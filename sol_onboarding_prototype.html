@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sol onboarding prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --dawn:#F4ECE2; --cream:#fff; --cocoa:#3A2D26; --clay:#6A5A4D;
+  --peach:#FFB27A; --coral:#FF8A6B; --gold:#F5B82E; --rose:#F2789F; --sage:#9CA87E;
+  --coralText:#C04A2E; --sageText:#5E6B45; --goldText:#8A6A00;
+  --dusk:#241A1F; --hair:rgba(60,60,67,.18);
+  --blue:#007AFF; --green:#34C759;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#15100E;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter",system-ui,sans-serif;color:var(--cocoa);padding:24px;
+  -webkit-font-smoothing:antialiased;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+button:disabled{cursor:default;}
+input{font-family:inherit;}
+
+.phone{width:390px;height:800px;background:var(--dawn);border-radius:46px;overflow:hidden;position:relative;
+  display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 10px #1d1714;}
+
+/* progress header */
+.prog{padding:22px 22px 0;display:flex;align-items:center;gap:14px;}
+.prog .bk{font-size:26px;line-height:1;width:24px;color:var(--coralText);font-weight:300;}
+.prog .track{flex:1;height:4px;border-radius:99px;background:rgba(58,45,38,.08);}
+.prog .fill{height:100%;border-radius:99px;background:var(--gold);transition:width .45s cubic-bezier(.2,.8,.3,1);}
+
+.body{flex:1;overflow-y:auto;padding:10px 26px 0;display:flex;flex-direction:column;}
+.footer{padding:14px 26px 30px;}
+
+h1.hd{font-size:32px;font-weight:700;letter-spacing:-.022em;line-height:1.16;}
+p.lead{font-size:16px;color:var(--clay);margin-top:8px;line-height:1.5;}
+
+.primary{width:100%;padding:16px 0;border-radius:12px;background:var(--coralText);color:#fff;
+  font-size:17px;font-weight:600;transition:all .25s cubic-bezier(.2,.8,.3,1);}
+.primary:disabled{background:rgba(58,45,38,.08);color:var(--clay);}
+.ghostbtn{width:100%;padding:12px 0;border-radius:12px;background:transparent;color:var(--coralText);
+  font-size:16px;font-weight:400;margin-top:6px;}
+
+/* option rows */
+.opt{width:100%;text-align:left;padding:14px 15px;border-radius:12px;border:1.5px solid var(--hair);
+  background:var(--cream);display:flex;align-items:center;gap:13px;transition:all .25s ease;}
+.opt.sel{border-color:var(--gold);background:rgba(245,184,46,.10);}
+.opt.dim{opacity:.5;}
+.opt .ic{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt .tx{flex:1;}
+.opt .tx b{display:block;font-size:16px;font-weight:600;}
+.opt .tx small{display:block;font-size:13px;color:var(--clay);margin-top:2px;}
+.radio{width:22px;height:22px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--hair);
+  display:flex;align-items:center;justify-content:center;background:transparent;}
+.opt.sel .radio{border-color:var(--goldText);background:var(--gold);}
+.dashed{border:1.5px dashed rgba(58,45,38,.22);background:transparent;}
+.dashed.sel{border:1.5px solid var(--gold);background:rgba(245,184,46,.10);}
+
+/* toggles (iOS metrics) */
+.tog{width:51px;height:31px;border-radius:99px;flex-shrink:0;background:rgba(120,120,128,.24);position:relative;transition:background .25s ease;}
+.tog.on{background:var(--green);}
+.tog .kn{position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .25s cubic-bezier(.2,.8,.3,1);}
+.tog.on .kn{left:22px;}
+.tog.big{width:51px;height:31px;}
+.tog.big .kn{width:27px;height:27px;}
+.tog.big.on .kn{left:22px;}
+.tog.big.on{background:var(--green);}
+
+/* permission card */
+.perm{background:var(--cream);border:1px solid var(--hair);border-radius:12px;padding:18px;display:flex;align-items:center;gap:14px;}
+.perm .ic{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.perm .tx{flex:1;}
+.perm .tx b{font-size:16px;font-weight:700;}
+.perm .tx small{display:block;font-size:12.5px;color:var(--clay);margin-top:2px;}
+
+/* animations */
+@keyframes swayF{0%,100%{transform:rotate(-1.5deg);}50%{transform:rotate(1.5deg);}}
+@keyframes swayB{0%,100%{transform:rotate(1.5deg);}50%{transform:rotate(-1.5deg);}}
+.sw-f{animation:swayF 7s ease-in-out infinite;transform-origin:center;}
+.sw-b{animation:swayB 9s ease-in-out infinite;transform-origin:center;}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.rise{animation:rise .45s cubic-bezier(.2,.8,.3,1) both;}
+@keyframes bloomScale{0%{transform:scale(.2) rotate(-25deg);opacity:0;}55%{opacity:1;}100%{transform:scale(1) rotate(0);opacity:1;}}
+.bloom-scale{transform-origin:center;animation:bloomScale 1.5s cubic-bezier(.34,1.15,.5,1) both;}
+@keyframes petalFade{from{opacity:0;}to{opacity:var(--o,1);}}
+.bloom-petal{opacity:0;animation:petalFade .7s ease both;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.bloom-center{animation:fadeIn .8s ease .85s both;}
+@keyframes gentleSway{0%,100%{transform:rotate(-1.4deg);}50%{transform:rotate(1.4deg);}}
+.bloom-wrap{animation:gentleSway 8s ease-in-out 1.8s infinite;transform-origin:center;}
+.done-text{animation:rise .8s cubic-bezier(.2,.8,.3,1) 1.3s both;}
+@keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.sheet{animation:sheetUp .36s cubic-bezier(.2,.8,.3,1) both;}
+@media (prefers-reduced-motion:reduce){.sw-f,.sw-b,.rise,.bloom-scale,.bloom-petal,.bloom-center,.bloom-wrap,.done-text,.sheet{animation:none!important;opacity:1;}}
+
+/* sheets */
+.scrim{position:absolute;inset:0;background:rgba(36,26,31,.4);z-index:40;}
+.sheetbox{position:absolute;left:0;right:0;bottom:0;z-index:41;background:var(--dawn);
+  border-radius:28px 28px 0 0;padding-bottom:22px;max-height:78%;display:flex;flex-direction:column;
+  box-shadow:0 -8px 30px rgba(0,0,0,.18);}
+.grab{width:38px;height:5px;border-radius:99px;background:rgba(58,45,38,.14);margin:10px auto 6px;}
+.sheethead{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 12px;}
+.donebtn{font-size:15.5px;font-weight:700;color:var(--coralText);}
+
+.yearwrap{position:relative;height:132px;}
+.yearband{position:absolute;top:50%;margin-top:-22px;left:16px;right:16px;height:44px;border-radius:12px;background:rgba(245,184,46,.14);pointer-events:none;z-index:1;}
+.fadeT{position:absolute;top:0;left:0;right:0;height:44px;background:linear-gradient(var(--dawn),rgba(244,236,226,0));pointer-events:none;z-index:2;}
+.fadeB{position:absolute;bottom:0;left:0;right:0;height:44px;background:linear-gradient(rgba(244,236,226,0),var(--dawn));pointer-events:none;z-index:2;}
+.yearscroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;padding:44px 0;text-align:center;scrollbar-width:none;position:relative;z-index:0;}
+.yearscroll::-webkit-scrollbar{display:none;}
+.yr{display:block;width:100%;height:44px;scroll-snap-align:center;font-size:18px;font-weight:500;color:var(--clay);opacity:.4;font-variant-numeric:tabular-nums;transition:all .15s ease;}
+.yr.on{font-size:24px;font-weight:700;color:var(--cocoa);opacity:1;}
+
+.hint{position:fixed;bottom:14px;left:0;right:0;text-align:center;font-size:12px;color:rgba(244,236,226,.55);font-weight:600;}
+.k{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--clay);}
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone"></div>
+<div class="hint">Tap through all eight steps. The back arrow and every toggle work.</div>
+
+<script>
+/* ============ icons (from the source design system, no emojis) ============ */
+function I(name,c,s){
+  c=c||'#3A2D26';s=s||22;
+  const P='fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+  const d={
+    moon:'<path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z" '+P+'/>',
+    run:'<g '+P+'><circle cx="13" cy="4" r="2"/><path d="M13 8l-3 3 1 4-2 4M10 11l-4 1M14 12l3 1 1 4"/></g>',
+    dumbbell:'<g '+P+'><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/></g>',
+    wave:'<g '+P+'><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></g>',
+    bolt:'<path d="M13 3L5 13h5l-1 8 8-10h-5z" '+P+'/>',
+    edit:'<g '+P+'><path d="M4 20h4L18 10l-4-4L4 16z"/><path d="M13 7l4 4"/></g>',
+    clock:'<g '+P+'><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></g>',
+    candle:'<g '+P+'><path d="M12 3c1.5 1.5 1.5 3 0 4-1.5-1-1.5-2.5 0-4z"/><rect x="9.5" y="8" width="5" height="11" rx="1.4"/></g>',
+    cup:'<g '+P+'><path d="M5 8h11v5a4 4 0 01-4 4H9a4 4 0 01-4-4z"/><path d="M16 9h2a2 2 0 010 4h-2"/></g>',
+    walk:'<g '+P+'><circle cx="13" cy="4.5" r="1.8"/><path d="M13 8l-2 4 2 2 1 5M11 12l-3 1M13 14l2 4"/></g>',
+    sun:'<g '+P+'><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.5 5.5l1.4 1.4M17.1 17.1l1.4 1.4M18.5 5.5l-1.4 1.4M6.9 17.1l-1.4 1.4"/></g>',
+    laptop:'<g '+P+'><rect x="5" y="5" width="14" height="9" rx="1.4"/><path d="M3 18h18"/></g>',
+    plus:'<path d="M12 5v14M5 12h14" fill="none" stroke="'+c+'" stroke-width="2.2" stroke-linecap="round"/>',
+    calendar:'<g '+P+'><rect x="4" y="5" width="16" height="16" rx="2.4"/><path d="M4 9h16M8 3v4M16 3v4"/></g>',
+    breath:'<g '+P+'><circle cx="12" cy="12" r="3"/><path d="M12 9c0-3 4-4 4-1M12 15c0 3 4 4 4 1M9 12c-3 0-4-4-1-4M15 12c3 0 4 4 1 4"/></g>',
+    pen:'<g '+P+'><path d="M4 20h4L18 10l-4-4L4 16z"/><path d="M13 7l4 4"/></g>',
+    mail:'<g '+P+'><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></g>',
+    check:'<path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="'+c+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+    heart:'<path d="M12 20s-7-4.5-9-9c-1.3-3 .5-6 3.5-6 2 0 3.5 1.5 5.5 4 2-2.5 3.5-4 5.5-4 3 0 4.8 3 3.5 6-2 4.5-9 9-9 9z" '+P+'/>',
+    shield:'<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z" '+P+'/>',
+    bell:'<path d="M6 9a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6zM10 20a2 2 0 004 0" '+P+'/>',
+    lock:'<g '+P+'><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></g>',
+    apple:'<g fill="'+c+'"><path d="M16.3 12.9c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.15-2.8.85-3.5.85-.7 0-1.85-.83-3-.81-1.55.02-3 .9-3.8 2.3-1.6 2.8-.4 7 1.15 9.3.77 1.13 1.68 2.4 2.87 2.35 1.15-.05 1.6-.74 3-.74s1.8.74 3 .72c1.24-.02 2.02-1.15 2.78-2.28.87-1.3 1.23-2.57 1.25-2.64-.03-.01-2.4-.92-2.4-3.66z"/><path d="M14.1 6.2c.63-.77 1.06-1.83.94-2.9-.91.04-2.01.61-2.66 1.37-.58.68-1.1 1.76-.96 2.8 1.02.08 2.05-.52 2.68-1.27z"/></g>',
+  };
+  return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" aria-hidden="true">'+(d[name]||'')+'</svg>';
+}
+
+/* ============ flower renderers ============ */
+function logoFlower(size){
+  const petals=16;let back='',front='';
+  for(let i=0;i<petals;i++){
+    back+='<ellipse cx="0" cy="-38" rx="8" ry="21" transform="rotate('+((i*360/petals)+11.25)+')" fill="url(#gp)" opacity=".5"/>';
+    front+='<ellipse cx="0" cy="-38" rx="8.5" ry="22" transform="rotate('+(i*360/petals)+')" fill="url(#gp)" opacity=".96" stroke="rgba(255,255,255,.4)" stroke-width=".5"/>';
+  }
+  let seeds='';
+  for(let i=0;i<130;i++){const a=i*137.5*Math.PI/180,r=1.55*Math.sqrt(i);if(r>19)continue;const t=r/19;
+    seeds+='<circle cx="'+(Math.cos(a)*r).toFixed(2)+'" cy="'+(Math.sin(a)*r).toFixed(2)+'" r="'+(1.2-t*.4).toFixed(2)+'" fill="'+(t<.5?'#E7B24A':'#7A4E1C')+'" opacity=".55"/>';}
+  return '<svg viewBox="-60 -60 120 120" width="'+size+'" height="'+size+'" aria-label="Sol">'+
+    '<defs><linearGradient id="gp" x1="0" y1="-1" x2="0" y2="0.2"><stop offset="0" stop-color="#FFC24D"/><stop offset=".55" stop-color="#FBA425"/><stop offset="1" stop-color="#F2871A"/></linearGradient>'+
+    '<radialGradient id="gs" cx="50%" cy="45%" r="58%"><stop offset="0" stop-color="#C99A3A"/><stop offset=".65" stop-color="#9A6A22"/><stop offset="1" stop-color="#5E3B16"/></radialGradient></defs>'+
+    '<g class="sw-b">'+back+'</g><g class="sw-f">'+front+'</g><circle cx="0" cy="0" r="21" fill="url(#gs)"/>'+seeds+'</svg>';
+}
+function bloomFlower(size){
+  const petals=16;let back='',front='';
+  for(let i=0;i<petals;i++){
+    back+='<ellipse class="bloom-petal" style="animation-delay:'+(300+i*50)+'ms;--o:.5" cx="0" cy="-38" rx="8" ry="21" transform="rotate('+((i*360/petals)+11.25)+')" fill="url(#bp)"/>';
+    front+='<ellipse class="bloom-petal" style="animation-delay:'+(300+i*50)+'ms;--o:.96" cx="0" cy="-38" rx="8.5" ry="22" transform="rotate('+(i*360/petals)+')" fill="url(#bp)" stroke="rgba(255,255,255,.4)" stroke-width=".5"/>';
+  }
+  let seeds='';
+  for(let i=0;i<130;i++){const a=i*137.5*Math.PI/180,r=1.55*Math.sqrt(i);if(r>19)continue;const t=r/19;
+    seeds+='<circle class="bloom-center" cx="'+(Math.cos(a)*r).toFixed(2)+'" cy="'+(Math.sin(a)*r).toFixed(2)+'" r="'+(1.2-t*.4).toFixed(2)+'" fill="'+(t<.5?'#E7B24A':'#7A4E1C')+'" opacity=".55"/>';}
+  return '<svg viewBox="-60 -60 120 120" width="'+size+'" height="'+size+'" class="bloom-wrap" aria-label="Sol">'+
+    '<defs><linearGradient id="bp" x1="0" y1="-1" x2="0" y2="0.2"><stop offset="0" stop-color="#FFC24D"/><stop offset=".55" stop-color="#FBA425"/><stop offset="1" stop-color="#F2871A"/></linearGradient>'+
+    '<radialGradient id="bs" cx="50%" cy="45%" r="58%"><stop offset="0" stop-color="#C99A3A"/><stop offset=".65" stop-color="#9A6A22"/><stop offset="1" stop-color="#5E3B16"/></radialGradient></defs>'+
+    '<g class="bloom-scale">'+back+front+'<circle cx="0" cy="0" r="21" fill="url(#bs)" class="bloom-center"/>'+seeds+'</g></svg>';
+}
+
+/* ============ data ============ */
+const GOALS=[
+  {id:'sleep',icon:'moon',label:'Sleep better',sub:'Deep, consistent rest',hue:'#6E63B8'},
+  {id:'race',icon:'run',label:'Start running',sub:'Build the habit, at your pace',hue:'#FF8A6B'},
+  {id:'strong',icon:'dumbbell',label:'Get stronger',sub:'Build muscle and resilience',hue:'#8A6A00'},
+  {id:'calm',icon:'wave',label:'Feel calmer',sub:'Less stress in your days',hue:'#3FB6B0'},
+  {id:'energy',icon:'bolt',label:'More daily energy',sub:'Stop running on empty',hue:'#C04A2E'},
+];
+const STACKS={
+  sleep:[
+    {id:'s1',icon:'clock',label:'Consistent wake time',sub:'±45 min · from your watch',hue:'#6E63B8',on:true},
+    {id:'s2',icon:'candle',label:'Wind down ritual',sub:"We'll define yours together",hue:'#6E63B8',on:true},
+    {id:'s3',icon:'cup',label:'Personal caffeine cutoff',sub:'Starts where you are',hue:'#8A6A00',on:true},
+  ],
+  race:[
+    {id:'r1',icon:'run',label:'Running session',sub:'Sol sets your starting frequency',hue:'#FF8A6B',on:true},
+    {id:'r2',icon:'clock',label:'Consistent wake time',sub:'Adaptation loves rhythm',hue:'#6E63B8',on:true},
+    {id:'r3',icon:'moon',label:'Recovery day honored',sub:'Rest is training too',hue:'#6E63B8',on:true},
+  ],
+  strong:[
+    {id:'g1',icon:'dumbbell',label:'Strength session',sub:'Sol sets a safe starting frequency',hue:'#8A6A00',on:true},
+    {id:'g2',icon:'moon',label:'Recovery day honored',sub:'Muscle builds at rest',hue:'#6E63B8',on:true},
+    {id:'g3',icon:'clock',label:'Consistent wake time',sub:'Growth happens at night',hue:'#6E63B8',on:true},
+  ],
+  calm:[
+    {id:'c1',icon:'breath',label:'5 minute breathwork',sub:'In for 4, out for 6',hue:'#3FB6B0',on:true},
+    {id:'c2',icon:'walk',label:'Gentle walk',sub:'10 minutes, any pace',hue:'#FF8A6B',on:true},
+    {id:'c3',icon:'pen',label:'2 minute journal',sub:'Guided prompts',hue:'#5E6B45',on:true},
+  ],
+  energy:[
+    {id:'e1',icon:'sun',label:'Morning sunlight',sub:'10 min · anchors your clock',hue:'#8A6A00',on:true},
+    {id:'e2',icon:'laptop',label:'Work cutoff time',sub:'Real recovery',hue:'#5B8DD6',on:true},
+    {id:'e3',icon:'walk',label:'Gentle walk',sub:'10 minutes, any pace',hue:'#FF8A6B',on:true},
+  ],
+};
+const ADDABLE=[
+  {id:'a-sun',icon:'sun',label:'Morning sunlight',sub:'10 min · anchors your clock',hue:'#8A6A00'},
+  {id:'a-walk',icon:'walk',label:'Gentle walk',sub:'10 minutes, any pace',hue:'#FF8A6B'},
+  {id:'a-breath',icon:'breath',label:'5 minute breathwork',sub:'In for 4, out for 6',hue:'#3FB6B0'},
+  {id:'a-journal',icon:'pen',label:'2 minute journal',sub:'Guided prompts',hue:'#5E6B45'},
+  {id:'a-cutoff',icon:'laptop',label:'Work cutoff time',sub:'Real recovery',hue:'#5B8DD6'},
+  {id:'a-stretch',icon:'walk',label:'Morning stretch',sub:'Gentle mobility',hue:'#FF8A6B'},
+  {id:'a-connect',icon:'heart',label:'One real conversation',sub:'A daily point of contact',hue:'#C03B6B'},
+  {id:'a-caffeine',icon:'cup',label:'Personal caffeine cutoff',sub:'Starts where you are',hue:'#8A6A00'},
+];
+const STEPS=['welcome','goal','build','plan','about','health','calendar','notify','done'];
+const YEARS=[];for(let y=2008;y>=1940;y--)YEARS.push(y);
+
+/* ============ state ============ */
+const S={
+  step:0, goals:[], other:false, otherText:'', stack:[],
+  birthYear:1996, gender:null, healthOn:false, calendarOn:false, notifyOn:false,
+  yearOpen:false, addOpen:false,
+};
+const MAX=3;
+
+function pickGoal(g){
+  S.other=false;
+  if(S.goals.includes(g))S.goals=S.goals.filter(x=>x!==g);
+  else if(S.goals.length<MAX)S.goals.push(g);
+  const merged=[];
+  S.goals.forEach(gid=>STACKS[gid].forEach(h=>{if(!merged.some(m=>m.id===h.id))merged.push({...h});}));
+  S.stack=merged;
+  render();
+}
+function pickOther(){S.other=true;S.goals=[];S.stack=[];render();setTimeout(()=>{const el=document.getElementById('otherIn');if(el)el.focus();},50);}
+function toggleHabit(hid){const h=S.stack.find(x=>x.id===hid);if(h)h.on=!h.on;render();}
+function addHabit(id){const h=ADDABLE.find(x=>x.id===id);if(h&&!S.stack.some(x=>x.id===h.id))S.stack.push({...h,on:true});render();}
+function next(){if(S.step<STEPS.length-1){S.step++;render();}}
+function back(){clearBuild();if(S.step>0){S.step--;if(STEPS[S.step]==='build')S.step--;render();}}
+function acceptOtherPlan(){S.stack=STACKS.energy.map(h=>({...h}));S.other=false;S.goals=['energy'];next();}
+
+const activeCount=()=>S.stack.filter(h=>h.on).length;
+const addable=()=>ADDABLE.filter(h=>!S.stack.some(x=>x.id===h.id||x.label===h.label));
+const goalLabel=()=>S.other?(S.otherText||'your goal'):(S.goals.length===1?GOALS.find(g=>g.id===S.goals[0]).label:S.goals.length+' directions');
+
+/* ============ views ============ */
+function optRow(o,sel,dim,onclick,right){
+  return '<button class="opt'+(sel?' sel':'')+(dim?' dim':'')+'" '+(dim?'disabled':'')+' onclick="'+onclick+'">'+
+    '<span class="ic" style="background:'+o.hue+'22">'+I(o.icon,o.hue,22)+'</span>'+
+    '<span class="tx"><b>'+o.label+'</b><small>'+o.sub+'</small></span>'+right+'</button>';
+}
+
+function vWelcome(){
+  return '<div class="body rise" style="justify-content:center;align-items:center;text-align:center;padding:0 26px">'+
+    logoFlower(150)+
+    '<div style="font-size:15px;font-weight:700;letter-spacing:.22em;color:var(--clay);margin-top:24px">SOL</div>'+
+    '<h1 style="font-size:33px;font-weight:700;letter-spacing:-.025em;margin-top:10px;line-height:1.15">Turn toward<br>the light</h1>'+
+    '<p style="font-size:15.5px;color:var(--clay);line-height:1.5;margin-top:12px">Core habits, built on science.<br>A mentor that learns what drives you.</p>'+
+  '</div>'+
+  '<div class="footer">'+
+    '<button class="primary" onclick="next()">Get started</button>'+
+    '<p style="font-size:11.5px;color:var(--clay);text-align:center;line-height:1.5;margin-top:14px">By continuing, you agree to Sol\'s <span style="color:var(--coralText);font-weight:600">Terms of Service</span> and <span style="color:var(--coralText);font-weight:600">Privacy Policy</span>. Sol supports healthy habits and isn\'t medical advice.</p>'+
+  '</div>';
+}
+
+function vGoal(){
+  const rows=GOALS.map(g=>{
+    const sel=S.goals.includes(g.id),atCap=S.goals.length>=MAX&&!sel;
+    return optRow(g,sel,atCap,"pickGoal('"+g.id+"')",
+      '<span class="radio">'+(sel?I('check','#3A2D26',13):'')+'</span>');
+  }).join('');
+  const nudge=S.goals.length>=2?'<div style="font-size:12.5px;color:var(--goldText);font-weight:600;line-height:1.5;padding:2px 4px;display:flex;gap:7px;align-items:flex-start">'+I('check','#8A6A00',14)+'<span>Most people go further by nailing one first. You can always add the '+(S.goals.length===MAX?'others':'rest')+' once it sticks.</span></div>':'';
+  const can=S.goals.length>0;
+  return '<div class="body rise">'+
+    '<h1 class="hd">What are you working toward?</h1>'+
+    '<p class="lead">Start with one. Sol builds your plan around it.</p>'+
+    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;padding-bottom:12px">'+rows+nudge+'</div>'+
+  '</div>'+
+  '<div class="footer"><button class="primary" id="goalBtn" '+(can?'':'disabled')+' onclick="next()">Build my plan</button></div>';
+}
+function syncGoalBtn(){
+  const b=document.getElementById('goalBtn');if(!b)return;
+  const can=S.goals.length>0||(S.other&&S.otherText.trim().length>1);
+  b.disabled=!can;
+}
+
+function vPlanOther(){
+  return '<div class="body rise" style="justify-content:center;text-align:center">'+
+    '<div style="align-self:center">'+logoFlower(96)+'</div>'+
+    '<h1 style="font-size:22px;font-weight:700;margin-top:16px;letter-spacing:-.02em;line-height:1.25">Sol doesn\'t do weight loss, and that\'s on purpose.</h1>'+
+    '<p style="font-size:14.5px;color:var(--clay);line-height:1.55;margin-top:12px">No diets, no calories, no numbers on a scale. What Sol can do is help you feel stronger, more energetic, and more rested, through movement, sleep, and stress habits that genuinely change how you feel.</p>'+
+    '<p style="font-size:14.5px;font-weight:600;line-height:1.5;margin-top:14px">Want to start there instead?</p>'+
+  '</div>'+
+  '<div class="footer"><button class="primary" onclick="acceptOtherPlan()">Yes, build that plan</button></div>';
+}
+
+function vPlan(){
+  if(S.other)return vPlanOther();
+  const rows=S.stack.map(h=>
+    '<button class="opt'+(h.on?' sel':'')+'" style="opacity:'+(h.on?1:.6)+'" onclick="toggleHabit(\''+h.id+'\')">'+
+    '<span class="ic" style="width:40px;height:40px;background:'+h.hue+'22">'+I(h.icon,h.hue,20)+'</span>'+
+    '<span class="tx"><b style="font-size:14.5px">'+h.label+'</b><small style="font-size:12px">'+h.sub+'</small></span>'+
+    '<span class="tog'+(h.on?' on':'')+'"><span class="kn"></span></span></button>').join('');
+  const n=activeCount();
+  const label=n===0?'Pick at least one. Small is the point.':'Start with '+n+' habit'+(n===1?'':'s');
+  return '<div class="body rise">'+
+    '<div class="k" style="text-transform:uppercase;color:var(--goldText);margin-bottom:10px">Built for: '+goalLabel()+'</div>'+
+    '<h1 class="hd">Here\'s your habit stack</h1>'+
+    '<p class="lead">Science backed, pre-selected. Toggle anything, or trust the plan.</p>'+
+    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-bottom:12px">'+rows+'</div>'+
+  '</div>'+
+  '<div class="footer"><button class="primary" '+(n===0?'disabled':'')+' onclick="next()">'+label+'</button></div>';
+}
+
+function vAbout(){
+  const genders=['Male','Female','Other'].map(g=>
+    '<button onclick="S.gender=\''+g+'\';render()" style="padding:15px 4px;border-radius:12px;font-size:14.5px;font-weight:600;border:1.5px solid '+(S.gender===g?'var(--gold)':'var(--hair)')+';background:'+(S.gender===g?'rgba(245,184,46,.12)':'var(--cream)')+';color:'+(S.gender===g?'var(--goldText)':'var(--cocoa)')+';transition:all .2s ease">'+g+'</button>').join('');
+  return '<div class="body rise">'+
+    '<h1 class="hd">A little about you</h1>'+
+    '<p class="lead">Just enough to keep your habits safe. Sol never asks your weight.</p>'+
+    '<div class="k" style="margin:26px 4px 11px">YEAR OF BIRTH</div>'+
+    '<button onclick="S.yearOpen=true;render()" style="position:relative;width:100%;padding:15px 18px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;display:flex;align-items:center;justify-content:center">'+
+      '<span style="font-size:17px;font-weight:700;font-variant-numeric:tabular-nums">'+S.birthYear+'</span>'+
+      '<span style="position:absolute;right:16px;font-size:11px;color:var(--clay);font-weight:600">Tap to change</span></button>'+
+    '<div class="k" style="margin:24px 4px 11px">GENDER</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">'+genders+'</div>'+
+  '</div>'+
+  '<div class="footer"><button class="primary" '+(S.gender?'':'disabled')+' onclick="next()">Continue</button></div>';
+}
+
+function permCard(iconName,iconColor,iconBg,title,sub,stateKey){
+  return '<div class="perm">'+
+    '<span class="ic" style="background:'+iconBg+'">'+I(iconName,iconColor,25)+'</span>'+
+    '<span class="tx"><b>'+title+'</b><small>'+sub+'</small></span>'+
+    '<button class="tog big'+(S[stateKey]?' on':'')+'" onclick="S.'+stateKey+'=!S.'+stateKey+';render()" aria-pressed="'+S[stateKey]+'"><span class="kn"></span></button>'+
+  '</div>';
+}
+function permFooter(onLabel,offLabel,on){
+  return '<div class="footer"><button class="primary" onclick="'+(on?'next()':'grantAndNext()')+'">'+(on?onLabel:offLabel)+'</button>'+
+    (!on?'<button class="ghostbtn" onclick="next()">Maybe later</button>':'')+'</div>';
+}
+let pendingGrant=null;
+function grantAndNext(){if(pendingGrant){S[pendingGrant]=true;}next();}
+
+function iosAlert(title,body){
+  return '<div style="width:272px;margin:0 auto;background:rgba(249,249,251,.94);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.18);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)">'+
+    '<div style="padding:18px 16px 14px;text-align:center">'+
+      '<div style="font-size:16px;font-weight:700;color:#000;letter-spacing:-.01em">'+title+'</div>'+
+      '<div style="font-size:12.5px;color:#3c3c43;opacity:.9;line-height:1.35;margin-top:5px">'+body+'</div>'+
+    '</div>'+
+    '<div style="display:flex;border-top:1px solid rgba(60,60,67,.25);font-size:16px;color:#007AFF">'+
+      '<div style="flex:1;text-align:center;padding:12px 0;border-right:1px solid rgba(60,60,67,.25)">Don\'t Allow</div>'+
+      '<div style="flex:1;text-align:center;padding:12px 0;font-weight:600">Allow</div>'+
+    '</div></div>';
+}
+function permScreen(title,lead,at,ab,cta,stateKey){
+  return '<div class="body rise" style="justify-content:flex-start">'+
+    '<div style="display:flex;flex-direction:column;align-items:center;margin-top:14px">'+
+      '<h1 class="hd" style="text-align:center">'+title+'</h1>'+
+      '<div style="background:var(--cream);border:1px solid var(--hair);border-radius:16px;padding:13px 17px;margin-top:16px;font-size:15px;line-height:1.45;color:var(--cocoa);text-align:center;max-width:28ch">'+lead+'</div>'+
+    '</div>'+
+    '<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:6px 0">'+iosAlert(at,ab)+'</div>'+
+  '</div>'+permFooter('Continue',cta,S[stateKey]);
+}
+
+function vHealth(){
+  pendingGrant='healthOn';
+  return permScreen(
+    'Connect Apple Health',
+    'Connect Health so Sol sees your <b>movement and sleep</b>',
+    '\u201CSol\u201D Would Like to Access Health',
+    'Reads steps, workouts and sleep',
+    'Connect Apple Health','healthOn');
+}
+function vCalendar(){
+  pendingGrant='calendarOn';
+  return permScreen(
+    'Let Sol read the room',
+    'Let Sol <b>ease your plan</b> on busy days, never the details',
+    '\u201CSol\u201D Would Like to Access Calendar',
+    'Sees how full your days look, never the details',
+    'Connect calendar','calendarOn');
+}
+function vNotify(){
+  pendingGrant='notifyOn';
+  return permScreen(
+    'Let Sol reach you',
+    'Turn on <b>gentle nudges</b> at the right moments, never a flood',
+    '\u201CSol\u201D Would Like to Send Notifications',
+    'Reminders you can change anytime',
+    'Turn on notifications','notifyOn');
+}
+
+function vDone(){
+  return '<div class="body" style="justify-content:center;align-items:center;text-align:center">'+
+    bloomFlower(130)+
+    '<h1 class="done-text" style="font-size:29px;font-weight:700;letter-spacing:-.02em;margin-top:16px">You\'re in</h1>'+
+    '<p class="done-text" style="font-size:14.5px;color:var(--clay);line-height:1.5;margin-top:8px;max-width:30ch">'+activeCount()+' habits, one direction. Create your account to save your progress.</p>'+
+    '<div class="done-text" style="width:100%;margin-top:24px;display:flex;flex-direction:column;gap:9px">'+
+      '<button style="width:100%;padding:14px 0;border-radius:12px;background:var(--cocoa);color:#fff;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px">'+I('apple','#fff',19)+' Continue with Apple</button>'+
+      '<button style="width:100%;padding:14px 0;border-radius:12px;border:1.5px solid var(--hair);background:#fff;color:var(--cocoa);font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:9px">'+
+        '<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>'+
+        ' Continue with Google</button>'+
+    '</div>'+
+    '<button class="done-text" style="margin-top:12px;background:transparent;color:var(--coralText);font-size:14.5px;font-weight:600;padding:4px 8px">Sign up with email</button>'+
+    '<p class="done-text" style="font-size:12.5px;color:var(--clay);margin-top:12px;line-height:1.5">7 days free, full access. Then ₪39.90/month. Cancel anytime.</p>'+
+  '</div>'+
+  '<div class="footer"><button class="ghostbtn" style="font-size:14.5px" onclick="restart()">Restart demo</button></div>';
+}
+function restart(){
+  S.step=0;S.goals=[];S.other=false;S.otherText='';S.stack=[];S.gender=null;
+  S.healthOn=false;S.calendarOn=false;S.notifyOn=false;render();
+}
+
+/* ============ sheets ============ */
+function sheetAdd(){
+  const list=addable();
+  const rows=list.length?list.map(h=>
+    '<button onclick="addHabit(\''+h.id+'\')" style="width:100%;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--hair);background:var(--cream);display:flex;align-items:center;gap:12px">'+
+    '<span style="width:38px;height:38px;border-radius:11px;background:'+h.hue+'22;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+I(h.icon,h.hue,19)+'</span>'+
+    '<span style="flex:1"><span style="display:block;font-size:14.5px;font-weight:600">'+h.label+'</span><span style="display:block;font-size:12px;color:var(--clay);margin-top:2px">'+h.sub+'</span></span>'+
+    '<span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--coralText);flex-shrink:0">'+I('plus','#C04A2E',16)+' Add</span></button>').join('')
+  :'<div style="text-align:center;color:var(--clay);font-size:14px;padding:20px 0 24px">You\'ve added everything we suggest for now. You can always add more later from Discover.</div>';
+  return '<div class="scrim" onclick="S.addOpen=false;render()"></div>'+
+    '<div class="sheetbox sheet"><div class="grab"></div>'+
+    '<div class="sheethead"><div><div style="font-size:18px;font-weight:700">Add a habit</div><div style="font-size:12.5px;color:var(--clay);margin-top:1px">From Sol\'s science backed library.</div></div>'+
+    '<button class="donebtn" onclick="S.addOpen=false;render()">Done</button></div>'+
+    '<div style="overflow-y:auto;padding:0 20px;display:flex;flex-direction:column;gap:9px">'+rows+'</div></div>';
+}
+function sheetYear(){
+  const rows=YEARS.map(y=>'<button class="yr'+(y===S.birthYear?' on':'')+'" onclick="S.birthYear='+y+';render()">'+y+'</button>').join('');
+  return '<div class="scrim" onclick="S.yearOpen=false;render()"></div>'+
+    '<div class="sheetbox sheet" style="max-height:none;padding-bottom:28px"><div class="sheethead" style="padding-top:16px"><span style="font-size:16px;font-weight:700">Year of birth</span>'+
+    '<button class="donebtn" onclick="S.yearOpen=false;render()">Done</button></div>'+
+    '<div class="yearwrap"><div class="yearband"></div><div class="fadeT"></div><div class="fadeB"></div>'+
+    '<div class="yearscroll" id="yearScroll">'+rows+'</div></div></div>';
+}
+
+/* ============ render ============ */
+const GOALWORD={sleep:'better sleep',race:'running',strong:'strength',calm:'calm',energy:'more energy'};
+function buildBeats(){
+  let first='Reading your goal';
+  if(S.goals&&S.goals.length===1){first='Reading your goal, '+(GOALWORD[S.goals[0]]||'your goal');}
+  else if(S.goals&&S.goals.length>1){first='Reading your goals';}
+  return [first,'Choosing habits backed by science','Setting a gentle starting point','Shaping it around your week'];
+}
+function vBuild(){
+  const rows=buildBeats().map((b)=>
+    '<div class="build-row" style="opacity:0;transform:translateY(5px);transition:opacity .35s ease,transform .35s ease;display:flex;align-items:center;gap:12px">'+
+      '<span class="build-ck" style="width:23px;height:23px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--hair);display:flex;align-items:center;justify-content:center;transition:all .3s ease">'+
+        '<svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="opacity:0"/></svg>'+
+      '</span>'+
+      '<span style="font-size:15.5px;font-weight:600;color:var(--cocoa);line-height:1.35">'+b+'</span>'+
+    '</div>').join('');
+  return '<div class="body" style="justify-content:center">'+
+    '<div style="width:100%;max-width:300px;margin:0 auto;display:flex;flex-direction:column;gap:17px">'+
+      '<div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--clay);text-align:center;margin-bottom:4px">Building your plan</div>'+
+      rows+
+    '</div>'+
+  '</div>'+
+  '<div class="footer"><button id="buildSkip" onclick="skipBuild()" style="width:100%;padding:12px 0;background:transparent;color:var(--clay);font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .4s ease;font-family:inherit;border:none;cursor:pointer">Skip</button></div>';
+}
+let buildTimers=[];
+function clearBuild(){buildTimers.forEach(clearTimeout);buildTimers=[];}
+function finishBuild(){if(STEPS[S.step]!=='build')return;clearBuild();S.step=STEPS.indexOf('plan');render();}
+function skipBuild(){finishBuild();}
+function startBuild(){
+  clearBuild();
+  const rows=Array.prototype.slice.call(document.querySelectorAll('.build-row'));
+  const STEP=680,CHECK=520,END=480;
+  rows.forEach((row,i)=>{
+    buildTimers.push(setTimeout(function(){row.style.opacity='1';row.style.transform='none';},i*STEP));
+    buildTimers.push(setTimeout(function(){
+      const ck=row.querySelector('.build-ck');if(ck){ck.style.background='var(--green)';ck.style.borderColor='var(--green)';}
+      const path=row.querySelector('path');if(path)path.style.opacity='1';
+    },i*STEP+CHECK));
+  });
+  buildTimers.push(setTimeout(function(){const s=document.getElementById('buildSkip');if(s){s.style.opacity='1';s.style.pointerEvents='auto';}},STEP+200));
+  buildTimers.push(setTimeout(finishBuild,(rows.length-1)*STEP+CHECK+END));
+}
+
+const VIEWS={welcome:vWelcome,goal:vGoal,build:vBuild,plan:vPlan,about:vAbout,health:vHealth,calendar:vCalendar,notify:vNotify,done:vDone};
+function render(){
+  const id=STEPS[S.step];
+  const prog=(S.step>0&&id!=='build')?'<div class="prog"><button class="bk" onclick="back()" aria-label="Back">‹</button>'+
+    '<div class="track"><div class="fill" style="width:'+(S.step/(STEPS.length-1)*100)+'%"></div></div><div style="width:24px"></div></div>':'';
+  document.getElementById('phone').innerHTML=prog+VIEWS[id]()+
+    (S.addOpen?sheetAdd():'')+(S.yearOpen?sheetYear():'');
+  if(id==='build')startBuild();
+  if(S.yearOpen){
+    const sc=document.getElementById('yearScroll');
+    const idx=YEARS.indexOf(S.birthYear);
+    if(sc&&idx>=0)sc.scrollTop=idx*44;
+  }
+}
+render();
+</script>
+</body>
+</html>
