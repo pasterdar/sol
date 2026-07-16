@@ -12,6 +12,7 @@
   --coralText:#C04A2E; --sageText:#5E6B45; --goldText:#8A6A00; --roseText:#C03B6B;
   --hair:rgba(60,60,67,.18); --dusk:#241A1F;
   --blue:#007AFF; --green:#34C759; --iosred:#FF3B30;
+  --tile:rgba(58,45,38,.06);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#15100E;min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -230,14 +231,14 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
       <p class="sub">Three weeks of turning toward the light</p>
 
       <div class="card grad">
-        <div class="k" style="color:var(--cocoa);opacity:.7">The direction you're growing</div>
+        <div class="k" style="color:var(--cocoa);opacity:.7">The improved version of you</div>
         <div style="font-size:22px;font-weight:800;letter-spacing:-.015em;margin:5px 0 9px;line-height:1.15">Someone who moves every day</div>
         <div style="font-size:13.5px;line-height:1.5;opacity:.9">34 small acts of tending, five of your six walks this week among them. You went out in the rain twice, when it was easy to skip.</div>
       </div>
 
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-          <b style="font-size:15px">Sleep is climbing</b><span style="font-size:12.5px;font-weight:600;color:var(--sageText)">now past 7h ☀</span>
+          <b style="font-size:15px">Sleep is improving</b><span style="font-size:12.5px;font-weight:600;color:var(--sageText)">now past 7h ☀</span>
         </div>
         <svg viewBox="0 0 300 106" width="100%" height="100" aria-label="Sleep trending up">
           <line x1="0" y1="31" x2="300" y2="31" stroke="#9CA87E" stroke-width="1.2" stroke-dasharray="4 5"/>
@@ -268,7 +269,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
       <div class="filters" id="filters"></div>
       <div class="card grad" id="fact">
         <div class="k" style="color:var(--cocoa);opacity:.7">Fact of the day</div>
-        <p style="font-size:14.5px;font-weight:500;line-height:1.5;margin-top:4px">Ten minutes of morning light can shift your sleep earlier the same night. Your eyes set the clock for the whole day.</p>
+        <p style="font-size:14.5px;font-weight:500;line-height:1.5;margin-top:4px">10 minutes of morning light can shift your sleep earlier the same night. Your eyes set the clock for the whole day.</p>
       </div>
       <div id="cards"></div>
     </div>
@@ -281,18 +282,19 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
       <p class="sub" style="margin-top:2px">You, Sol, and everything Sol keeps</p>
       <div class="k" style="margin:6px 4px 10px">You &amp; Sol</div>
       <div class="grpwrap">
-        <button class="acrow" onclick="go('memory')"><span class="ic" style="background:rgba(245,184,46,.18)">💡</span><span class="lbl">What Sol knows about you<small>View, edit, or delete every memory</small></span><span class="chev">›</span></button>
-        <button class="acrow" onclick="toast('Your goal','Someone who moves every day')"><span class="ic" style="background:rgba(255,138,107,.18)">🎯</span><span class="lbl">Your goal &amp; direction<small>Someone who moves every day</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="go('memory')"><span class="ic" style="background:var(--tile)">💡</span><span class="lbl">What Sol knows about you<small>View, edit, or delete every memory</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="toast('Your goal','Someone who moves every day')"><span class="ic" style="background:var(--tile)">🎯</span><span class="lbl">Your goal &amp; direction<small>Someone who moves every day</small></span><span class="chev">›</span></button>
       </div>
       <div class="k" style="margin:0 4px 10px">Habits</div>
       <div class="grpwrap">
-        <button class="acrow" onclick="go('config')"><span class="ic" style="background:rgba(156,168,126,.2)">📋</span><span class="lbl">My habits<small>4 active</small></span><span class="chev">›</span></button>
-        <button class="acrow" onclick="toast('Reminders','Evening reminders are on')"><span class="ic" style="background:rgba(255,138,107,.18)">🔔</span><span class="lbl">Reminders &amp; notifications</span><span class="chev">›</span></button>
+        <button class="acrow" onclick="go('config')"><span class="ic" style="background:var(--tile)">📋</span><span class="lbl">My habits<small>4 active</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="toast('Reminders','Evening reminders are on')"><span class="ic" style="background:var(--tile)">🔔</span><span class="lbl">Reminders &amp; notifications</span><span class="chev">›</span></button>
       </div>
       <div class="k" style="margin:0 4px 10px">Privacy &amp; data</div>
       <div class="grpwrap">
-        <button class="acrow" onclick="toast('Permissions','Health, Calendar, Notifications, Location')"><span class="ic" style="background:rgba(156,168,126,.2)">🛡</span><span class="lbl">Permissions<small>Health, Calendar, Notifications, Location</small></span><span class="chev">›</span></button>
-        <button class="acrow" onclick="toast('Connected devices','Apple Watch')"><span class="ic" style="background:rgba(255,138,107,.18)">⌚</span><span class="lbl">Connected devices<small>Apple Watch</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="toast('Reset link sent','Check your email to set a new password')"><span class="ic" style="background:var(--tile)">🔒</span><span class="lbl">Reset password<small>We'll email you a secure link</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="toast('Permissions','Health, Calendar, Notifications, Location')"><span class="ic" style="background:var(--tile)">🛡</span><span class="lbl">Permissions<small>Health, Calendar, Notifications, Location</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="toast('Connected devices','Apple Watch')"><span class="ic" style="background:var(--tile)">⌚</span><span class="lbl">Connected devices<small>Apple Watch</small></span><span class="chev">›</span></button>
       </div>
       <div class="grpwrap">
         <button class="acrow" onclick="openDelete()"><span class="ic" style="background:rgba(255,59,48,.12)">🗑</span><span class="lbl" style="color:#FF3B30">Delete account &amp; all data</span></button>
@@ -509,10 +511,10 @@ function flowerSVG(size,fill,idp){
     '<g class="sway-b">'+back+'</g><g class="sway-f">'+front+'</g><circle cx="0" cy="0" r="21" fill="url(#'+idp+'s)"/>'+seeds+'</svg>';
 }
 const habitsData=[
-  {id:'walk',icon:'🚶',tint:'rgba(255,138,107,.18)',name:'Walk 10 minutes after lunch',sub:'Afternoon',done:true,edit:true},
-  {id:'sun',icon:'☀️',tint:'rgba(245,184,46,.2)',name:'Morning sunlight',sub:'10 min, tracked by your watch',done:true},
-  {id:'wind',icon:'🌙',tint:'rgba(255,138,107,.18)',name:'Wind down by 10:30',sub:'Evening',done:false},
-  {id:'breathe',icon:'🌬',tint:'rgba(63,182,176,.16)',name:'5 minute breathwork',sub:'Guided session',done:false,opens:'breath'},
+  {id:'walk',icon:'🚶',tint:'var(--tile)',name:'Walk 10 minutes after lunch',sub:'Afternoon',done:true,edit:true},
+  {id:'sun',icon:'☀️',tint:'var(--tile)',name:'Morning sunlight',sub:'10 min, tracked by your watch',done:true},
+  {id:'wind',icon:'🌙',tint:'var(--tile)',name:'Wind down by 10:30',sub:'Evening',done:false},
+  {id:'breathe',icon:'🌬',tint:'var(--tile)',name:'5 minute breathwork',sub:'Guided session',done:false,opens:'breath'},
 ];
 function fillRatio(){return habitsData.filter(h=>h.done).length/habitsData.length*0.9+0.1;}
 function renderFlower(bloom){
@@ -576,26 +578,16 @@ function micon(name,c){
 /* prompts are mostly memory derived: sleep pattern, protecting the evening,
    a gentle emotional option, and one evergreen habit suggestion */
 const STARTERS=[
-  {icon:'moon', tint:'rgba(255,138,107,.16)', tc:'#C04A2E', text:"Why has my sleep been slipping?", insight:true,
-   reply:"Looking at the last two weeks, the thread is late work nights. When your calendar runs past nine, your sleep starts about an hour later. It isn't willpower, it's timing. Want me to help protect the wind down on those nights?",
-   chips:["Yes, protect my evenings","Show me the nights","Not now"]},
-  {icon:'shield', tint:'rgba(94,107,69,.14)', tc:'#5E6B45', text:"Help me protect tomorrow evening",
-   reply:"Tomorrow looks full until six. I can hold a wind down block from nine thirty so a ten thirty sleep stays in reach. I'd add only my own event, nothing else moves. Want me to?",
-   chips:["Yes, hold it","Make it nine","Not now"]},
-  {icon:'heart', tint:'rgba(242,120,159,.16)', tc:'#C03B6B', text:"I'm exhausted today, what should I do?",
+  {icon:'heart', tint:'var(--tile)', tc:'#C03B6B', text:"I'm exhausted today, what should I do?",
    reply:"Then today is a light day, and that still counts as showing up. One short walk is plenty. The steadier version of you is built on returning after the hard days, not on perfect ones. Want me to shrink today's plan to just the walk?",
    chips:["Yes, lighten today","I'll keep the full plan","Thanks, Sol"]},
-  {icon:'spark', tint:'rgba(245,184,46,.18)', tc:'#8A6A00', text:"Suggest a habit I'd actually keep",
+  {icon:'spark', tint:'var(--tile)', tc:'#8A6A00', text:"Suggest a habit I'd actually keep",
    reply:"Since you already move most days, morning light would compound it. Ten minutes outside early sets your body clock, which feeds the sleep you're working on. Want to add it as a gentle daily prompt?",
    chips:["Add morning light","Something calmer","Not now"]},
 ];
 
 const FOLLOWUP={
-  'Yes, protect my evenings':{r:"Done. On nights work runs late, I'll nudge you at nine thirty to start closing down.",t:['Evening nudge on','Nine thirty on late nights']},
-  'Show me the nights':{r:"Last two weeks it was Tuesday and Thursday, both past nine. Your sleep those nights started around eleven thirty."},
   'Not now':{r:"No problem. I'm here whenever you want to pick it up."},
-  'Yes, hold it':{r:"Held. Wind down is on your calendar tomorrow, nine thirty to ten thirty.",t:['Added to your calendar','Wind down · Tomorrow 9:30pm']},
-  'Make it nine':{r:"Set for nine. A little more room to land softly.",t:['Added to your calendar','Wind down · Tomorrow 9:00pm']},
   'Yes, lighten today':{r:"Lightened. Just the walk today, everything else can wait.",t:['Plan lightened','Just the walk today']},
   "I'll keep the full plan":{r:"Love it. I'll be right here if it starts to feel like too much."},
   'Thanks, Sol':{r:"Anytime. Go easy on yourself today."},
@@ -733,12 +725,13 @@ function toggleVoice(){
 /* ---------- discover ---------- */
 const DOMAINS=[['all','All'],['sleep','Sleep'],['movement','Movement'],['calm','Calm'],['focus','Focus'],['connect','Connection']];
 const CARDS=[
-  {id:'wake',d:'sleep',icon:'☀️',tt:'#5A4FA8',bg:'rgba(110,99,184,.14)',title:'Consistent wake time',tag:'KEYSTONE',what:'Getting up around the same time every day.',why:'A steady wake time anchors your body clock more powerfully than bedtime does, making mornings easier and nights more reliable.'},
-  {id:'walk',d:'movement',icon:'🚶',tt:'#C04A2E',bg:'rgba(255,138,107,.14)',title:'Gentle walk',tag:'KEYSTONE',what:'A short walk at any pace, anytime in your day.',why:'Even ten minutes reliably lifts mood and energy. The lowest effort, highest return movement there is.'},
-  {id:'calm',d:'calm',icon:'🌬',tt:'#2E8A86',bg:'rgba(63,182,176,.14)',title:'5 minute breathwork',tryIt:true,what:'A short guided session: breathe in for 4 seconds, out for 6, for five minutes.',why:'A longer exhale than inhale switches on your body\'s calming response. Around six breaths a minute is the rate shown to best settle stress.'},
-  {id:'cutoff',d:'focus',icon:'💻',tt:'#3E6FB8',bg:'rgba(91,141,214,.14)',title:'Work cutoff time',tag:'KEYSTONE',what:'A set time you stop work for the day.',why:'Mentally detaching from work predicts recovery and wellbeing even more than sleep does. The evening is where you recharge.'},
-  {id:'light',d:'sleep',icon:'🌅',tt:'#8A6A00',bg:'rgba(245,184,46,.16)',title:'Morning sunlight',tag:'KEYSTONE',what:'Ten minutes of outdoor light early in the day.',why:'Morning light sets your circadian clock, improving both daytime alertness and that night\'s sleep.'},
-  {id:'convo',d:'connect',icon:'💬',tt:'#C03B6B',bg:'rgba(242,120,159,.14)',title:'One real conversation',tag:'KEYSTONE',what:'One conversation that goes beyond logistics, a genuine check in.',why:'Social connection is the single strongest predictor of long term wellbeing. One real conversation beats many surface ones.'},
+  {id:'wake',d:'sleep',icon:'☀️',tt:'#5A4FA8',bg:'var(--tile)',title:'Consistent wake time',why:'A steady wake time anchors your body clock more powerfully than bedtime does, making mornings easier and nights more reliable.'},
+  {id:'walk',d:'movement',icon:'🚶',tt:'#C04A2E',bg:'var(--tile)',title:'Gentle movement',why:'Even ten minutes reliably lifts mood and energy. The lowest effort, highest return movement there is.'},
+  {id:'stretch',d:'movement',icon:'🧘',tt:'#C04A2E',bg:'var(--tile)',title:'Morning stretch',why:'A few minutes of gentle mobility eases stiffness and wakes the body up, the simplest way to start moving before the day asks anything of you.'},
+  {id:'calm',d:'calm',icon:'🌬',tt:'#2E8A86',bg:'var(--tile)',title:'5 minute breathwork',tryIt:true,why:'A longer exhale than inhale switches on your body\'s calming response. Around six breaths a minute is the rate shown to best settle stress.'},
+  {id:'cutoff',d:'focus',icon:'💻',tt:'#3E6FB8',bg:'var(--tile)',title:'Work cutoff time',why:'Mentally detaching from work predicts recovery and wellbeing even more than sleep does. The evening is where you recharge.'},
+  {id:'light',d:'sleep',icon:'🌅',tt:'#8A6A00',bg:'var(--tile)',title:'Morning sunlight',why:'Morning light sets your circadian clock, improving both daytime alertness and that night\'s sleep.'},
+  {id:'convo',d:'connect',icon:'💬',tt:'#C03B6B',bg:'var(--tile)',title:'One real conversation',why:'Social connection is the single strongest predictor of long term wellbeing. One real conversation beats many surface ones.'},
 ];
 let domain='all';const addedSet={};
 function renderFilters(){
@@ -753,8 +746,7 @@ function renderCards(){
     return '<div class="card">'+
       '<div style="display:flex;align-items:center;gap:12px;margin-bottom:11px">'+
       '<span style="width:44px;height:44px;border-radius:13px;background:'+c.bg+';display:flex;align-items:center;justify-content:center;font-size:20px">'+c.icon+'</span>'+
-      '<div style="flex:1"><b style="font-size:15.5px;letter-spacing:-.01em">'+c.title+'</b>'+(c.tag?'<div style="font-size:10.5px;font-weight:800;color:'+c.tt+';letter-spacing:.02em">'+c.tag+'</div>':'')+'</div></div>'+
-      '<div class="k" style="margin-bottom:2px">What</div><div class="what">'+c.what+'</div>'+
+      '<div style="flex:1"><b style="font-size:15.5px;letter-spacing:-.01em">'+c.title+'</b></div></div>'+
       '<div class="k" style="color:'+c.tt+';margin-bottom:2px">Why it works</div><div class="what" style="margin-bottom:12px">'+c.why+'</div>'+
       '<div class="rowbtns">'+(c.tryIt?'<button style="background:#3FB6B0;color:#fff" onclick="go(\'breath\')">🌬 Try it now</button>':'')+addBtn+'</div></div>';
   }).join('');

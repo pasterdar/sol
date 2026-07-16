@@ -120,7 +120,6 @@ p.lead{font-size:16px;color:var(--clay);margin-top:8px;line-height:1.5;}
 <body>
 
 <div class="phone" id="phone"></div>
-<div class="hint">Tap through all eight steps. The back arrow and every toggle work.</div>
 
 <script>
 /* ============ icons (from the source design system, no emojis) ============ */
@@ -150,6 +149,7 @@ function I(name,c,s){
     shield:'<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z" '+P+'/>',
     bell:'<path d="M6 9a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6zM10 20a2 2 0 004 0" '+P+'/>',
     lock:'<g '+P+'><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></g>',
+    search:'<g '+P+'><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.3-4.3"/></g>',
     apple:'<g fill="'+c+'"><path d="M16.3 12.9c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.15-2.8.85-3.5.85-.7 0-1.85-.83-3-.81-1.55.02-3 .9-3.8 2.3-1.6 2.8-.4 7 1.15 9.3.77 1.13 1.68 2.4 2.87 2.35 1.15-.05 1.6-.74 3-.74s1.8.74 3 .72c1.24-.02 2.02-1.15 2.78-2.28.87-1.3 1.23-2.57 1.25-2.64-.03-.01-2.4-.92-2.4-3.66z"/><path d="M14.1 6.2c.63-.77 1.06-1.83.94-2.9-.91.04-2.01.61-2.66 1.37-.58.68-1.1 1.76-.96 2.8 1.02.08 2.05-.52 2.68-1.27z"/></g>',
   };
   return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" aria-hidden="true">'+(d[name]||'')+'</svg>';
@@ -188,41 +188,31 @@ function bloomFlower(size){
 /* ============ data ============ */
 const GOALS=[
   {id:'sleep',icon:'moon',label:'Sleep better',sub:'Deep, consistent rest',hue:'#6E63B8'},
-  {id:'race',icon:'run',label:'Start running',sub:'Build the habit, at your pace',hue:'#FF8A6B'},
-  {id:'strong',icon:'dumbbell',label:'Get stronger',sub:'Build muscle and resilience',hue:'#8A6A00'},
+  {id:'fitness',icon:'run',label:'Get fitter',sub:'Pick your sport next',hue:'#FF8A6B'},
   {id:'calm',icon:'wave',label:'Feel calmer',sub:'Less stress in your days',hue:'#3FB6B0'},
-  {id:'energy',icon:'bolt',label:'More daily energy',sub:'Stop running on empty',hue:'#C04A2E'},
+  {id:'energy',icon:'bolt',label:'Higher energy',sub:'Stop running on empty',hue:'#C04A2E'},
 ];
+const SPORTS=['Running','Walking','Strength training','Cycling','Swimming','Yoga','Pilates','Hiking','Football','Basketball','Tennis','Padel','Boxing','Climbing','Rowing','Dancing','Martial arts','Skiing','Surfing','Golf','Volleyball','CrossFit'];
 const STACKS={
   sleep:[
     {id:'s1',icon:'clock',label:'Consistent wake time',sub:'±45 min · from your watch',hue:'#6E63B8',on:true},
     {id:'s2',icon:'candle',label:'Wind down ritual',sub:"We'll define yours together",hue:'#6E63B8',on:true},
     {id:'s3',icon:'cup',label:'Personal caffeine cutoff',sub:'Starts where you are',hue:'#8A6A00',on:true},
   ],
-  race:[
-    {id:'r1',icon:'run',label:'Running session',sub:'Sol sets your starting frequency',hue:'#FF8A6B',on:true},
-    {id:'r2',icon:'clock',label:'Consistent wake time',sub:'Adaptation loves rhythm',hue:'#6E63B8',on:true},
-    {id:'r3',icon:'moon',label:'Recovery day honored',sub:'Rest is training too',hue:'#6E63B8',on:true},
-  ],
-  strong:[
-    {id:'g1',icon:'dumbbell',label:'Strength session',sub:'Sol sets a safe starting frequency',hue:'#8A6A00',on:true},
-    {id:'g2',icon:'moon',label:'Recovery day honored',sub:'Muscle builds at rest',hue:'#6E63B8',on:true},
-    {id:'g3',icon:'clock',label:'Consistent wake time',sub:'Growth happens at night',hue:'#6E63B8',on:true},
-  ],
   calm:[
     {id:'c1',icon:'breath',label:'5 minute breathwork',sub:'In for 4, out for 6',hue:'#3FB6B0',on:true},
-    {id:'c2',icon:'walk',label:'Gentle walk',sub:'10 minutes, any pace',hue:'#FF8A6B',on:true},
+    {id:'c2',icon:'walk',label:'Gentle movement',sub:'10 minutes, any pace',hue:'#FF8A6B',on:true},
     {id:'c3',icon:'pen',label:'2 minute journal',sub:'Guided prompts',hue:'#5E6B45',on:true},
   ],
   energy:[
     {id:'e1',icon:'sun',label:'Morning sunlight',sub:'10 min · anchors your clock',hue:'#8A6A00',on:true},
     {id:'e2',icon:'laptop',label:'Work cutoff time',sub:'Real recovery',hue:'#5B8DD6',on:true},
-    {id:'e3',icon:'walk',label:'Gentle walk',sub:'10 minutes, any pace',hue:'#FF8A6B',on:true},
+    {id:'e3',icon:'walk',label:'Gentle movement',sub:'10 minutes, any pace',hue:'#FF8A6B',on:true},
   ],
 };
 const ADDABLE=[
   {id:'a-sun',icon:'sun',label:'Morning sunlight',sub:'10 min · anchors your clock',hue:'#8A6A00'},
-  {id:'a-walk',icon:'walk',label:'Gentle walk',sub:'10 minutes, any pace',hue:'#FF8A6B'},
+  {id:'a-walk',icon:'walk',label:'Gentle movement',sub:'10 minutes, any pace',hue:'#FF8A6B'},
   {id:'a-breath',icon:'breath',label:'5 minute breathwork',sub:'In for 4, out for 6',hue:'#3FB6B0'},
   {id:'a-journal',icon:'pen',label:'2 minute journal',sub:'Guided prompts',hue:'#5E6B45'},
   {id:'a-cutoff',icon:'laptop',label:'Work cutoff time',sub:'Real recovery',hue:'#5B8DD6'},
@@ -230,32 +220,62 @@ const ADDABLE=[
   {id:'a-connect',icon:'heart',label:'One real conversation',sub:'A daily point of contact',hue:'#C03B6B'},
   {id:'a-caffeine',icon:'cup',label:'Personal caffeine cutoff',sub:'Starts where you are',hue:'#8A6A00'},
 ];
-const STEPS=['welcome','goal','build','plan','about','health','calendar','notify','done'];
+const STEPS=['welcome','goal','sport','build','plan','about','health','calendar','notify','done'];
 const YEARS=[];for(let y=2008;y>=1940;y--)YEARS.push(y);
 
 /* ============ state ============ */
 const S={
-  step:0, goals:[], other:false, otherText:'', stack:[],
+  step:0, goals:[], other:false, otherText:'', stack:[], sport:null, sportQuery:'',
   birthYear:1996, gender:null, healthOn:false, calendarOn:false, notifyOn:false,
   yearOpen:false, addOpen:false,
 };
 const MAX=3;
 
+function fitnessStack(){
+  const sp=S.sport||'Training';
+  return [
+    {id:'f1',icon:'run',label:sp+' session',sub:'Sol sets your starting frequency',hue:'#FF8A6B',on:true},
+    {id:'f2',icon:'moon',label:'Recovery day honored',sub:'Rest is where you grow',hue:'#6E63B8',on:true},
+    {id:'f3',icon:'clock',label:'Consistent wake time',sub:'Adaptation loves rhythm',hue:'#6E63B8',on:true},
+  ];
+}
+function rebuildStack(){
+  const merged=[];
+  S.goals.forEach(gid=>{
+    const st = gid==='fitness' ? fitnessStack() : (STACKS[gid]||[]);
+    st.forEach(h=>{if(!merged.some(m=>m.id===h.id))merged.push({...h});});
+  });
+  S.stack=merged;
+}
 function pickGoal(g){
   S.other=false;
   if(S.goals.includes(g))S.goals=S.goals.filter(x=>x!==g);
   else if(S.goals.length<MAX)S.goals.push(g);
-  const merged=[];
-  S.goals.forEach(gid=>STACKS[gid].forEach(h=>{if(!merged.some(m=>m.id===h.id))merged.push({...h});}));
-  S.stack=merged;
+  if(!S.goals.includes('fitness'))S.sport=null;
+  rebuildStack();
   render();
 }
 function pickOther(){S.other=true;S.goals=[];S.stack=[];render();setTimeout(()=>{const el=document.getElementById('otherIn');if(el)el.focus();},50);}
 function toggleHabit(hid){const h=S.stack.find(x=>x.id===hid);if(h)h.on=!h.on;render();}
 function addHabit(id){const h=ADDABLE.find(x=>x.id===id);if(h&&!S.stack.some(x=>x.id===h.id))S.stack.push({...h,on:true});render();}
-function next(){if(S.step<STEPS.length-1){S.step++;render();}}
-function back(){clearBuild();if(S.step>0){S.step--;if(STEPS[S.step]==='build')S.step--;render();}}
-function acceptOtherPlan(){S.stack=STACKS.energy.map(h=>({...h}));S.other=false;S.goals=['energy'];next();}
+function skipSport(){return !S.goals.includes('fitness');}
+function next(){
+  if(S.step<STEPS.length-1){
+    S.step++;
+    if(STEPS[S.step]==='sport'&&skipSport())S.step++;
+    render();
+  }
+}
+function back(){
+  clearBuild();
+  if(S.step>0){
+    S.step--;
+    if(STEPS[S.step]==='build')S.step--;
+    if(STEPS[S.step]==='sport'&&skipSport())S.step--;
+    render();
+  }
+}
+function acceptOtherPlan(){S.other=false;S.goals=['energy'];rebuildStack();S.step=STEPS.indexOf('build');render();}
 
 const activeCount=()=>S.stack.filter(h=>h.on).length;
 const addable=()=>ADDABLE.filter(h=>!S.stack.some(x=>x.id===h.id||x.label===h.label));
@@ -272,8 +292,8 @@ function vWelcome(){
   return '<div class="body rise" style="justify-content:center;align-items:center;text-align:center;padding:0 26px">'+
     logoFlower(150)+
     '<div style="font-size:15px;font-weight:700;letter-spacing:.22em;color:var(--clay);margin-top:24px">SOL</div>'+
-    '<h1 style="font-size:33px;font-weight:700;letter-spacing:-.025em;margin-top:10px;line-height:1.15">Turn toward<br>the light</h1>'+
-    '<p style="font-size:15.5px;color:var(--clay);line-height:1.5;margin-top:12px">Core habits, built on science.<br>A mentor that learns what drives you.</p>'+
+    '<h1 style="font-size:33px;font-weight:700;letter-spacing:-.025em;margin-top:10px;line-height:1.15">Become the best<br>version of yourself</h1>'+
+    '<p style="font-size:15.5px;color:var(--clay);line-height:1.5;margin-top:12px">Core habits, based on science.<br>A mentor that learns what drives you.</p>'+
   '</div>'+
   '<div class="footer">'+
     '<button class="primary" onclick="next()">Get started</button>'+
@@ -371,13 +391,16 @@ function iosAlert(title,body){
       '<div style="flex:1;text-align:center;padding:12px 0;font-weight:600">Allow</div>'+
     '</div></div>';
 }
-function permScreen(title,lead,at,ab,cta,stateKey){
+function permScreen(title,lead,why,at,ab,cta,stateKey){
   return '<div class="body rise" style="justify-content:flex-start">'+
     '<div style="display:flex;flex-direction:column;align-items:center;margin-top:14px">'+
       '<h1 class="hd" style="text-align:center">'+title+'</h1>'+
       '<div style="background:var(--cream);border:1px solid var(--hair);border-radius:16px;padding:13px 17px;margin-top:16px;font-size:15px;line-height:1.45;color:var(--cocoa);text-align:center;max-width:28ch">'+lead+'</div>'+
     '</div>'+
-    '<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:6px 0">'+iosAlert(at,ab)+'</div>'+
+    '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:6px 0">'+
+      iosAlert(at,ab)+
+      '<p style="font-size:13px;color:var(--clay);line-height:1.5;text-align:center;max-width:30ch">'+why+'</p>'+
+    '</div>'+
   '</div>'+permFooter('Continue',cta,S[stateKey]);
 }
 
@@ -386,6 +409,7 @@ function vHealth(){
   return permScreen(
     'Connect Apple Health',
     'Connect Health so Sol sees your <b>movement and sleep</b>',
+    'Your habits then tick themselves off, so Sol can spot what is working without you logging a thing.',
     '\u201CSol\u201D Would Like to Access Health',
     'Reads steps, workouts and sleep',
     'Connect Apple Health','healthOn');
@@ -395,6 +419,7 @@ function vCalendar(){
   return permScreen(
     'Let Sol read the room',
     'Let Sol <b>ease your plan</b> on busy days, never the details',
+    'On a packed day Sol trims your plan instead of piling on, so a hard week never turns into a broken streak.',
     '\u201CSol\u201D Would Like to Access Calendar',
     'Sees how full your days look, never the details',
     'Connect calendar','calendarOn');
@@ -404,6 +429,7 @@ function vNotify(){
   return permScreen(
     'Let Sol reach you',
     'Turn on <b>gentle nudges</b> at the right moments, never a flood',
+    'A nudge at the right moment is what turns a good plan into a habit that actually sticks.',
     '\u201CSol\u201D Would Like to Send Notifications',
     'Reminders you can change anytime',
     'Turn on notifications','notifyOn');
@@ -455,10 +481,10 @@ function sheetYear(){
 }
 
 /* ============ render ============ */
-const GOALWORD={sleep:'better sleep',race:'running',strong:'strength',calm:'calm',energy:'more energy'};
+const GOALWORD={sleep:'better sleep',fitness:'fitness',calm:'calm',energy:'higher energy'};
 function buildBeats(){
   let first='Reading your goal';
-  if(S.goals&&S.goals.length===1){first='Reading your goal, '+(GOALWORD[S.goals[0]]||'your goal');}
+  if(S.goals&&S.goals.length===1){var w=(S.goals[0]==='fitness'&&S.sport)?S.sport.toLowerCase():(GOALWORD[S.goals[0]]||'your goal');first='Reading your goal, '+w;}
   else if(S.goals&&S.goals.length>1){first='Reading your goals';}
   return [first,'Choosing habits backed by science','Setting a gentle starting point','Shaping it around your week'];
 }
@@ -497,7 +523,45 @@ function startBuild(){
   buildTimers.push(setTimeout(finishBuild,(rows.length-1)*STEP+CHECK+END));
 }
 
-const VIEWS={welcome:vWelcome,goal:vGoal,build:vBuild,plan:vPlan,about:vAbout,health:vHealth,calendar:vCalendar,notify:vNotify,done:vDone};
+function sportRows(){
+  const q=(S.sportQuery||'').trim().toLowerCase();
+  const list=SPORTS.filter(sp=>sp.toLowerCase().indexOf(q)>-1);
+  if(!list.length)return '<div style="text-align:center;color:var(--clay);font-size:14px;padding:22px 0;line-height:1.5">No match. Sol can still build around movement in general.</div>';
+  return list.map(sp=>{
+    const on=S.sport===sp;
+    return '<button onclick="setSport(\''+sp.replace(/'/g,"\\'")+'\')" style="width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .2s ease;border:1.5px solid '+(on?'var(--gold)':'var(--hair)')+';background:'+(on?'rgba(245,184,46,.10)':'var(--cream)')+'">'+
+      '<span style="flex:1;font-size:15px;font-weight:600;color:var(--cocoa)">'+sp+'</span>'+
+      (on?'<span style="width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+I('check','#3A2D26',13)+'</span>':'')+
+    '</button>';
+  }).join('');
+}
+function filterSports(v){
+  S.sportQuery=v;
+  const box=document.getElementById('sportList');
+  if(box)box.innerHTML=sportRows();
+}
+function setSport(sp){
+  S.sport=sp;
+  rebuildStack();
+  const box=document.getElementById('sportList');
+  if(box)box.innerHTML=sportRows();
+  const b=document.getElementById('sportBtn');
+  if(b){b.disabled=false;b.textContent='Continue with '+sp;}
+}
+function vSport(){
+  return '<div class="body rise">'+
+    '<h1 class="hd">Which sport?</h1>'+
+    '<p class="lead">Pick the one you want to build around. You can change it later.</p>'+
+    '<div style="display:flex;align-items:center;gap:9px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;padding:11px 14px;margin:18px 0 12px">'+
+      I('search','#6A5A4D',18)+
+      '<input id="sportSearch" value="'+(S.sportQuery||'').replace(/"/g,'&quot;')+'" oninput="filterSports(this.value)" placeholder="Search sports" style="flex:1;min-width:0;border:none;background:transparent;outline:none;font-size:15px;color:var(--cocoa);font-family:inherit" />'+
+    '</div>'+
+    '<div id="sportList" style="display:flex;flex-direction:column;gap:9px;padding-bottom:12px">'+sportRows()+'</div>'+
+  '</div>'+
+  '<div class="footer"><button id="sportBtn" class="primary" '+(S.sport?'':'disabled')+' onclick="next()">'+(S.sport?'Continue with '+S.sport:'Pick a sport')+'</button></div>';
+}
+
+const VIEWS={welcome:vWelcome,goal:vGoal,sport:vSport,build:vBuild,plan:vPlan,about:vAbout,health:vHealth,calendar:vCalendar,notify:vNotify,done:vDone};
 function render(){
   const id=STEPS[S.step];
   const prog=(S.step>0&&id!=='build')?'<div class="prog"><button class="bk" onclick="back()" aria-label="Back">‹</button>'+
