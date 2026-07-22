@@ -11,7 +11,7 @@
   --peach:#FFB27A; --coral:#FF8A6B; --gold:#F5B82E; --rose:#F2789F; --sage:#9CA87E;
   --coralText:#C04A2E; --sageText:#5E6B45; --goldText:#8A6A00;
   --dusk:#241A1F; --hair:rgba(60,60,67,.18);
-  --blue:#007AFF; --green:#34C759;
+  --blue:#007AFF; --green:#61BB46;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#15100E;min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -51,7 +51,7 @@ p.lead{font-size:16px;color:var(--clay);margin-top:8px;line-height:1.5;}
 .opt .tx{flex:1;}
 .opt .tx b{display:block;font-size:16px;font-weight:600;}
 .opt .tx small{display:block;font-size:13px;color:var(--clay);margin-top:2px;}
-.radio{width:22px;height:22px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--hair);
+.radio{width:22px;height:22px;border-radius:6px;flex-shrink:0;border:1.5px solid var(--hair);
   display:flex;align-items:center;justify-content:center;background:transparent;}
 .opt.sel .radio{border-color:var(--goldText);background:var(--gold);}
 .dashed{border:1.5px dashed rgba(58,45,38,.22);background:transparent;}
@@ -76,10 +76,10 @@ p.lead{font-size:16px;color:var(--clay);margin-top:8px;line-height:1.5;}
 .perm .tx small{display:block;font-size:12.5px;color:var(--clay);margin-top:2px;}
 
 /* animations */
-@keyframes swayF{0%,100%{transform:rotate(-1.5deg);}50%{transform:rotate(1.5deg);}}
-@keyframes swayB{0%,100%{transform:rotate(1.5deg);}50%{transform:rotate(-1.5deg);}}
-.sw-f{animation:swayF 7s ease-in-out infinite;transform-origin:center;}
-.sw-b{animation:swayB 9s ease-in-out infinite;transform-origin:center;}
+@keyframes swayF{0%,100%{transform:rotate(-2.6deg);}50%{transform:rotate(2.6deg);}}
+@keyframes swayB{0%,100%{transform:rotate(2.6deg);}50%{transform:rotate(-2.6deg);}}
+.sw-f{animation:swayF 4.4s ease-in-out infinite;transform-origin:center;}
+.sw-b{animation:swayB 5.8s ease-in-out infinite;transform-origin:center;}
 @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 .rise{animation:rise .45s cubic-bezier(.2,.8,.3,1) both;}
 @keyframes bloomScale{0%{transform:scale(.2) rotate(-25deg);opacity:0;}55%{opacity:1;}100%{transform:scale(1) rotate(0);opacity:1;}}
@@ -88,8 +88,8 @@ p.lead{font-size:16px;color:var(--clay);margin-top:8px;line-height:1.5;}
 .bloom-petal{opacity:0;animation:petalFade .7s ease both;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 .bloom-center{animation:fadeIn .8s ease .85s both;}
-@keyframes gentleSway{0%,100%{transform:rotate(-1.4deg);}50%{transform:rotate(1.4deg);}}
-.bloom-wrap{animation:gentleSway 8s ease-in-out 1.8s infinite;transform-origin:center;}
+@keyframes gentleSway{0%,100%{transform:rotate(-2.4deg);}50%{transform:rotate(2.4deg);}}
+.bloom-wrap{animation:gentleSway 5.2s ease-in-out 1.8s infinite;transform-origin:center;}
 .done-text{animation:rise .8s cubic-bezier(.2,.8,.3,1) 1.3s both;}
 @keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
 .sheet{animation:sheetUp .36s cubic-bezier(.2,.8,.3,1) both;}
@@ -188,11 +188,17 @@ function bloomFlower(size){
 /* ============ data ============ */
 const GOALS=[
   {id:'sleep',icon:'moon',label:'Sleep better',sub:'Deep, consistent rest',hue:'#6E63B8'},
-  {id:'fitness',icon:'run',label:'Get fitter',sub:'Pick your sport next',hue:'#FF8A6B'},
+  {id:'fitness',icon:'run',label:'Get fitter',sub:'Pick your activity next',hue:'#FF8A6B'},
   {id:'calm',icon:'wave',label:'Feel calmer',sub:'Less stress in your days',hue:'#3FB6B0'},
   {id:'energy',icon:'bolt',label:'Higher energy',sub:'Stop running on empty',hue:'#C04A2E'},
 ];
-const SPORTS=['Running','Walking','Strength training','Cycling','Swimming','Yoga','Pilates','Hiking','Football','Basketball','Tennis','Padel','Boxing','Climbing','Rowing','Dancing','Martial arts','Skiing','Surfing','Golf','Volleyball','CrossFit'];
+const SPORTS=[
+  ['Running','🏃'],['Walking','🚶'],['Strength training','🏋️'],['Cycling','🚴'],['Swimming','🏊'],
+  ['Yoga','🧘'],['Pilates','🤸'],['Hiking','🥾'],['Football','⚽'],['Basketball','🏀'],
+  ['Tennis','🎾'],['Padel','🎾'],['Boxing','🥊'],['Climbing','🧗'],['Rowing','🚣'],
+  ['Dancing','💃'],['Martial arts','🥋'],['Skiing','⛷️'],['Surfing','🏄'],['Golf','⛳'],
+  ['Volleyball','🏐'],['CrossFit','🤾']
+];
 const STACKS={
   sleep:[
     {id:'s1',icon:'clock',label:'Consistent wake time',sub:'±45 min · from your watch',hue:'#6E63B8',on:true},
@@ -220,13 +226,13 @@ const ADDABLE=[
   {id:'a-connect',icon:'heart',label:'One real conversation',sub:'A daily point of contact',hue:'#C03B6B'},
   {id:'a-caffeine',icon:'cup',label:'Personal caffeine cutoff',sub:'Starts where you are',hue:'#8A6A00'},
 ];
-const STEPS=['welcome','goal','sport','build','plan','about','health','calendar','notify','done'];
+const STEPS=['welcome','goal','sport','build','plan','about','health','notify','done'];
 const YEARS=[];for(let y=2008;y>=1940;y--)YEARS.push(y);
 
 /* ============ state ============ */
 const S={
   step:0, goals:[], other:false, otherText:'', stack:[], sport:null, sportQuery:'',
-  birthYear:1996, gender:null, healthOn:false, calendarOn:false, notifyOn:false,
+  birthYear:1996, gender:null, healthOn:false, notifyOn:false,
   yearOpen:false, addOpen:false,
 };
 const MAX=3;
@@ -284,7 +290,7 @@ const goalLabel=()=>S.other?(S.otherText||'your goal'):(S.goals.length===1?GOALS
 /* ============ views ============ */
 function optRow(o,sel,dim,onclick,right){
   return '<button class="opt'+(sel?' sel':'')+(dim?' dim':'')+'" '+(dim?'disabled':'')+' onclick="'+onclick+'">'+
-    '<span class="ic" style="background:'+o.hue+'22">'+I(o.icon,o.hue,22)+'</span>'+
+    '<span class="ic" style="background:transparent">'+I(o.icon,o.hue,22)+'</span>'+
     '<span class="tx"><b>'+o.label+'</b><small>'+o.sub+'</small></span>'+right+'</button>';
 }
 
@@ -336,7 +342,7 @@ function vPlan(){
   if(S.other)return vPlanOther();
   const rows=S.stack.map(h=>
     '<button class="opt'+(h.on?' sel':'')+'" style="opacity:'+(h.on?1:.6)+'" onclick="toggleHabit(\''+h.id+'\')">'+
-    '<span class="ic" style="width:40px;height:40px;background:'+h.hue+'22">'+I(h.icon,h.hue,20)+'</span>'+
+    '<span class="ic" style="width:40px;height:40px;background:transparent">'+I(h.icon,h.hue,20)+'</span>'+
     '<span class="tx"><b style="font-size:14.5px">'+h.label+'</b><small style="font-size:12px">'+h.sub+'</small></span>'+
     '<span class="tog'+(h.on?' on':'')+'"><span class="kn"></span></span></button>').join('');
   const n=activeCount();
@@ -344,7 +350,8 @@ function vPlan(){
   return '<div class="body rise">'+
     '<div class="k" style="text-transform:uppercase;color:var(--goldText);margin-bottom:10px">Built for: '+goalLabel()+'</div>'+
     '<h1 class="hd">Here\'s your habit stack</h1>'+
-    '<p class="lead">Science backed, pre-selected. Toggle anything, or trust the plan.</p>'+
+    '<p class="lead">These few move the needle most for your goal, and they reinforce each other. Toggle anything, or trust the plan.</p>'+
+    '<p style="font-size:13px;color:var(--clay);line-height:1.5;margin-top:8px">The science behind each one lives in Discover.</p>'+
     '<div style="display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-bottom:12px">'+rows+'</div>'+
   '</div>'+
   '<div class="footer"><button class="primary" '+(n===0?'disabled':'')+' onclick="next()">'+label+'</button></div>';
@@ -414,16 +421,6 @@ function vHealth(){
     'Reads steps, workouts and sleep',
     'Connect Apple Health','healthOn');
 }
-function vCalendar(){
-  pendingGrant='calendarOn';
-  return permScreen(
-    'Let Sol read the room',
-    'Let Sol <b>ease your plan</b> on busy days, never the details',
-    'On a packed day Sol trims your plan instead of piling on, so a hard week never turns into a broken streak.',
-    '\u201CSol\u201D Would Like to Access Calendar',
-    'Sees how full your days look, never the details',
-    'Connect calendar','calendarOn');
-}
 function vNotify(){
   pendingGrant='notifyOn';
   return permScreen(
@@ -453,7 +450,7 @@ function vDone(){
 }
 function restart(){
   S.step=0;S.goals=[];S.other=false;S.otherText='';S.stack=[];S.gender=null;
-  S.healthOn=false;S.calendarOn=false;S.notifyOn=false;render();
+  S.healthOn=false;S.notifyOn=false;render();
 }
 
 /* ============ sheets ============ */
@@ -461,7 +458,7 @@ function sheetAdd(){
   const list=addable();
   const rows=list.length?list.map(h=>
     '<button onclick="addHabit(\''+h.id+'\')" style="width:100%;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--hair);background:var(--cream);display:flex;align-items:center;gap:12px">'+
-    '<span style="width:38px;height:38px;border-radius:11px;background:'+h.hue+'22;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+I(h.icon,h.hue,19)+'</span>'+
+    '<span style="width:38px;height:38px;border-radius:11px;background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+I(h.icon,h.hue,19)+'</span>'+
     '<span style="flex:1"><span style="display:block;font-size:14.5px;font-weight:600">'+h.label+'</span><span style="display:block;font-size:12px;color:var(--clay);margin-top:2px">'+h.sub+'</span></span>'+
     '<span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--coralText);flex-shrink:0">'+I('plus','#C04A2E',16)+' Add</span></button>').join('')
   :'<div style="text-align:center;color:var(--clay);font-size:14px;padding:20px 0 24px">You\'ve added everything we suggest for now. You can always add more later from Discover.</div>';
@@ -491,7 +488,7 @@ function buildBeats(){
 function vBuild(){
   const rows=buildBeats().map((b)=>
     '<div class="build-row" style="opacity:0;transform:translateY(5px);transition:opacity .35s ease,transform .35s ease;display:flex;align-items:center;gap:12px">'+
-      '<span class="build-ck" style="width:23px;height:23px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--hair);display:flex;align-items:center;justify-content:center;transition:all .3s ease">'+
+      '<span class="build-ck" style="width:23px;height:23px;border-radius:6px;flex-shrink:0;border:1.5px solid var(--hair);display:flex;align-items:center;justify-content:center;transition:all .3s ease">'+
         '<svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="opacity:0"/></svg>'+
       '</span>'+
       '<span style="font-size:15.5px;font-weight:600;color:var(--cocoa);line-height:1.35">'+b+'</span>'+
@@ -502,12 +499,11 @@ function vBuild(){
       rows+
     '</div>'+
   '</div>'+
-  '<div class="footer"><button id="buildSkip" onclick="skipBuild()" style="width:100%;padding:12px 0;background:transparent;color:var(--clay);font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .4s ease;font-family:inherit;border:none;cursor:pointer">Skip</button></div>';
+  '<div class="footer"></div>';
 }
 let buildTimers=[];
 function clearBuild(){buildTimers.forEach(clearTimeout);buildTimers=[];}
 function finishBuild(){if(STEPS[S.step]!=='build')return;clearBuild();S.step=STEPS.indexOf('plan');render();}
-function skipBuild(){finishBuild();}
 function startBuild(){
   clearBuild();
   const rows=Array.prototype.slice.call(document.querySelectorAll('.build-row'));
@@ -519,19 +515,20 @@ function startBuild(){
       const path=row.querySelector('path');if(path)path.style.opacity='1';
     },i*STEP+CHECK));
   });
-  buildTimers.push(setTimeout(function(){const s=document.getElementById('buildSkip');if(s){s.style.opacity='1';s.style.pointerEvents='auto';}},STEP+200));
   buildTimers.push(setTimeout(finishBuild,(rows.length-1)*STEP+CHECK+END));
 }
 
 function sportRows(){
   const q=(S.sportQuery||'').trim().toLowerCase();
-  const list=SPORTS.filter(sp=>sp.toLowerCase().indexOf(q)>-1);
+  const list=SPORTS.filter(sp=>sp[0].toLowerCase().indexOf(q)>-1);
   if(!list.length)return '<div style="text-align:center;color:var(--clay);font-size:14px;padding:22px 0;line-height:1.5">No match. Sol can still build around movement in general.</div>';
-  return list.map(sp=>{
+  return list.map(item=>{
+    const sp=item[0], ic=item[1];
     const on=S.sport===sp;
     return '<button onclick="setSport(\''+sp.replace(/'/g,"\\'")+'\')" style="width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .2s ease;border:1.5px solid '+(on?'var(--gold)':'var(--hair)')+';background:'+(on?'rgba(245,184,46,.10)':'var(--cream)')+'">'+
+      '<span style="font-size:20px;width:26px;text-align:center;flex-shrink:0">'+ic+'</span>'+
       '<span style="flex:1;font-size:15px;font-weight:600;color:var(--cocoa)">'+sp+'</span>'+
-      (on?'<span style="width:22px;height:22px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+I('check','#3A2D26',13)+'</span>':'')+
+      (on?'<span style="width:22px;height:22px;border-radius:6px;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+I('check','#3A2D26',13)+'</span>':'')+
     '</button>';
   }).join('');
 }
@@ -550,18 +547,18 @@ function setSport(sp){
 }
 function vSport(){
   return '<div class="body rise">'+
-    '<h1 class="hd">Which sport?</h1>'+
+    '<h1 class="hd">Which activity?</h1>'+
     '<p class="lead">Pick the one you want to build around. You can change it later.</p>'+
     '<div style="display:flex;align-items:center;gap:9px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;padding:11px 14px;margin:18px 0 12px">'+
       I('search','#6A5A4D',18)+
-      '<input id="sportSearch" value="'+(S.sportQuery||'').replace(/"/g,'&quot;')+'" oninput="filterSports(this.value)" placeholder="Search sports" style="flex:1;min-width:0;border:none;background:transparent;outline:none;font-size:15px;color:var(--cocoa);font-family:inherit" />'+
+      '<input id="sportSearch" value="'+(S.sportQuery||'').replace(/"/g,'&quot;')+'" oninput="filterSports(this.value)" placeholder="Search activities" style="flex:1;min-width:0;border:none;background:transparent;outline:none;font-size:15px;color:var(--cocoa);font-family:inherit" />'+
     '</div>'+
     '<div id="sportList" style="display:flex;flex-direction:column;gap:9px;padding-bottom:12px">'+sportRows()+'</div>'+
   '</div>'+
-  '<div class="footer"><button id="sportBtn" class="primary" '+(S.sport?'':'disabled')+' onclick="next()">'+(S.sport?'Continue with '+S.sport:'Pick a sport')+'</button></div>';
+  '<div class="footer"><button id="sportBtn" class="primary" '+(S.sport?'':'disabled')+' onclick="next()">'+(S.sport?'Continue with '+S.sport:'Pick an activity')+'</button></div>';
 }
 
-const VIEWS={welcome:vWelcome,goal:vGoal,sport:vSport,build:vBuild,plan:vPlan,about:vAbout,health:vHealth,calendar:vCalendar,notify:vNotify,done:vDone};
+const VIEWS={welcome:vWelcome,goal:vGoal,sport:vSport,build:vBuild,plan:vPlan,about:vAbout,health:vHealth,notify:vNotify,done:vDone};
 function render(){
   const id=STEPS[S.step];
   const prog=(S.step>0&&id!=='build')?'<div class="prog"><button class="bk" onclick="back()" aria-label="Back">‹</button>'+
