@@ -317,7 +317,7 @@ function vGoal(){
   const can=S.goals.length>0;
   return '<div class="body rise">'+
     '<h1 class="hd">What are you working toward?</h1>'+
-    '<p class="lead">Start with one. Sol builds your plan around it.</p>'+
+    '<p class="lead">Start with one.<br>Sol builds your plan around it.</p>'+
     '<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;padding-bottom:12px">'+rows+nudge+'</div>'+
   '</div>'+
   '<div class="footer"><button class="primary" id="goalBtn" '+(can?'':'disabled')+' onclick="next()">Build my plan</button></div>';
@@ -351,8 +351,8 @@ function vPlan(){
     '<div class="k" style="text-transform:uppercase;color:var(--goldText);margin-bottom:10px">Built for: '+goalLabel()+'</div>'+
     '<h1 class="hd">Here\'s your habit stack</h1>'+
     '<p class="lead">These few move the needle most for your goal, and they reinforce each other. Toggle anything, or trust the plan.</p>'+
-    '<p style="font-size:13px;color:var(--clay);line-height:1.5;margin-top:8px">The science behind each one lives in Discover.</p>'+
-    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-bottom:12px">'+rows+'</div>'+
+    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:18px">'+rows+'</div>'+
+    '<p style="font-size:13px;color:var(--clay);line-height:1.5;margin-top:14px;padding-bottom:12px">Once you\'re in, the science behind each habit lives in the Discover tab.</p>'+
   '</div>'+
   '<div class="footer"><button class="primary" '+(n===0?'disabled':'')+' onclick="next()">'+label+'</button></div>';
 }
@@ -362,7 +362,7 @@ function vAbout(){
     '<button onclick="S.gender=\''+g+'\';render()" style="padding:15px 4px;border-radius:12px;font-size:14.5px;font-weight:600;border:1.5px solid '+(S.gender===g?'var(--gold)':'var(--hair)')+';background:'+(S.gender===g?'rgba(245,184,46,.12)':'var(--cream)')+';color:'+(S.gender===g?'var(--goldText)':'var(--cocoa)')+';transition:all .2s ease">'+g+'</button>').join('');
   return '<div class="body rise">'+
     '<h1 class="hd">A little about you</h1>'+
-    '<p class="lead">Just enough to keep your habits safe. Sol never asks your weight.</p>'+
+    '<p class="lead">Just enough to keep your habits safe.<br>Sol never asks your weight.</p>'+
     '<div class="k" style="margin:26px 4px 11px">YEAR OF BIRTH</div>'+
     '<button onclick="S.yearOpen=true;render()" style="position:relative;width:100%;padding:15px 18px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;display:flex;align-items:center;justify-content:center">'+
       '<span style="font-size:17px;font-weight:700;font-variant-numeric:tabular-nums">'+S.birthYear+'</span>'+
