@@ -7,31 +7,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --dawn:#F4ECE2; --cream:#fff; --cocoa:#3A2D26; --clay:#6A5A4D;
-  --peach:#FFB27A; --coral:#FF8A6B; --gold:#F5B82E; --rose:#F2789F; --sage:#9CA87E;
-  --coralText:#C04A2E; --sageText:#5E6B45; --goldText:#8A6A00; --roseText:#C03B6B;
-  --hair:rgba(60,60,67,.18); --dusk:#241A1F;
-  --blue:#007AFF; --green:#61BB46; --iosred:#FF3B30;
+  --dawn:#FAF7F1; --cream:#fff; --cocoa:#1F1F1F; --clay:#9E9A94;
+  --peach:#E6C98B; --coral:#FF8A65; --gold:#F5B800; --rose:#FF8A65; --sage:#8FA87A;
+  --coralText:#FF8A65; --sageText:#8FA87A; --goldText:#F5B800; --roseText:#FF8A65;
+  --hair:#E6E4DF; --dusk:#1F1F1F;
+  --blue:#007AFF; --green:#8FA87A; --iosred:#FF3B30;
   --tile:transparent;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#15100E;min-height:100vh;display:flex;align-items:center;justify-content:center;
+body{background:#1F1F1F;min-height:100vh;display:flex;align-items:center;justify-content:center;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter",system-ui,sans-serif;color:var(--cocoa);padding:24px;
   -webkit-font-smoothing:antialiased;}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
 
 .phone{width:390px;height:800px;background:var(--dawn);border-radius:46px;overflow:hidden;position:relative;
-  display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 10px #1d1714;}
+  display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(31,31,31,.5),0 0 0 10px #1F1F1F;}
 .screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--dawn);}
 .screen.on{display:flex;}
 .scroll{flex:1;overflow-y:auto;padding:46px 18px 110px;}
 .scroll.nofoot{padding-bottom:28px;}
+h1,p{text-wrap:balance;}
 h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .sub{font-size:15px;color:var(--clay);margin-bottom:16px;}
 .card{background:var(--cream);border:1px solid var(--hair);border-radius:12px;padding:15px 16px;margin-bottom:12px;}
-.grad{background:linear-gradient(135deg,var(--peach),var(--coral));border:none;}
+.grad{background:#FFF3C4;border:1px solid var(--hair);}
 .k{font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--clay);text-transform:uppercase;}
-.pillbtn{display:block;width:100%;padding:14px 0;border-radius:12px;background:var(--coralText);color:#fff;
+.pillbtn{display:block;width:100%;padding:14px 0;border-radius:12px;background:var(--gold);color:var(--cocoa);
   font-size:17px;font-weight:600;text-align:center;}
 .ghost{background:transparent;color:var(--coralText);border:none;font-weight:400;}
 .navrow{padding:16px 16px 8px;display:flex;align-items:center;gap:10px;position:relative;min-height:44px;}
@@ -42,7 +43,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .tabbar{position:absolute;bottom:0;left:0;right:0;display:flex;padding:9px 8px 24px;
   background:rgba(244,236,226,.82);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--hair);z-index:20;}
 .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:500;color:var(--clay);}
-.tabbar button.active{color:var(--coralText);}
+.tabbar button.active{color:var(--cocoa);font-weight:700;}
 .tabbar svg{width:26px;height:26px;}
 
 /* flower */
@@ -56,12 +57,12 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .sway-f{animation:swayF 7s ease-in-out infinite;transform-origin:center;}
 .sway-b{animation:swayB 9s ease-in-out infinite;transform-origin:center;}
 .fl-bloom{animation:bloom .52s cubic-bezier(.34,1.25,.5,1);transform-origin:center;}
-.fl-glow{position:absolute;inset:-9px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(245,184,46,.55) 0%,rgba(255,138,107,.28) 50%,transparent 72%);animation:glowPulse 3.8s ease-in-out infinite;}
+.fl-glow{position:absolute;inset:-9px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(245,184,0,.55) 0%,rgba(255,138,101,.28) 50%,transparent 72%);animation:glowPulse 3.8s ease-in-out infinite;}
 .fl-drift{animation:driftRot 46s linear infinite;transform-origin:center;}
 @media (prefers-reduced-motion:reduce){.fl-breathe,.sway-f,.sway-b,.fl-bloom,.fl-glow,.fl-drift{animation:none!important;}}
 /* mentor avatar: gentle hover with light travelling around the petals */
 .mentor-stage{position:relative;width:120px;height:112px;display:flex;align-items:center;justify-content:center;}
-.mentor-shadow{position:absolute;bottom:6px;left:50%;width:54px;height:9px;margin-left:-27px;border-radius:50%;background:#3A2D26;opacity:.16;filter:blur(3.5px);animation:mHoverShadow 5.6s ease-in-out infinite;}
+.mentor-shadow{position:absolute;bottom:6px;left:50%;width:54px;height:9px;margin-left:-27px;border-radius:50%;background:#1F1F1F;opacity:.16;filter:blur(3.5px);animation:mHoverShadow 5.6s ease-in-out infinite;}
 .mentor-hover{animation:mHover 5.6s ease-in-out infinite;will-change:transform;}
 @keyframes mHover{0%,100%{transform:translateY(2px);}50%{transform:translateY(-5px);}}
 @keyframes mHoverShadow{0%,100%{transform:scaleX(1);opacity:.16;}50%{transform:scaleX(.82);opacity:.09;}}
@@ -70,15 +71,29 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 @media (prefers-reduced-motion:reduce){.mentor-hover,.mentor-shadow,.mp-shimmer{animation:none!important;}}
 
 /* habits */
-.habit{display:flex;align-items:center;gap:12px;background:var(--cream);border:1px solid var(--hair);
-  border-radius:12px;padding:13px 14px;margin-bottom:10px;text-align:left;width:100%;}
-.habit .ic{width:34px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.habit .nm{font-size:16px;font-weight:700;flex:1;}
-.habit .nm small{display:block;font-size:11.5px;font-weight:600;color:var(--clay);margin-top:1px;}
-.tick{width:28px;height:28px;border-radius:7px;border:2px solid var(--hair);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s;}
-.habit.done .tick{background:var(--sage);border-color:var(--sage);}
-.play{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#3FB6B0;box-shadow:0 2px 8px rgba(63,182,176,.35);}
-.habit.done .nm{opacity:.55;text-decoration:line-through;}
+.mission{position:relative;display:flex;align-items:center;gap:12px;background:#FFF3C4;border:1px solid var(--hair);
+  border-radius:14px;padding:16px 18px 16px 16px;margin-top:12px;width:100%;font-family:inherit;cursor:pointer;text-align:left;}
+.mission .mark{position:static;flex-shrink:0;margin-right:2px;}
+.mission.done .mark{background:var(--sage);}
+.mission.done .mtitle,.mission.done .memoji{opacity:.45;}
+.habit.done .ic,.habit.done .nm,.habit.done .val{opacity:.45;}
+.wday{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.wday .dot{width:30px;height:30px;border-radius:50%;background:var(--hair);display:flex;align-items:center;justify-content:center;}
+.wday.on .dot{background:var(--sage);}
+.wday .lb{font-size:10.5px;font-weight:700;color:var(--clay);}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.habit{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:0;background:var(--cream);
+  border:1px solid var(--hair);border-radius:14px;padding:14px;text-align:left;min-height:118px;}
+.habit .ic{font-size:26px;line-height:1;margin-bottom:auto;}
+.habit .nm{font-size:13px;font-weight:600;color:var(--clay);margin-top:10px;}
+.habit .val{font-size:20px;font-weight:800;letter-spacing:-.015em;margin-top:2px;}
+.habit .val span{font-size:12px;font-weight:600;color:var(--clay);}
+.habit .val.light{font-size:16px;font-weight:600;}
+.mark{width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;background:rgba(31,31,31,.06);}
+.habit .mark{position:absolute;top:12px;right:12px;}
+.habit.done .mark{background:var(--sage);}
+.habit .mark svg{display:block;}
 
 /* chat */
 .chat{flex:1;overflow-y:auto;padding:14px 16px 8px;}
@@ -102,15 +117,15 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;}
 .filters button{flex-shrink:0;border:1.5px solid var(--hair);background:var(--cream);color:var(--clay);
   border-radius:99px;padding:8px 15px;font-size:13px;font-weight:600;}
-.filters button.on{border-color:var(--gold);background:rgba(245,184,46,.12);color:var(--goldText);}
+.filters button.on{border-color:var(--gold);background:#FFF3C4;color:var(--cocoa);}
 .what{font-size:13px;line-height:1.5;margin:3px 0 9px;}
 .rowbtns{display:flex;gap:8px;}
 .rowbtns button{flex:1;padding:11px 0;border-radius:13px;font-size:13.5px;font-weight:700;}
 
 /* segmented */
-.seg{display:inline-flex;background:rgba(58,45,38,.06);border:none;border-radius:9px;padding:2px;margin-bottom:16px;}
+.seg{display:inline-flex;background:rgba(31,31,31,.06);border:none;border-radius:9px;padding:2px;margin-bottom:16px;}
 .seg button{padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600;color:var(--cocoa);}
-.seg button.on{background:var(--cream);color:var(--cocoa);box-shadow:0 1px 3px rgba(58,45,38,.16);}
+.seg button.on{background:var(--cream);color:var(--cocoa);box-shadow:0 1px 3px rgba(31,31,31,.16);}
 
 /* account rows */
 .acrow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--hair);width:100%;text-align:left;}
@@ -118,21 +133,21 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .acrow .ic{width:28px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .acrow .lbl{flex:1;font-size:16px;font-weight:600;}
 .acrow .lbl small{display:block;font-size:11.5px;font-weight:500;color:var(--clay);margin-top:1px;}
-.acrow .chev{color:#C7C7CC;font-size:16px;font-weight:700;}
+.acrow .chev{color:#9E9A94;font-size:16px;font-weight:700;}
 .grpwrap{background:var(--cream);border:1px solid var(--hair);border-radius:12px;overflow:hidden;margin-bottom:18px;}
 
 /* config */
 .trio{display:flex;gap:9px;}
 .trio button{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 4px;border-radius:12px;
-  border:1.5px solid var(--hair);background:var(--cream);font-size:12.5px;font-weight:600;color:var(--clay);}
-.trio button.on{background:var(--gold);border-color:transparent;color:var(--cocoa);}
+  border:1.5px solid var(--hair);background:var(--cream);font-size:12.5px;font-weight:600;color:var(--cocoa);}
+.trio button.on{background:#FFF3C4;border-color:var(--gold);color:var(--cocoa);}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
 .grid2 button{padding:13px 0;border-radius:12px;border:1.5px solid var(--hair);background:var(--cream);font-size:14px;font-weight:600;}
-.grid2 button.on{border-color:var(--gold);background:rgba(245,184,46,.12);color:var(--goldText);}
+.grid2 button.on{border-color:var(--gold);background:#FFF3C4;color:var(--cocoa);}
 
 /* toast */
 .toast{position:absolute;left:16px;right:16px;bottom:96px;background:var(--dusk);border-radius:12px;padding:13px 15px;
-  display:flex;align-items:center;gap:12px;z-index:40;color:#fff;box-shadow:0 12px 32px rgba(0,0,0,.35);
+  display:flex;align-items:center;gap:12px;z-index:40;color:#fff;box-shadow:0 12px 32px rgba(31,31,31,.35);
   opacity:0;transform:translateY(14px);transition:all .3s cubic-bezier(.2,.8,.3,1);pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);pointer-events:auto;}
 .toast .msg{flex:1;font-size:13.5px;font-weight:700;}
@@ -156,15 +171,35 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
   <!-- ============ TODAY ============ -->
   <div class="screen on" data-s="today">
     <div class="scroll">
-      <div style="display:flex;align-items:baseline;gap:10px">
-        <h1 class="big">Today</h1>
-        <span id="todayCount" style="font-size:15px;font-weight:600;color:var(--clay);font-variant-numeric:tabular-nums"></span>
+      <h1 id="todayGreet" style="font-size:22px;font-weight:700;letter-spacing:-.018em">Good morning, Daria</h1>
+
+      <div class="card" style="margin-top:18px;padding:15px 16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+          <span style="font-size:13.5px;font-weight:700">Your rhythm</span>
+          <span style="font-size:13px;font-weight:700;color:var(--clay)">23 days</span>
+        </div>
+        <div id="weekRow" style="display:flex;justify-content:space-between;gap:5px"></div>
       </div>
-      <div class="card grad" id="fact" style="margin-top:18px">
+
+      <button class="mission" id="missionCard" onclick="tapMission()">
+        <div class="memoji" style="font-size:40px;line-height:1">🏃🏼‍♀️</div>
+        <div style="flex:1;text-align:left">
+          <div style="font-size:12.5px;font-weight:600;color:var(--clay)">Today's mission</div>
+          <div class="mtitle" style="font-size:20px;font-weight:800;letter-spacing:-.015em;margin-top:3px;line-height:1.2">Run for 30 minutes</div>
+        </div>
+        <span class="mark" id="missionMark" style="position:static;flex-shrink:0"></span>
+      </button>
+
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:22px 2px 12px">
+        <h2 style="font-size:18px;font-weight:800;letter-spacing:-.015em">Daily habits</h2>
+        <span id="todayCount" style="font-size:13px;font-weight:600;color:var(--clay);font-variant-numeric:tabular-nums"></span>
+      </div>
+      <div id="habits" class="hgrid"></div>
+
+      <div class="card" id="fact" style="margin-top:16px;background:#FFF3C4;border:1px solid var(--hair)">
         <div class="k" style="color:var(--cocoa);opacity:.7">Fact of the day</div>
         <p style="font-size:14.5px;font-weight:500;line-height:1.5;margin-top:4px">10 minutes of morning light can shift your sleep earlier the same night. Your eyes set the clock for the whole day.</p>
       </div>
-      <div id="habits" style="margin-top:14px"></div>
 
     </div>
   </div>
@@ -206,33 +241,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
         </button>
       </div>
 
-
-      <div class="card grad" style="margin-top:18px">
-        <div class="k" style="color:var(--cocoa);opacity:.7">Building toward</div>
-        <div style="font-size:20px;font-weight:800;letter-spacing:-.015em;margin:5px 0 12px;line-height:1.2">Half marathon, 12 October</div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px">
-          <span style="font-size:13.5px;font-weight:600;opacity:.9">11 weeks in</span>
-          <span style="font-size:13.5px;font-weight:600;opacity:.9">9 weeks to go</span>
-        </div>
-        <div style="height:9px;border-radius:99px;background:rgba(58,45,38,.16);overflow:hidden">
-          <div style="width:55%;height:100%;border-radius:99px;background:var(--cocoa);opacity:.55"></div>
-        </div>
-        <div style="font-size:13px;line-height:1.5;opacity:.9;margin-top:10px">Past halfway, and your long run has grown every month. No rush, the date is a horizon, not a test.</div>
-      </div>
-
-
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-          <b style="font-size:15px">Resting heart rate</b><span style="font-size:12.5px;font-weight:600;color:var(--sageText)">−4 bpm this month</span>
-        </div>
-        <svg viewBox="0 0 300 70" width="100%" height="66" aria-label="Resting heart rate trending down">
-          <path d="M0,18 L50,24 L100,20 L150,32 L200,38 L250,44 L300,48 L300,62 L0,62 Z" fill="rgba(156,168,126,.20)"/>
-          <path d="M0,18 L50,24 L100,20 L150,32 L200,38 L250,44 L300,48" fill="none" stroke="#9CA87E" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-
-
-      <div class="card">
+      <div class="card" style="margin-top:22px">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
           <div style="flex:1">
             <div style="font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums">23</div>
@@ -247,19 +256,32 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
         <div style="font-size:12.5px;color:var(--sageText);font-weight:600;margin-top:11px">Every day since you started</div>
       </div>
 
+
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+          <b style="font-size:15px">Resting heart rate</b><span style="font-size:12.5px;font-weight:600;color:var(--sageText)">−4 bpm this month</span>
+        </div>
+        <svg viewBox="0 0 300 70" width="100%" height="66" aria-label="Resting heart rate trending down">
+          <path d="M0,18 L50,24 L100,20 L150,32 L200,38 L250,44 L300,48 L300,62 L0,62 Z" fill="rgba(143,168,122,.20)"/>
+          <path d="M0,18 L50,24 L100,20 L150,32 L200,38 L250,44 L300,48" fill="none" stroke="#8FA87A" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
           <b style="font-size:15px">Sleep is improving</b><span style="font-size:12.5px;font-weight:600;color:var(--sageText)">now past 7h ☀</span>
         </div>
         <svg viewBox="0 0 300 106" width="100%" height="100" aria-label="Sleep trending up">
-          <line x1="0" y1="31" x2="300" y2="31" stroke="#9CA87E" stroke-width="1.2" stroke-dasharray="4 5"/>
-          <text x="300" y="26" text-anchor="end" font-size="10" fill="#5E6B45" font-weight="600">7h</text>
-          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24 L300,90 L0,90 Z" fill="rgba(255,138,107,.22)"/>
-          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24" fill="none" stroke="#FF8A6B" stroke-width="2.5" stroke-linecap="round"/>
-          <g fill="#fff" stroke="#FF8A6B" stroke-width="2">
+          <line x1="0" y1="31" x2="300" y2="31" stroke="#8FA87A" stroke-width="1.2" stroke-dasharray="4 5"/>
+          <text x="300" y="26" text-anchor="end" font-size="10" fill="#8FA87A" font-weight="600">7h</text>
+          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24 L300,90 L0,90 Z" fill="rgba(255,138,101,.22)"/>
+          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24" fill="none" stroke="#FF8A65" stroke-width="2.5" stroke-linecap="round"/>
+          <g fill="#fff" stroke="#FF8A65" stroke-width="2">
             <circle cx="0" cy="63" r="3"/><circle cx="50" cy="71" r="3"/><circle cx="100" cy="47" r="3"/><circle cx="150" cy="55" r="3"/><circle cx="200" cy="27" r="3"/><circle cx="250" cy="20" r="3"/><circle cx="300" cy="24" r="3"/>
           </g>
-          <g font-size="10" fill="#6A5A4D" text-anchor="middle">
+          <g font-size="10" fill="#9E9A94" text-anchor="middle">
             <text x="0" y="103">S</text><text x="50" y="103">M</text><text x="100" y="103">T</text><text x="150" y="103">W</text><text x="200" y="103">T</text><text x="250" y="103">F</text><text x="300" y="103">S</text>
           </g>
         </svg>
@@ -289,7 +311,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
       </div>
       <div class="k" style="margin:0 4px 10px">Habits</div>
       <div class="grpwrap">
-        <button class="acrow" onclick="go('config')"><span class="lbl">My habits<small>4 active</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="openConfig('Target steps','👣');go('config')"><span class="lbl">My habits<small>4 active</small></span><span class="chev">›</span></button>
         <button class="acrow" onclick="toast('Reminders','Evening reminders are on')"><span class="lbl">Reminders &amp; notifications</span><span class="chev">›</span></button>
       </div>
       <div class="k" style="margin:0 4px 10px">Privacy &amp; data</div>
@@ -340,7 +362,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
     </div>
     <div style="padding:12px 20px 28px;border-top:1px solid var(--hair);background:var(--dawn)">
       <button id="delBtn" disabled onclick="confirmDelete()"
-        style="width:100%;padding:15px 0;border-radius:12px;font-size:15.5px;font-weight:700;background:rgba(58,45,38,.08);color:var(--clay);transition:all .2s">Delete my account</button>
+        style="width:100%;padding:15px 0;border-radius:12px;font-size:15.5px;font-weight:700;background:rgba(31,31,31,.08);color:var(--clay);transition:all .2s">Delete my account</button>
     </div>
   </div>
 
@@ -356,27 +378,52 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
   </div>
 
   <!-- ============ BREATHWORK (sub) ============ -->
-  <div class="screen" data-s="breath" style="background:radial-gradient(130% 90% at 50% 18%,#fff 0%,var(--dawn) 55%,#EFE4D6 100%)">
+  <div class="screen" data-s="breath" style="background:radial-gradient(130% 90% at 50% 18%,#fff 0%,var(--dawn) 55%,#E6C98B 100%)">
     <div class="navrow">
       <button class="backbtn" onclick="stopBreath();back()">Close</button>
       <div class="ttl" style="text-align:center">Breathe</div>
       <span style="width:48px"></span>
     </div>
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div id="bwPhase" style="font-size:26px;font-weight:700;letter-spacing:-.015em;color:var(--cocoa);margin-bottom:18px;min-height:32px">Ready</div>
       <div style="position:relative;width:250px;height:250px;display:flex;align-items:center;justify-content:center">
-        <div id="bwHalo" style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(245,184,46,.15) 0%,rgba(255,138,107,.07) 45%,transparent 72%)"></div>
+        <div id="bwHalo" style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(245,184,0,.15) 0%,rgba(255,138,101,.07) 45%,transparent 72%)"></div>
         <div id="bwFlower" style="width:210px;height:210px;transform:scale(.7);transition:transform .6s ease"></div>
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
-          <div style="text-align:center;color:#fff;text-shadow:0 1px 3px rgba(58,45,38,.5)">
-            <div id="bwPhase" style="font-size:15px;font-weight:700">Ready</div>
-            <div id="bwCount" style="font-size:30px;font-weight:700;font-variant-numeric:tabular-nums"></div>
-          </div>
+        <div style="position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center">
+          <div id="bwCount" style="font-size:48px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;color:#fff;text-shadow:0 1px 4px rgba(31,31,31,.45)"></div>
         </div>
       </div>
     </div>
     <div id="bwLeft" style="text-align:center;font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--cocoa);margin-bottom:14px">5:00</div>
     <div style="padding:0 24px 36px">
       <button class="pillbtn" id="bwBtn" onclick="toggleBreath()">Begin</button>
+    </div>
+  </div>
+
+  <!-- ============ MEDITATE (sub) ============ -->
+  <div class="screen" data-s="meditate" style="background:radial-gradient(130% 90% at 50% 18%,#fff 0%,var(--dawn) 55%,#E6C98B 100%)">
+    <div class="navrow">
+      <button class="backbtn" onclick="stopMed();back()">Close</button>
+      <div class="ttl" style="text-align:center">Meditate</div>
+      <span style="width:48px"></span>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:0 24px">
+      <div style="position:relative;width:250px;height:250px;display:flex;align-items:center;justify-content:center">
+        <svg width="250" height="250" viewBox="0 0 250 250" style="position:absolute">
+          <circle cx="125" cy="125" r="108" fill="none" stroke="var(--hair)" stroke-width="6"/>
+          <circle id="medRing" cx="125" cy="125" r="108" fill="none" stroke="var(--sage)" stroke-width="6"
+            stroke-linecap="round" transform="rotate(-90 125 125)" stroke-dasharray="678.6" stroke-dashoffset="0"/>
+        </svg>
+        <div style="text-align:center">
+          <div style="font-size:40px;line-height:1">🧘🏼‍♀️</div>
+          <div id="medLeft" style="font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:8px">10:00</div>
+          <div id="medPhase" style="font-size:13px;color:var(--clay);font-weight:600;margin-top:2px">Ready when you are</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 24px 20px">
+      <div id="medPicker" style="display:flex;gap:8px;justify-content:center;margin-bottom:16px"></div>
+      <button class="pillbtn" id="medBtn" onclick="toggleMed()">Begin</button>
     </div>
   </div>
 
@@ -388,8 +435,9 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
     </div>
     <div class="scroll nofoot" style="padding-top:6px">
       <div class="card" style="display:flex;align-items:center;gap:13px">
-        <span style="width:46px;height:46px;border-radius:12px;background:rgba(255,138,107,.18);display:flex;align-items:center;justify-content:center;font-size:22px">🚶</span>
-        <b style="flex:1;font-size:15.5px" id="cfgName">Walk 10 minutes after lunch</b>
+        <span id="cfgIcon" style="width:46px;height:46px;border-radius:12px;background:rgba(255,138,101,.18);display:flex;align-items:center;justify-content:center;font-size:22px">👣</span>
+        <b style="flex:1;font-size:15.5px" id="cfgName">Target steps</b>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clay)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.8 2.8 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
       </div>
       <p style="font-size:12.5px;color:var(--clay);margin:8px 4px 0;line-height:1.45">Sol suggested this wording. Make it yours. Specific, time bound habits are the ones that stick.</p>
 
@@ -399,30 +447,41 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
       <div class="k" style="margin:22px 4px 11px">Frequency</div>
       <div class="grid2" id="cfgFreq"></div>
 
-      <div class="card" style="margin-top:22px;display:flex;align-items:center;gap:11px">
-        <span style="font-size:18px">🔔</span>
-        <b style="flex:1;font-size:15px">Daily reminder</b>
-        <button id="cfgTog" onclick="togReminder()" aria-pressed="true" style="width:51px;height:31px;border-radius:99px;background:var(--green);position:relative;transition:background .2s">
-          <span id="cfgKnob" style="position:absolute;top:2px;left:22px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s cubic-bezier(.2,.8,.3,1)"></span>
-        </button>
+      <div id="cfgAutoNote" style="display:none;align-items:flex-start;gap:10px;margin-top:22px;background:#FFF3C4;border:1px solid var(--hair);border-radius:14px;padding:14px 15px">
+        <span style="font-size:17px;line-height:1.3">⌚</span>
+        <span style="font-size:13.5px;line-height:1.5;color:var(--cocoa)"></span>
+      </div>
+      <div class="card" id="cfgRemCard" style="margin-top:22px;padding-bottom:6px">
+        <div style="display:flex;align-items:center;gap:11px">
+          <span style="font-size:18px">🔔</span>
+          <b style="flex:1;font-size:15px">Daily reminder</b>
+          <button id="cfgTog" onclick="togReminder()" aria-pressed="true" style="width:51px;height:31px;border-radius:99px;background:var(--green);position:relative;transition:background .2s">
+            <span id="cfgKnob" style="position:absolute;top:2px;left:22px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(31,31,31,.2);transition:left .2s cubic-bezier(.2,.8,.3,1)"></span>
+          </button>
+        </div>
+        <div id="cfgTimeRow" style="display:flex;align-items:center;gap:8px;padding:12px 2px 8px;margin-top:10px;border-top:1px solid var(--hair)">
+          <span style="font-size:13.5px;color:var(--clay);flex:1">Remind me at</span>
+          <button id="cfgClock" onclick="togTimePick()" style="font-size:14px;font-weight:700;color:var(--cocoa);background:#FFF3C4;border:1.5px solid var(--gold);border-radius:9px;padding:7px 13px;font-family:inherit;font-variant-numeric:tabular-nums">2:00 pm ▾</button>
+        </div>
+        <div id="cfgPick" style="display:none;gap:7px;flex-wrap:wrap;padding:2px 2px 10px;max-height:132px;overflow-y:auto"></div>
       </div>
     </div>
-    <div style="padding:12px 20px 28px;border-top:1px solid var(--hair);display:flex;gap:10px">
-      <button class="pillbtn ghost" style="flex:0 0 auto;padding:15px 20px;color:var(--coralText)" onclick="toast('Removed','Habit removed from your plan');back()">Remove</button>
-      <button class="pillbtn" style="flex:1;padding:15px 0" onclick="toast('Saved','Walk 10 minutes after lunch');back()">Save habit</button>
+    <div style="padding:12px 20px 16px;border-top:1px solid var(--hair)">
+      <button class="pillbtn" style="width:100%;padding:15px 0;background:var(--sage)" onclick="toast('Saved',cfgTitle);back()">Save habit</button>
+      <button style="display:block;margin:10px auto 0;font-size:13.5px;font-weight:600;color:var(--iosred);background:none;border:none;font-family:inherit;cursor:pointer;padding:6px 14px" onclick="toast('Removed',cfgTitle+' removed from your plan');back()">Remove habit</button>
     </div>
   </div>
 
   <!-- tab bar -->
   <!-- account button, top right corner (replaces the Account tab) -->
   <button id="acctBtn" onclick="go('account')" aria-label="Account"
-    style="position:absolute;top:26px;right:20px;width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--peach),var(--coral));display:flex;align-items:center;justify-content:center;z-index:24;box-shadow:0 3px 10px rgba(58,45,38,.25);padding:0">
-    <b style="font-size:16px;color:var(--cocoa)">N</b>
+    style="position:absolute;top:26px;right:20px;width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--peach),var(--coral));display:flex;align-items:center;justify-content:center;z-index:24;box-shadow:0 3px 10px rgba(31,31,31,.25);padding:0">
+    <b style="font-size:16px;color:var(--cocoa)">D</b>
   </button>
 
   <!-- floating mentor flower (Sol, present across the main tabs) -->
   <button id="floatFlower" onclick="tapFloatFlower()" aria-label="Sol, your mentor. Opens chat."
-    style="position:absolute;right:22px;bottom:104px;width:60px;height:60px;border-radius:50%;background:var(--cream);border:1px solid var(--hair);box-shadow:0 8px 22px rgba(58,45,38,.28);display:flex;align-items:center;justify-content:center;z-index:26;padding:0;transition:transform .2s cubic-bezier(.2,.8,.3,1)">
+    style="position:absolute;right:22px;bottom:104px;width:60px;height:60px;border-radius:50%;background:var(--cream);border:1px solid var(--hair);box-shadow:0 8px 22px rgba(31,31,31,.28);display:flex;align-items:center;justify-content:center;z-index:26;padding:0;transition:transform .2s cubic-bezier(.2,.8,.3,1)">
     <span class="fl-glow"></span>
     <span id="floatFlowerWrap" class="fl-drift" style="display:block;pointer-events:none;position:relative"></span>
   </button>
@@ -431,7 +490,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 
   <!-- toast -->
   <div class="toast" id="toast">
-    <span style="width:30px;height:30px;border-radius:9px;background:rgba(156,168,126,.28);display:flex;align-items:center;justify-content:center">✓</span>
+    <span style="width:30px;height:30px;border-radius:9px;background:rgba(143,168,122,.28);display:flex;align-items:center;justify-content:center">✓</span>
     <div class="msg" id="toastMsg">Done<small id="toastSub"></small></div>
     <button style="color:var(--peach);font-weight:800;font-size:13px" onclick="hideToast()">OK</button>
   </div>
@@ -447,7 +506,7 @@ const TABS=[
 ];
 const ROOTS=['journey','today','discover'];
 let current='today', activeRoot='today', stack=[];
-function isSub(id){return ['memory','breath','config','delete'].includes(id);}
+function isSub(id){return ['memory','breath','meditate','config','delete'].includes(id);}
 
 function icon(d){
   if(d==='sun')return '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.5 5.5l1.4 1.4M17.1 17.1l1.4 1.4M18.5 5.5l-1.4 1.4M6.9 17.1l-1.4 1.4"/>';
@@ -472,6 +531,7 @@ function go(id){
   current=id;
   applyScreen();
   if(id==='mentor'&&!isSub(leaving))renderEmptyState();
+  if(id==='meditate')resetMed();
 }
 function back(){
   const t=stack.pop()||activeRoot||'today';
@@ -493,7 +553,7 @@ function flowerSVG(size,fill,idp){
   let back='',front='';
   for(let i=0;i<petals;i++){
     back+='<ellipse cx="0" cy="-38" rx="8" ry="21" transform="rotate('+((i*360/petals)+11.25)+')" fill="url(#'+idp+'p)" opacity="'+(i<filled?0.5:0.12)+'"/>';
-    front+='<ellipse cx="0" cy="-38" rx="8.5" ry="22" transform="rotate('+(i*360/petals)+')" fill="'+(i<filled?('url(#'+idp+'p)'):'none')+'" stroke="'+(i<filled?'rgba(255,255,255,.4)':'rgba(58,45,38,.16)')+'" stroke-width=".6"/>';
+    front+='<ellipse cx="0" cy="-38" rx="8.5" ry="22" transform="rotate('+(i*360/petals)+')" fill="'+(i<filled?('url(#'+idp+'p)'):'none')+'" stroke="'+(i<filled?'rgba(255,255,255,.4)':'rgba(31,31,31,.16)')+'" stroke-width=".6"/>';
   }
   let seeds='';
   for(let i=0;i<130;i++){
@@ -507,10 +567,10 @@ function flowerSVG(size,fill,idp){
     '<g class="sway-b">'+back+'</g><g class="sway-f">'+front+'</g><circle cx="0" cy="0" r="21" fill="url(#'+idp+'s)"/>'+seeds+'</svg>';
 }
 const habitsData=[
-  {id:'walk',icon:'🚶',tint:'var(--tile)',name:'Walk 10 minutes after lunch',sub:'Afternoon',done:true,edit:true},
-  {id:'sun',icon:'☀️',tint:'var(--tile)',name:'Morning sunlight',sub:'10 min, tracked by your watch',done:true},
-  {id:'wind',icon:'🌙',tint:'var(--tile)',name:'Wind down by 10:30',sub:'Evening',done:false},
-  {id:'breathe',icon:'🪷',tint:'var(--tile)',name:'5 minute breathwork',sub:'Guided session',done:false,opens:'breath'},
+  {id:'steps',icon:'👣',name:'Target steps',val:'6,240',unit:'/ 8,000',done:false,edit:true,auto:true},
+  {id:'move',icon:'🎯',name:'Move your body',val:'2',unit:'of 3 this week',done:false},
+  {id:'breathe',icon:'🪷',name:'Breathwork',val:'5',unit:'min',done:false,opens:'breath'},
+  {id:'water',icon:'💧',name:'Morning water',val:'1',unit:'glass on waking',done:true},
 ];
 function fillRatio(){return habitsData.filter(h=>h.done).length/habitsData.length*0.9+0.1;}
 function renderFlower(bloom){
@@ -529,17 +589,47 @@ function renderHabits(){
   const el=document.getElementById('todayCount');
   if(el)el.textContent=habitsData.filter(h=>h.done).length+'/'+habitsData.length+' habits done';
   document.getElementById('habits').innerHTML=habitsData.map((h,i)=>{
-    const right=h.opens
-      ? '<span class="play"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span>'
-      : '<span class="tick">'+(h.done?'<svg width="15" height="15" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</span>';
+    const check='<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const play='<svg width="12" height="12" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="var(--cocoa)"/></svg>';
+    const watch='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--clay)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6"/><path d="M12 10v2.5l1.5 1M9 4h6M9 20h6"/></svg>';
+    const mark=h.done?check:(h.auto?watch:(h.opens?play:''));
     return '<button class="habit'+(h.done?' done':'')+'" onclick="tapHabit('+i+')">'+
-      '<span class="ic" style="background:'+h.tint+'">'+h.icon+'</span>'+
-      '<span class="nm">'+h.name+'<small>'+h.sub+'</small></span>'+right+'</button>';
+      '<span class="mark">'+mark+'</span>'+
+      '<span class="ic">'+h.icon+'</span>'+
+      '<span class="nm">'+h.name+'</span>'+
+      (h.val?'<span class="val'+(h.light?' light':'')+'">'+h.val+(h.unit?' <span>'+h.unit+'</span>':'')+'</span>':'')+
+    '</button>';
   }).join('');
+}
+let missionDone=false;
+function tapMission(){
+  missionDone=!missionDone;
+  renderMission();
+  if(missionDone)toast('Mission complete','Run for 30 minutes');
+}
+function renderMission(){
+  const card=document.getElementById('missionCard');
+  const mark=document.getElementById('missionMark');
+  if(!card||!mark)return;
+  card.classList.toggle('done',missionDone);
+  mark.innerHTML=missionDone?'<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>':'';
+}
+function renderTodayGreet(){
+  const el=document.getElementById('todayGreet');
+  if(el)el.textContent=greeting()+', Daria';
+}
+function renderWeek(){
+  const box=document.getElementById('weekRow');
+  if(!box)return;
+  const days=['S','M','T','W','T','F','S'], doneTo=4;
+  const check='<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  box.innerHTML=days.map((d,i)=>
+    '<span class="wday'+(i<doneTo?' on':'')+'"><span class="dot">'+(i<doneTo?check:'')+'</span><span class="lb">'+d+'</span></span>').join('');
 }
 function tapHabit(i){
   const h=habitsData[i];
-  if(h.opens){go(h.opens);return;}
+  if(h.auto){toast('Tracked automatically','Sol fills this in from your watch');return;}
+  if(h.opens&&!h.done){go(h.opens);return;}
   h.done=!h.done;
   renderHabits();renderFlower(h.done);
   if(h.done)toast('Marked done',h.name);
@@ -547,10 +637,10 @@ function tapHabit(i){
 document.addEventListener('DOMContentLoaded',()=>{
   (function(){
     const box=document.getElementById('streakDots');
-    if(box){let h='';for(let i=0;i<28;i++){h+='<span style="width:9px;height:9px;border-radius:2.5px;background:'+(i<23?'var(--green)':'rgba(58,45,38,.12)')+'"></span>';}box.innerHTML=h;}
+    if(box){let h='';for(let i=0;i<28;i++){h+='<span style="width:9px;height:9px;border-radius:2.5px;background:'+(i<23?'var(--green)':'rgba(31,31,31,.12)')+'"></span>';}box.innerHTML=h;}
   })();
-  renderHabits();renderFlower(false);renderTabs();renderFilters();renderCards();renderMem();renderCfg();updateChrome();
-  document.getElementById('voiceBtn').innerHTML=micSvg('#6A5A4D')+'<span style="position:absolute;bottom:-15px;left:calc(50% + 7px);transform:translateX(-50%);font-size:8.5px;font-weight:700;color:var(--clay);white-space:nowrap;letter-spacing:.01em">coming soon</span>';syncSend();
+  renderHabits();renderWeek();renderTodayGreet();renderMission();renderFlower(false);renderTabs();renderFilters();renderCards();renderMem();renderCfg();renderReminder();updateChrome();
+  document.getElementById('voiceBtn').innerHTML=micSvg('#9E9A94')+'<span style="position:absolute;bottom:-15px;left:calc(50% + 7px);transform:translateX(-50%);font-size:8.5px;font-weight:700;color:var(--clay);white-space:nowrap;letter-spacing:.01em">coming soon</span>';syncSend();
   document.getElementById('bwFlower').innerHTML=flowerSVG(210,1,'bw');
   document.getElementById('hdMark').innerHTML=markSVG(30,'hd');
 });
@@ -559,9 +649,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 /* redesigned compact mark: 8 flat rounded petals, gold core */
 function markSVG(size,idp){
   let p='';
-  for(let i=0;i<8;i++)p+='<ellipse cx="20" cy="10.5" rx="5" ry="8.5" transform="rotate('+(i*45)+' 20 20)" fill="#FF8A6B"/>';
+  for(let i=0;i<8;i++)p+='<ellipse cx="20" cy="10.5" rx="5" ry="8.5" transform="rotate('+(i*45)+' 20 20)" fill="#FF8A65"/>';
   return '<svg viewBox="0 0 40 40" width="'+size+'" height="'+size+'" aria-label="Sol">'+p+
-    '<circle cx="20" cy="20" r="6.2" fill="#F5B82E"/>'+
+    '<circle cx="20" cy="20" r="6.2" fill="#F5B800"/>'+
     '<circle cx="20" cy="20" r="6.2" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.2"/></svg>';
 }
 
@@ -580,10 +670,10 @@ function micon(name,c){
 /* prompts are mostly memory derived: sleep pattern, protecting the evening,
    a gentle emotional option, and one evergreen habit suggestion */
 const STARTERS=[
-  {icon:'heart', tint:'var(--tile)', tc:'#C03B6B', text:"I'm exhausted today, what should I do?",
+  {icon:'heart', tint:'var(--tile)', tc:'#FF8A65', text:"I'm exhausted today, what should I do?",
    reply:"Then today is a light day, and that still counts as showing up. One short walk is plenty. The steadier version of you is built on returning after the hard days, not on perfect ones. Want me to shrink today's plan to just the walk?",
    chips:["Yes, lighten today","I'll keep the full plan","Thanks, Sol"]},
-  {icon:'spark', tint:'var(--tile)', tc:'#8A6A00', text:"Suggest a habit I'd actually keep",
+  {icon:'spark', tint:'var(--tile)', tc:'#F5B800', text:"Suggest a habit I'd actually keep",
    reply:"Since you already move most days, morning light would compound it. Ten minutes outside early sets your body clock, which feeds the sleep you're working on. Want to add it as a gentle daily prompt?",
    chips:["Add morning light","Something calmer","Not now"]},
 ];
@@ -611,7 +701,7 @@ function renderEmptyState(){
   document.getElementById('chat').innerHTML=
     '<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px">'+
       '<div class="mentor-stage"><span class="mentor-shadow"></span><div class="mentor-hover" id="mentorAvatar">'+flowerSVG(84,0.75,'me')+'</div></div>'+
-      '<div style="font-size:22px;font-weight:800;letter-spacing:-.015em;color:var(--cocoa);text-align:center;line-height:1.28;margin-top:18px">'+greeting()+', Noy</div>'+
+      '<div style="font-size:22px;font-weight:800;letter-spacing:-.015em;color:var(--cocoa);text-align:center;line-height:1.28;margin-top:18px">'+greeting()+', Daria</div>'+
       '<div style="font-size:14.5px;color:var(--clay);text-align:center;margin-top:8px">How can I help you today?</div>'+
     '</div>';
   ripplePetals('mentorAvatar');
@@ -687,16 +777,151 @@ function sendText(){
 
 /* voice recording: tap to start, tap again to stop and send. works from the
    big empty state mic and from the mic in the text input bar */
+
+/* ---------- meditation timer ---------- */
+const MED_LENGTHS=[5,10,15,20];
+let medLen=10, medLeft=600, medTimer=null, medRunning=false;
+const MED_C=2*Math.PI*108;
+function renderMedPicker(){
+  const p=document.getElementById('medPicker');
+  if(!p)return;
+  p.innerHTML=MED_LENGTHS.map(m=>
+    '<button onclick="setMedLen('+m+')" style="flex:1;padding:9px 0;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid '+
+    (m===medLen?'var(--gold)':'var(--hair)')+';background:'+(m===medLen?'#FFF3C4':'var(--cream)')+';color:var(--cocoa)">'+m+' min</button>').join('');
+}
+function fmtMed(sec){
+  const mm=Math.floor(sec/60), ss=String(sec%60).padStart(2,'0');
+  return mm+':'+ss;
+}
+function paintMed(){
+  const l=document.getElementById('medLeft');
+  if(l)l.textContent=fmtMed(medLeft);
+  const ring=document.getElementById('medRing');
+  if(ring)ring.setAttribute('stroke-dashoffset', MED_C*(1-medLeft/(medLen*60)));
+}
+function setMedLen(m){
+  if(medRunning)return;
+  medLen=m; medLeft=m*60;
+  renderMedPicker(); paintMed();
+}
+function resetMed(){
+  clearInterval(medTimer); medTimer=null; medRunning=false;
+  medLeft=medLen*60;
+  const b=document.getElementById('medBtn');
+  if(b){b.textContent='Begin';b.onclick=toggleMed;}
+  const ph=document.getElementById('medPhase');
+  if(ph)ph.textContent='Ready when you are';
+  renderMedPicker(); paintMed();
+}
+function stopMed(){ resetMed(); }
+function toggleMed(){
+  const b=document.getElementById('medBtn'), ph=document.getElementById('medPhase');
+  if(medRunning){
+    clearInterval(medTimer); medTimer=null; medRunning=false;
+    b.textContent='Resume'; ph.textContent='Paused';
+    renderMedPicker();
+    return;
+  }
+  medRunning=true;
+  b.textContent='Pause';
+  ph.textContent='Settle in, follow your breath';
+  renderMedPicker();
+  medTimer=setInterval(()=>{
+    medLeft--;
+    if(medLeft<=0){
+      clearInterval(medTimer); medTimer=null; medRunning=false;
+      medLeft=0; paintMed();
+      ph.textContent='Done';
+      b.textContent='Mark as done';
+      b.onclick=()=>{markSessionDone('meditate','Meditate');stopMed();back();};
+      return;
+    }
+    paintMed();
+  },1000);
+}
+function markSessionDone(id,label){
+  const h=habitsData.find(x=>x.id===id);
+  if(h){h.done=true;renderHabits();renderFlower(true);}
+  toast('Marked done',label);
+}
+
 /* ---------- discover ---------- */
-const DOMAINS=[['all','All'],['sleep','Sleep'],['movement','Movement'],['calm','Calm'],['focus','Focus'],['connect','Connection']];
+const DOMAINS=[['all','All'],['sleep','Sleep'],['movement','Movement'],['calm','Calm']];
 const CARDS=[
-  {id:'wake',more:'Your circadian clock takes its strongest cue from when you get up, not when you lie down. Hold the wake time steady for two weeks and bedtime tends to follow on its own.',d:'sleep',icon:'☀️',tt:'#5A4FA8',bg:'var(--tile)',title:'Consistent wake time',why:'A steady wake time anchors your body clock more powerfully than bedtime does, making mornings easier and nights more reliable.'},
-  {id:'walk',d:'movement',more:'The effect shows up at any pace, and outdoors adds a mood benefit on top. Attaching it to an existing anchor, like after lunch, is what makes it stick.',icon:'🚶',tt:'#C04A2E',bg:'var(--tile)',title:'Gentle movement',why:'Even ten minutes reliably lifts mood and energy. The lowest effort, highest return movement there is.'},
-  {id:'stretch',more:'Aim for slow, comfortable range rather than deep stretches. Two to five minutes on waking is enough to reduce that first-hour stiffness most people accept as normal.',d:'movement',icon:'🧘',tt:'#C04A2E',bg:'var(--tile)',title:'Morning stretch',why:'A few minutes of gentle mobility eases stiffness and wakes the body up, the simplest way to start moving before the day asks anything of you.'},
-  {id:'calm',more:'The 4 in, 6 out ratio works because a longer exhale activates the vagus nerve. Doing it at the same time daily builds the reflex, so it is available when stress actually hits.',d:'calm',icon:'🪷',tt:'#2E8A86',bg:'var(--tile)',title:'5 minute breathwork',tryIt:true,why:'A longer exhale than inhale switches on your body\'s calming response. Around six breaths a minute is the rate shown to best settle stress.'},
-  {id:'cutoff',more:'Pick a time you can honor four days out of five, not a perfect one. The wind down that follows the cutoff is where sleep quality is actually won.',d:'focus',icon:'💻',tt:'#3E6FB8',bg:'var(--tile)',title:'Work cutoff time',why:'Mentally detaching from work predicts recovery and wellbeing even more than sleep does. The evening is where you recharge.'},
-  {id:'light',more:'Cloudy daylight still delivers many times more light than indoor bulbs. No sunglasses for those minutes, and before 10am works best for setting the clock.',d:'sleep',icon:'🌅',tt:'#8A6A00',bg:'var(--tile)',title:'Morning sunlight',why:'Morning light sets your circadian clock, improving both daytime alertness and that night\'s sleep.'},
-  {id:'convo',more:'Depth beats duration, ten real minutes counts. A standing call or walk with the same person removes the scheduling friction that usually kills this habit.',d:'connect',icon:'💬',tt:'#C03B6B',bg:'var(--tile)',title:'One real conversation',why:'Social connection is the single strongest predictor of long term wellbeing. One real conversation beats many surface ones.'},
+  {id:'wake',d:'sleep',icon:'⏰',tt:'#6F92A8',bg:'var(--tile)',title:'Consistent wake time',
+   what:'Same time every day, including weekends.',
+   why:'A fixed wake time is the strongest anchor for your body clock.',
+   more:'Your clock takes its cue from when you get up, not when you lie down. Hold it steady for two weeks and bedtime tends to follow on its own.'},
+
+  {id:'bedtime',d:'sleep',icon:'🛏️',tt:'#6F92A8',bg:'var(--tile)',title:'Consistent bedtime',
+   what:'Within about 45 minutes of the same time every night.',
+   why:'Regular sleep timing tracks with better sleep quality, separately from how long you sleep.',
+   more:'Regularity is its own ingredient. Two people sleeping the same hours can wake feeling very differently depending on how steady those hours are.'},
+
+  {id:'nobed',d:'sleep',icon:'📱',tt:'#6F92A8',bg:'var(--tile)',title:'Screen free before bed',
+   what:'No screens for 15 minutes before you sleep.',
+   why:'Light and stimulation close to bed hold off the drop in alertness that lets sleep start.',
+   more:'Fifteen minutes is deliberately small, short enough to keep on a bad night. Leaving the phone across the room removes the decision entirely.'},
+
+  {id:'sevenh',d:'sleep',icon:'💤',tt:'#6F92A8',bg:'var(--tile)',title:'7 hours of sleep',
+   what:'At least 7 hours a night.',
+   why:'Seven or more hours is what sleep medicine bodies recommend for adults, and below it health risk climbs.',
+   more:'This one is an outcome more than an action, which is why the other sleep habits exist. Fix the timing and the hours usually follow.'},
+
+  {id:'caffeine',d:'sleep',icon:'☕',tt:'#6F92A8',bg:'var(--tile)',title:'Caffeine',
+   what:'None within 6 hours of your bedtime.',
+   why:'Caffeine has a half life of roughly five to six hours, so an afternoon coffee is still working at bedtime.',
+   more:'You may fall asleep fine and still lose deep sleep, which is why people underestimate this one. Shift the cutoff earlier an hour at a time.'},
+
+  {id:'meal',d:'sleep',icon:'🍽️',tt:'#6F92A8',bg:'var(--tile)',title:'Last meal',
+   what:'Finish eating at least 4 hours before bed.',
+   why:'Lying down soon after eating makes reflux and broken sleep more likely.',
+   more:'The aim is comfort, not restriction. If four hours is unrealistic, even two is a meaningful improvement on eating right up to bedtime.'},
+
+  {id:'steps',d:'movement',icon:'👣',tt:'#FF8A65',bg:'var(--tile)',title:'Target steps',
+   what:'Reach at least 8,000 steps across the day.',
+   why:'Around 8,000 steps a day is where the steepest drop in health risk shows up.',
+   more:'8,000 is a starting point, not a rule. Sol adjusts it to where you actually are, since a target you beat most days builds more than one you miss.'},
+
+  {id:'move',d:'movement',icon:'🎯',tt:'#FF8A65',bg:'var(--tile)',title:'Move your body',
+   what:'At least 30 minutes, a few times a week.',
+   why:'Regular moderate activity is the most consistent predictor of long term health there is.',
+   more:'The number of sessions adapts to you. Anything that raises your breathing counts, and splitting 30 minutes into two halves works just as well.'},
+
+  {id:'strength',d:'movement',icon:'💪🏼',tt:'#FF8A65',bg:'var(--tile)',title:'Strength',
+   what:'At least twice a week.',
+   why:'Major activity guidelines put muscle strengthening work at two or more days a week.',
+   more:'Bodyweight counts. Two short sessions beat one long one, and the muscle you keep into later life is built by exactly this kind of repetition.'},
+
+  {id:'breath',d:'calm',icon:'🪷',tt:'#8FA87A',bg:'var(--tile)',title:'Breathwork',tryIt:'breath',
+   what:'In for 4, a half second pause, out for 5.5, for five minutes.',
+   why:'Six breaths a minute is the rate where heart rate variability peaks.',
+   more:'The longer exhale is what activates the calming response. Doing it at the same time daily builds the reflex, so it is available when stress actually hits.'},
+
+  {id:'journal',d:'calm',icon:'✍🏼',tt:'#8FA87A',bg:'var(--tile)',title:'Clear your head',
+   what:'Write down at least 3 things that are on your mind.',
+   why:'Getting what is unfinished out of your head makes it easier to stop turning it over.',
+   more:'It works best right before bed or first thing in the morning, whenever the loop is loudest. Bullet points are fine, nobody is reading it but you.'},
+
+  {id:'read',d:'calm',icon:'📚',tt:'#8FA87A',bg:'var(--tile)',title:'Read',
+   what:'20 minutes with a book.',
+   why:'A low arousal wind down that displaces screen time.',
+   more:'Paper or e ink beats a backlit screen here. The point is as much what it replaces as what it is.'},
+
+  {id:'nowake',d:'calm',icon:'📱',tt:'#8FA87A',bg:'var(--tile)',title:'Screen free morning',
+   what:'No screens for the first 15 minutes after waking.',
+   why:'Starting the day without input protects your attention before the day claims it.',
+   more:'Charging the phone outside the bedroom does most of the work. Fifteen minutes is enough to notice the difference in how the morning feels.'},
+
+  {id:'meditate',d:'calm',icon:'🧘🏼‍♀️',tt:'#8FA87A',bg:'var(--tile)',title:'Meditate',tryIt:'meditate',
+   what:'Meditate for about 10 minutes.',
+   why:'10 minutes of daily practice is enough to show measurable drops in stress.',
+   more:'A wandering mind is not failure, noticing the wander is the repetition. Same time each day matters more than length.'},
+
+  {id:'water',d:'calm',icon:'💧',tt:'#8FA87A',bg:'var(--tile)',title:'Morning water',
+   what:'A glass of water when you wake up.',
+   why:'You wake mildly dehydrated after a night without fluids.',
+   more:'The smallest habit on this list, which is exactly why it works. Leaving a glass by the bed the night before removes the only obstacle.'},
 ];
 let domain='all';const addedSet={};const openSet={};
 function toggleMore(id){openSet[id]=!openSet[id];renderCards();}
@@ -708,18 +933,35 @@ function renderCards(){
   const list=domain==='all'?CARDS:CARDS.filter(c=>c.d===domain);
   document.getElementById('cards').innerHTML=list.map(c=>{
     const added=addedSet[c.id];
-    const addBtn='<button style="flex:1;background:'+(added?'rgba(58,45,38,.06)':'var(--cocoa)')+';color:'+(added?'var(--clay)':'#fff')+'" onclick="addCard(\''+c.id+'\')" '+(added?'disabled':'')+'>'+(added?'Added to your plan':'＋ Add to my plan')+'</button>';
+    const addBtn='<button style="flex:1;background:'+(added?'rgba(31,31,31,.06)':'var(--sage)')+';color:'+(added?'var(--clay)':'var(--cocoa)')+'" onclick="addCard(\''+c.id+'\')" '+(added?'disabled':'')+'>'+(added?'Added to your plan':'＋ Add to my plan')+'</button>';
     return '<div class="card">'+
       '<div style="display:flex;align-items:center;gap:12px;margin-bottom:11px">'+
       '<span style="width:36px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">'+c.icon+'</span>'+
       '<div style="flex:1"><b style="font-size:15.5px;letter-spacing:-.01em">'+c.title+'</b></div></div>'+
-      '<div class="k" style="color:'+c.tt+';margin-bottom:2px">Why it works</div><div class="what">'+c.why+'</div>'+
+      '<div class="what" style="font-weight:600;color:var(--cocoa)">'+c.what+'</div>'+
+      '<div class="what" style="margin-top:5px">'+c.why+'</div>'+
       (openSet[c.id]?'<div class="what" style="margin-top:6px">'+c.more+'</div>':'')+
-      '<button onclick="toggleMore(\''+c.id+'\')" style="display:block;background:none;border:none;padding:0;margin:8px 0 12px;font-size:13px;font-weight:700;color:var(--coralText);cursor:pointer;font-family:inherit">'+(openSet[c.id]?'Show less':'Read more about this habit')+'</button>'+
-      '<div class="rowbtns">'+(c.tryIt?'<button style="background:#3FB6B0;color:#fff" onclick="go(\'breath\')">🪷 Try it now</button>':'')+addBtn+'</div></div>';
+      '<button onclick="toggleMore(\''+c.id+'\')" style="display:block;background:none;border:none;padding:0;margin:8px 0 12px;font-size:13px;font-weight:700;color:var(--clay);cursor:pointer;font-family:inherit">'+(openSet[c.id]?'Show less':'Read more about this habit')+'</button>'+
+      '<div class="rowbtns">'+(c.tryIt?'<button style="background:var(--sage);color:var(--cocoa)" onclick="go(\''+c.tryIt+'\')">'+c.icon+' Try it now</button>':'')+addBtn+'</div></div>';
   }).join('');
 }
-function addCard(id){addedSet[id]=true;renderCards();toast('Added to your plan','Set the details in Edit habit');setTimeout(()=>go('config'),700);}
+function addCard(id){
+  addedSet[id]=true;renderCards();
+  const c=CARDS.find(x=>x.id===id);
+  if(c)openConfig(c.title,c.icon);
+  toast('Added to your plan','Set the details in Edit habit');
+  setTimeout(()=>go('config'),700);
+}
+function openConfig(title,icon){
+  cfgTitle=title; cfgIcon=icon||'👣';
+  const d=cfgDefaults(title);
+  cfgAuto=!!d.auto; cfgSrc=d.src||'';
+  if(!cfgAuto){cfgT=d.tod; cfgClockT=d.at; cfgR=true;}
+  cfgPickOpen=false;
+  const n=document.getElementById('cfgName'); if(n)n.textContent=cfgTitle;
+  const i=document.getElementById('cfgIcon'); if(i)i.textContent=cfgIcon;
+  renderCfg(); renderReminder();
+}
 
 /* ---------- memory ---------- */
 const MEM=[
@@ -752,13 +994,13 @@ function syncDelete(){
   const ok=delAcked&&pass.length>=1;
   const b=document.getElementById('delBtn');
   b.disabled=!ok;
-  b.style.background=ok?'#FF3B30':'rgba(58,45,38,.08)';
+  b.style.background=ok?'#FF3B30':'rgba(31,31,31,.08)';
   b.style.color=ok?'#fff':'var(--clay)';
 }
 function confirmDelete(){toast('Account deleted','This is a prototype, nothing was really removed');setTimeout(()=>go('account'),400);}
 
 /* ---------- breathwork ---------- */
-const INH=4,EXH=6,CYCLE=10,TOTAL=300;
+const INH=4,HOLD=0.5,EXH=5.5,CYCLE=10,TOTAL=300;
 let bwRun=false,bwStart=0,bwPaused=0,bwRaf=null;
 function toggleBreath(){
   if(bwRun){bwRun=false;bwPaused=performance.now()-bwStart;cancelAnimationFrame(bwRaf);document.getElementById('bwBtn').textContent='Resume';return;}
@@ -774,12 +1016,13 @@ function stopBreath(){bwRun=false;bwPaused=0;cancelAnimationFrame(bwRaf);
 function bwTick(){
   if(!bwRun)return;
   const e=(performance.now()-bwStart)/1000;
-  if(e>=TOTAL){bwRun=false;document.getElementById('bwPhase').textContent='Done';document.getElementById('bwCount').textContent='';document.getElementById('bwBtn').textContent='Mark as done';document.getElementById('bwBtn').onclick=()=>{toast('Marked done','5 minute breathwork');stopBreath();back();};return;}
+  if(e>=TOTAL){bwRun=false;document.getElementById('bwPhase').textContent='Done';document.getElementById('bwCount').textContent='';document.getElementById('bwBtn').textContent='Mark as done';document.getElementById('bwBtn').onclick=()=>{markSessionDone('breathe','Breathwork');stopBreath();back();};return;}
   const rem=TOTAL-e,mm=Math.floor(rem/60),ss=String(Math.floor(rem%60)).padStart(2,'0');
   document.getElementById('bwLeft').textContent=mm+':'+ss;
   const ic=e%CYCLE;let scale,phase,left;
   if(ic<INH){phase='Breathe in';left=Math.ceil(INH-ic);scale=.55+.45*(ic/INH);}
-  else{phase='Breathe out';left=Math.ceil(CYCLE-ic);scale=1-.45*((ic-INH)/EXH);}
+  else if(ic<INH+HOLD){phase='Hold';left=1;scale=1;}
+  else{phase='Breathe out';left=Math.ceil(CYCLE-ic);scale=1-.45*((ic-INH-HOLD)/EXH);}
   document.getElementById('bwPhase').textContent=phase;
   document.getElementById('bwCount').textContent=left;
   const f=document.getElementById('bwFlower');
@@ -789,17 +1032,78 @@ function bwTick(){
 }
 
 /* ---------- config ---------- */
-let cfgT='afternoon',cfgF='Weekdays',cfgR=true;
+let cfgT='afternoon',cfgF='Weekdays',cfgR=true,cfgClockT='2:00 pm',cfgPickOpen=false;
+let cfgTitle='Target steps',cfgIcon='👣',cfgAuto=false,cfgSrc='';
+const CFG_TIMES=['6:00 am','6:30 am','7:00 am','7:30 am','8:00 am','9:00 am','10:00 am',
+  '12:00 pm','1:00 pm','2:00 pm','3:00 pm','4:00 pm','5:00 pm','6:00 pm','7:00 pm',
+  '8:00 pm','8:30 pm','9:00 pm','9:30 pm','10:00 pm','10:30 pm'];
+/* per habit: when it makes sense to be reminded, and whether Sol tracks it for you.
+   auto habits come from the watch, so a reminder to log them would be noise. */
+const HABIT_CFG={
+  'Target steps':{auto:true,src:'your watch'},
+  'Consistent bedtime':{auto:true,src:'your watch'},
+  'Consistent wake time':{auto:true,src:'your watch'},
+  '7 hours of sleep':{auto:true,src:'your watch'},
+  'Move your body':{auto:true,src:'your watch'},
+  'Strength':{tod:'evening',at:'6:00 pm'},
+  'Morning water':{tod:'morning',at:'7:30 am'},
+  'Screen free morning':{tod:'morning',at:'7:00 am'},
+  'Meditate':{tod:'morning',at:'8:00 am'},
+  'Caffeine':{tod:'afternoon',at:'2:00 pm'},
+  'Breathwork':{tod:'evening',at:'6:00 pm'},
+  'Last meal':{tod:'evening',at:'6:30 pm'},
+  'Read':{tod:'evening',at:'9:00 pm'},
+  'Clear your head':{tod:'evening',at:'9:30 pm'},
+  'Screen free before bed':{tod:'evening',at:'10:30 pm'}
+};
+function cfgDefaults(title){
+  return HABIT_CFG[title]||{tod:'evening',at:'8:00 pm'};
+}
+function togTimePick(){cfgPickOpen=!cfgPickOpen;renderTimePick();}
+function setClock(t){
+  cfgClockT=t; cfgPickOpen=false;
+  const h=parseInt(t), pm=/pm/.test(t), hr=(h===12?(pm?12:0):(pm?h+12:h));
+  cfgT = hr<12?'morning':(hr<17?'afternoon':'evening');
+  renderCfg(); renderTimePick();
+}
+function renderReminder(){
+  const card=document.getElementById('cfgRemCard'), auto=document.getElementById('cfgAutoNote');
+  if(!card||!auto)return;
+  card.style.display=cfgAuto?'none':'block';
+  auto.style.display=cfgAuto?'flex':'none';
+  if(cfgAuto){
+    auto.querySelector('span:last-child').textContent='Sol completes this automatically from '+(cfgSrc||'your watch')+', so there is nothing to log.';
+    return;
+  }
+  document.getElementById('cfgTog').style.background=cfgR?'var(--green)':'#E6E4DF';
+  document.getElementById('cfgKnob').style.left=cfgR?'22px':'2px';
+  const row=document.getElementById('cfgTimeRow'); if(row)row.style.display=cfgR?'flex':'none';
+  renderTimePick();
+}
+function renderTimePick(){
+  const btn=document.getElementById('cfgClock');
+  if(btn)btn.textContent=cfgClockT+' ▾';
+  const p=document.getElementById('cfgPick');
+  if(!p)return;
+  p.style.display=cfgPickOpen?'flex':'none';
+  p.innerHTML=CFG_TIMES.map(t=>'<button onclick="setClock(\''+t+'\')" style="font-family:inherit;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;padding:8px 12px;border-radius:9px;cursor:pointer;border:1.5px solid '+(t===cfgClockT?'var(--gold)':'var(--hair)')+';background:'+(t===cfgClockT?'#FFF3C4':'var(--cream)')+';color:var(--cocoa)">'+t+'</button>').join('');
+}
+function setTod(tod){
+  cfgT=tod;
+  const anchor={morning:'7:30 am',afternoon:'2:00 pm',evening:'9:00 pm'};
+  cfgClockT=anchor[tod]||cfgClockT;
+  renderCfg(); renderTimePick();
+}
 function renderCfg(){
   const times=[['morning','🌅','Morning'],['afternoon','☀️','Afternoon'],['evening','🌙','Evening']];
-  document.getElementById('cfgTime').innerHTML=times.map(t=>'<button class="'+(cfgT===t[0]?'on':'')+'" onclick="cfgT=\''+t[0]+'\';renderCfg()"><span style="font-size:19px">'+t[1]+'</span>'+t[2]+'</button>').join('');
+  document.getElementById('cfgTime').innerHTML=times.map(t=>'<button class="'+(cfgT===t[0]?'on':'')+'" onclick="setTod(\''+t[0]+'\')"><span style="font-size:19px">'+t[1]+'</span>'+t[2]+'</button>').join('');
   const freqs=['Every day','Weekdays','Weekends','Custom'];
   document.getElementById('cfgFreq').innerHTML=freqs.map(f=>'<button class="'+(cfgF===f?'on':'')+'" onclick="cfgF=\''+f+'\';renderCfg()">'+f+'</button>').join('');
 }
 function togReminder(){
   cfgR=!cfgR;
-  document.getElementById('cfgTog').style.background=cfgR?'var(--green)':'rgba(120,120,128,.24)';
-  document.getElementById('cfgKnob').style.left=cfgR?'22px':'2px';
+  if(!cfgR)cfgPickOpen=false;
+  renderReminder();
 }
 
 /* ---------- toast ---------- */
