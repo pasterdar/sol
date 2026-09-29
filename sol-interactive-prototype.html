@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -8,6 +8,11 @@
 <style>
 :root{
   --dawn:#FAF7F1; --cream:#fff; --cocoa:#1F1F1F; --clay:#9E9A94;
+  /* Text tiers built from the locked ink, not new colours.
+     --soft  = 65%: secondary text. >=4.90:1 on dawn, white, butter and the tinted fills.
+     --dim   = 70%: disabled labels. >=5.45:1 on the disabled fills.
+     --clay  is decoration only (typing dots, the pencil glyph, the disabled mic). */
+  --soft:rgba(31,31,31,.65); --dim:rgba(31,31,31,.7);
   --peach:#E6C98B; --coral:#FF8A65; --gold:#F5B800; --rose:#FF8A65; --sage:#8FA87A;
   --coralText:#FF8A65; --sageText:#8FA87A; --goldText:#F5B800; --roseText:#FF8A65;
   --hair:#E6E4DF; --dusk:#1F1F1F;
@@ -24,32 +29,33 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(31,31,31,.5),0 0 0 10px #1F1F1F;}
 .screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--dawn);}
 .screen.on{display:flex;}
-.scroll{flex:1;overflow-y:auto;padding:46px 18px 110px;}
+/* bottom padding clears the tab bar AND the floating mentor flower, which sits
+   104–164px from the bottom; 110px left the last card underneath it */
+.scroll{flex:1;overflow-y:auto;padding:46px 18px 176px;}
 .scroll.nofoot{padding-bottom:28px;}
 h1,p{text-wrap:balance;}
-h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
-.sub{font-size:15px;color:var(--clay);margin-bottom:16px;}
+/* every root screen opens at the same rank as Today's greeting */
+h1.big{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-bottom:3px;}
+.sub{font-size:15px;color:var(--soft);margin-bottom:16px;}
 .card{background:var(--cream);border:1px solid var(--hair);border-radius:12px;padding:15px 16px;margin-bottom:12px;}
 .grad{background:#FFF3C4;border:1px solid var(--hair);}
-.k{font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--clay);text-transform:uppercase;}
-.pillbtn{display:block;width:100%;padding:14px 0;border-radius:12px;background:var(--gold);color:var(--cocoa);
+.k{font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--soft);text-transform:uppercase;}
+.pillbtn{display:block;width:100%;padding:14px 0;border-radius:12px;background:var(--sage);color:var(--cocoa);
   font-size:17px;font-weight:600;text-align:center;}
-.ghost{background:transparent;color:var(--coralText);border:none;font-weight:400;}
+.ghost{background:transparent;color:var(--cocoa);border:none;font-weight:400;}
 .navrow{padding:16px 16px 8px;display:flex;align-items:center;gap:10px;position:relative;min-height:44px;}
 .navrow .ttl{font-size:17px;font-weight:600;letter-spacing:-.01em;position:absolute;left:0;right:0;text-align:center;pointer-events:none;}
-.backbtn{font-size:17px;font-weight:400;color:var(--coralText);padding:4px 6px;position:relative;z-index:1;}
+.backbtn{font-size:17px;font-weight:400;color:var(--cocoa);padding:4px 6px;position:relative;z-index:1;}
 
 /* tab bar */
 .tabbar{position:absolute;bottom:0;left:0;right:0;display:flex;padding:9px 8px 24px;
-  background:rgba(244,236,226,.82);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--hair);z-index:20;}
-.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:500;color:var(--clay);}
+  background:rgba(250,247,241,.82);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--hair);z-index:20;}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:500;color:var(--soft);}
 .tabbar button.active{color:var(--cocoa);font-weight:700;}
 .tabbar svg{width:26px;height:26px;}
 
 /* flower */
 @keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.045);}}
-@keyframes glowPulse{0%,100%{opacity:.30;transform:scale(1);}50%{opacity:.62;transform:scale(1.13);}}
-@keyframes driftRot{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 @keyframes swayF{0%,100%{transform:rotate(-1.5deg);}50%{transform:rotate(1.5deg);}}
 @keyframes swayB{0%,100%{transform:rotate(1.5deg);}50%{transform:rotate(-1.5deg);}}
 @keyframes bloom{0%{transform:scale(1);}45%{transform:scale(1.12);}100%{transform:scale(1);}}
@@ -57,68 +63,104 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .sway-f{animation:swayF 7s ease-in-out infinite;transform-origin:center;}
 .sway-b{animation:swayB 9s ease-in-out infinite;transform-origin:center;}
 .fl-bloom{animation:bloom .52s cubic-bezier(.34,1.25,.5,1);transform-origin:center;}
-.fl-glow{position:absolute;inset:-9px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(245,184,0,.55) 0%,rgba(255,138,101,.28) 50%,transparent 72%);animation:glowPulse 3.8s ease-in-out infinite;}
-.fl-drift{animation:driftRot 46s linear infinite;transform-origin:center;}
-@media (prefers-reduced-motion:reduce){.fl-breathe,.sway-f,.sway-b,.fl-bloom,.fl-glow,.fl-drift{animation:none!important;}}
-/* mentor avatar: gentle hover with light travelling around the petals */
+@media (prefers-reduced-motion:reduce){.fl-breathe,.sway-f,.sway-b,.fl-bloom{animation:none!important;}}
+/* Sol's presence: the core breathes, and rings leave it and fade outward.
+   Each ring fades in as it goes, so a restart is never visible. */
+@keyframes solRipple{
+  0%{transform:scale(.42);opacity:0;}
+  18%{opacity:.5;}
+  100%{transform:scale(1.5);opacity:0;}
+}
+@keyframes solBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.045);}}
+.sol-rp{animation:solRipple 12s ease-out infinite;transform-origin:50% 50%;transform-box:fill-box;}
+.sol-rp.d1{animation-delay:-4s;}
+.sol-rp.d2{animation-delay:-8s;}
+.sol-breathe{animation:solBreathe 6s ease-in-out infinite;transform-box:fill-box;}
+@media (prefers-reduced-motion:reduce){.sol-rp,.sol-breathe{animation:none!important;}.sol-rp{opacity:.28;}}
+/* the mentor avatar sits still now: the ripples carry the life, and a hovering
+   ring read as drifting rather than breathing */
 .mentor-stage{position:relative;width:120px;height:112px;display:flex;align-items:center;justify-content:center;}
-.mentor-shadow{position:absolute;bottom:6px;left:50%;width:54px;height:9px;margin-left:-27px;border-radius:50%;background:#1F1F1F;opacity:.16;filter:blur(3.5px);animation:mHoverShadow 5.6s ease-in-out infinite;}
-.mentor-hover{animation:mHover 5.6s ease-in-out infinite;will-change:transform;}
-@keyframes mHover{0%,100%{transform:translateY(2px);}50%{transform:translateY(-5px);}}
-@keyframes mHoverShadow{0%,100%{transform:scaleX(1);opacity:.16;}50%{transform:scaleX(.82);opacity:.09;}}
-@keyframes mShimmer{0%,100%{opacity:.5;}50%{opacity:1;}}
-.mp-shimmer{animation:mShimmer 2.8s ease-in-out infinite;}
-@media (prefers-reduced-motion:reduce){.mentor-hover,.mentor-shadow,.mp-shimmer{animation:none!important;}}
 
-/* habits */
-.mission{position:relative;display:flex;align-items:center;gap:12px;background:#FFF3C4;border:1px solid var(--hair);
-  border-radius:14px;padding:16px 18px 16px 16px;margin-top:12px;width:100%;font-family:inherit;cursor:pointer;text-align:left;}
-.mission .mark{position:static;flex-shrink:0;margin-right:2px;}
-.mission.done .mark{background:var(--sage);}
-.mission.done .mtitle,.mission.done .memoji{opacity:.45;}
-.habit.done .ic,.habit.done .nm,.habit.done .val{opacity:.45;}
+/* habits
+   Layout uses start/end (logical properties) throughout, so a right-to-left
+   language mirrors without a redesign: the tick sits at the start of a row. */
+.mission{background:#FFF3C4;border-radius:16px;margin-top:22px;}
+.mission-main{display:flex;align-items:center;gap:12px;width:100%;font-family:inherit;cursor:pointer;text-align:start;
+  padding-block:12px;padding-inline:14px 16px;}
+.mission-main.solo{padding-block-end:12px;}
+.mission .mark{position:static;flex-shrink:0;margin-inline-start:2px;}
+.mission.done .memoji{opacity:.45;}
+.habit.done .ic{opacity:.45;}
 .wday{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
 .wday .dot{width:30px;height:30px;border-radius:50%;background:var(--hair);display:flex;align-items:center;justify-content:center;}
 .wday.on .dot{background:var(--sage);}
-.wday .lb{font-size:10.5px;font-weight:700;color:var(--clay);}
-.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.habit{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:0;background:var(--cream);
-  border:1px solid var(--hair);border-radius:14px;padding:14px;text-align:left;min-height:118px;}
-.habit .ic{font-size:26px;line-height:1;margin-bottom:auto;}
-.habit .nm{font-size:13px;font-weight:600;color:var(--clay);margin-top:10px;}
-.habit .val{font-size:20px;font-weight:800;letter-spacing:-.015em;margin-top:2px;}
-.habit .val span{font-size:12px;font-weight:600;color:var(--clay);}
-.habit .val.light{font-size:16px;font-weight:600;}
+.wday .lb{font-size:10.5px;font-weight:700;color:var(--soft);}
+.wday.today .lb{color:var(--cocoa);font-weight:800;}
+/* one habit per row: tick, icon, name, then its number at the end. No boxes —
+   a hairline between rows is all the separation a calm list needs. */
+.hlist{display:flex;flex-direction:column;}
+.habit{position:relative;display:flex;align-items:center;gap:13px;width:100%;padding:14px 2px;text-align:start;}
+.habit+.habit{box-shadow:inset 0 1px 0 rgba(31,31,31,.07);}
+.habit .ic{font-size:21px;line-height:1;width:26px;text-align:center;flex-shrink:0;}
+.habit .nm{flex:1;min-width:0;font-size:15.5px;font-weight:600;letter-spacing:-.01em;color:var(--cocoa);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* one grammar for every value: the number carries, the unit stays quiet */
+.habit .val{font-size:15px;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums;flex-shrink:0;}
+.habit .val span{font-size:13.5px;font-weight:600;color:var(--soft);}
+.habit.done .nm{color:var(--soft);}
+/* One circle for every habit; the glyph inside says who completes it.
+   Empty = yours to tap · watch = the watch is watching · play = opens a session.
+   Done is sage either way, and an automatic habit keeps its watch glyph when
+   done, so a finished day still shows how it finished. */
 .mark{width:26px;height:26px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;background:rgba(31,31,31,.06);}
-.habit .mark{position:absolute;top:12px;right:12px;}
-.habit.done .mark{background:var(--sage);}
-.habit .mark svg{display:block;}
+  display:flex;align-items:center;justify-content:center;background:transparent;}
+.habit .mark{position:static;}
+/* an unticked circle must read as a control: ink at 50% measures 3.15:1 on
+   butter and 3.23:1 on white, clearing the 3:1 bar for UI boundaries */
+.mark.tap,.mark.play{box-shadow:inset 0 0 0 1.5px rgba(31,31,31,.5);}
+/* the watch's circle is quieter, because it is not a control */
+.mark.auto{box-shadow:inset 0 0 0 1.5px rgba(31,31,31,.22);}
+.mark.done{background:var(--sage);box-shadow:none;}
+.mark svg{display:block;}
 
 /* chat */
 .chat{flex:1;overflow-y:auto;padding:14px 16px 8px;}
-.bub{max-width:78%;padding:11px 14px;border-radius:20px 20px 20px 6px;background:var(--cream);
+.bub{max-width:78%;padding:11px 14px;border-radius:20px;border-end-start-radius:6px;background:var(--cream);
   border:1px solid var(--hair);font-size:14px;line-height:1.5;margin-bottom:10px;}
-.bub.me{margin-left:auto;background:var(--cocoa);color:#fff;border:none;border-radius:20px 20px 6px 20px;font-weight:500;}
+.bub.me{margin-inline-start:auto;background:var(--cocoa);color:#fff;border:none;border-end-start-radius:20px;border-end-end-radius:6px;font-weight:500;}
 .chips{display:flex;gap:8px;flex-wrap:wrap;padding:4px 16px 10px;}
 .chips button{background:var(--cream);border:1px solid var(--hair);border-radius:99px;padding:9px 14px;font-size:13px;font-weight:600;}
-.noticed{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--sageText);margin:0 0 4px 4px;letter-spacing:.02em;}
 @keyframes blink{0%,80%,100%{opacity:.3;}40%{opacity:1;}}
-.dots{display:inline-flex;gap:4px;padding:13px 16px;border-radius:20px 20px 20px 6px;background:var(--cream);border:1px solid var(--hair);}
+.dots{display:inline-flex;gap:4px;padding:13px 16px;border-radius:20px;border-end-start-radius:6px;background:var(--cream);border:1px solid var(--hair);}
+/* mentor offer for free users; the conversation underneath is kept */
+.offer{flex:1;overflow-y:auto;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 28px 36px;}
+.offer ul{list-style:none;margin:18px 0 22px;display:flex;flex-direction:column;gap:9px;text-align:start;width:100%;}
+.offer li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.45;}
 .dots i{width:7px;height:7px;border-radius:50%;background:var(--clay);animation:blink 1.4s infinite;}
 .dots i:nth-child(2){animation-delay:.2s;}.dots i:nth-child(3){animation-delay:.4s;}
 
 /* memory */
 .memrow{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:1px solid var(--hair);font-size:13.5px;line-height:1.45;}
 .memrow:last-child{border-bottom:none;}
-.memrow .del{color:var(--coralText);font-weight:800;font-size:13px;flex-shrink:0;padding:0 2px;}
+.memrow .del{color:var(--cocoa);font-weight:800;font-size:13px;flex-shrink:0;padding:0 2px;}
 
-/* discover */
+/* library */
 .filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;}
-.filters button{flex-shrink:0;border:1.5px solid var(--hair);background:var(--cream);color:var(--clay);
+.filters button{flex-shrink:0;border:1.5px solid var(--hair);background:var(--cream);color:var(--soft);
   border-radius:99px;padding:8px 15px;font-size:13px;font-weight:600;}
 .filters button.on{border-color:var(--gold);background:#FFF3C4;color:var(--cocoa);}
-.what{font-size:13px;line-height:1.5;margin:3px 0 9px;}
+/* balance so card copy never strands one word on its last line */
+.what{font-size:13px;line-height:1.5;margin:3px 0 9px;text-wrap:balance;}
+/* collapsed Library cards */
+.dcard{padding:0;}
+.dhead{display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;text-align:start;font-family:inherit;}
+.dhead b{flex:1;font-size:15.5px;letter-spacing:-.01em;}
+.dic{width:32px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.dadded{font-size:11.5px;font-weight:700;color:var(--cocoa);background:#FFF3C4;border:1px solid var(--gold);border-radius:99px;padding:2px 8px;white-space:nowrap;}
+.dchev{font-size:18px;transition:transform .2s ease;}
+.dcard.open .dchev{transform:rotate(90deg);}
+.dbody{padding-block:0 14px;padding-inline:60px 16px;}
+@media (prefers-reduced-motion:reduce){.dchev{transition:none;}}
 .rowbtns{display:flex;gap:8px;}
 .rowbtns button{flex:1;padding:11px 0;border-radius:13px;font-size:13.5px;font-weight:700;}
 
@@ -128,12 +170,66 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .seg button.on{background:var(--cream);color:var(--cocoa);box-shadow:0 1px 3px rgba(31,31,31,.16);}
 
 /* account rows */
-.acrow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--hair);width:100%;text-align:left;}
+.acrow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--hair);width:100%;text-align:start;}
 .acrow:last-child{border-bottom:none;}
 .acrow .ic{width:28px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.acrow .lbl{flex:1;font-size:16px;font-weight:600;}
-.acrow .lbl small{display:block;font-size:11.5px;font-weight:500;color:var(--clay);margin-top:1px;}
-.acrow .chev{color:#9E9A94;font-size:16px;font-weight:700;}
+.acrow .lbl{flex:1;font-size:16px;font-weight:600;text-align:start;}
+.acrow .lbl small{display:block;font-size:11.5px;font-weight:500;color:var(--soft);margin-top:1px;}
+.acrow .chev{color:var(--soft);font-size:16px;font-weight:700;}
+.chev:dir(rtl),.backbtn .glyph:dir(rtl){display:inline-block;transform:scaleX(-1);}
+.pill-sm{flex-shrink:0;padding:7px 14px;border-radius:99px;background:var(--sage);color:var(--cocoa);font-size:13px;font-weight:700;}
+/* iOS-style switch; on is sage, matching the reminder switch */
+.sw{width:51px;height:31px;border-radius:99px;background:#E6E4DF;position:relative;flex-shrink:0;transition:background .2s;}
+.sw.on{background:var(--sage);}
+.sw i{position:absolute;top:2px;inset-inline-start:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(31,31,31,.2);transition:inset-inline-start .2s cubic-bezier(.2,.8,.3,1);}
+.sw.on i{inset-inline-start:22px;}
+/* ---- chat drawer: slides from the start edge, over the chat ---- */
+.scrim{position:absolute;inset:0;background:rgba(31,31,31,.42);z-index:60;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+.scrim.on{opacity:1;pointer-events:auto;}
+.drawer{position:absolute;inset-block:0;inset-inline-start:0;width:82%;max-width:320px;z-index:61;background:var(--dawn);border-inline-end:1px solid var(--hair);
+  box-shadow:0 0 28px rgba(31,31,31,.16);display:flex;flex-direction:column;
+  transform:translateX(-102%);transition:transform .26s cubic-bezier(.2,.8,.3,1);}
+.drawer:dir(rtl){transform:translateX(102%);}
+.drawer.on,.drawer.on:dir(rtl){transform:translateX(0);}
+.drawer .dhd{padding:14px 14px 8px;}
+.newchat{width:100%;display:flex;align-items:center;gap:9px;padding:12px 14px;border-radius:12px;background:var(--cream);border:1px solid var(--hair);font-family:inherit;font-size:15px;font-weight:700;color:var(--cocoa);text-align:start;}
+.drawer .dlist{flex:1;overflow-y:auto;padding:4px 10px 10px;}
+.drawer .sect{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--soft);padding:14px 6px 6px;}
+.crow{display:flex;align-items:center;gap:8px;width:100%;padding:10px 8px;border-radius:10px;text-align:start;}
+.crow.on{background:#FFF3C4;}
+.crow .ct{flex:1;min-width:0;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--cocoa);text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.crow .cw{font-size:11.5px;font-weight:600;color:var(--soft);font-variant-numeric:tabular-nums;flex-shrink:0;}
+.crow .cm{width:26px;height:26px;border-radius:8px;flex-shrink:0;color:var(--soft);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.grow{display:flex;align-items:center;gap:8px;width:100%;padding:10px 8px;border-radius:10px;text-align:start;}
+.grow .gt{flex:1;min-width:0;font-family:inherit;font-size:14.5px;font-weight:700;color:var(--cocoa);text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.grow .gc{font-size:11.5px;font-weight:600;color:var(--soft);flex-shrink:0;}
+.grow .gv{font-size:14px;color:var(--soft);transition:transform .2s ease;}
+.grow.open .gv{transform:rotate(90deg);}
+.drawer .dft{border-top:1px solid var(--hair);padding:6px 10px 16px;}
+.dftrow{display:flex;align-items:center;gap:10px;width:100%;padding:12px 8px;border-radius:10px;font-size:14.5px;font-weight:600;color:var(--cocoa);text-align:start;}
+.dftrow .fc{flex:1;min-width:0;}
+.dftrow small{display:block;font-size:11.5px;font-weight:500;color:var(--soft);}
+/* ---- bottom sheet: the chat menu, and the small naming forms ---- */
+.sheet{position:absolute;inset-inline:0;bottom:0;z-index:71;background:var(--dawn);border-radius:24px 24px 0 0;border-top:1px solid var(--hair);
+  box-shadow:0 -8px 28px rgba(31,31,31,.18);padding:8px 10px 22px;max-height:80%;overflow-y:auto;transform:translateY(102%);transition:transform .26s cubic-bezier(.2,.8,.3,1);}
+.sheet.on{transform:translateY(0);}
+.sheet .grab{width:38px;height:5px;border-radius:99px;background:var(--hair);margin:2px auto 8px;}
+.srow{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:12px;font-family:inherit;font-size:15.5px;font-weight:600;color:var(--cocoa);text-align:start;}
+.srow .si{width:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.srow .sc{flex:1;min-width:0;}
+/* ink label, red icon: red text measures 3.32:1 on dawn, so the icon carries
+   the destructive signal, the same as the Delete account row */
+.sdiv{height:1px;background:var(--hair);margin:6px 10px;}
+.sheet input{width:100%;padding:14px 15px;border-radius:12px;font-size:15px;font-family:inherit;border:1.5px solid var(--hair);background:var(--cream);color:var(--cocoa);outline:none;}
+@media (prefers-reduced-motion:reduce){.drawer,.sheet,.scrim,.grow .gv{transition:none;}}
+.timerow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;font-size:15px;font-weight:600;}
+.timerow input{font:inherit;font-size:15px;font-weight:700;color:var(--cocoa);background:#FFF3C4;border:1.5px solid var(--gold);border-radius:9px;padding:6px 10px;font-variant-numeric:tabular-nums;}
+.stepper{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--hair);background:var(--cream);}
+.stepper span{font-size:14px;font-weight:600;}
+.stepper div{display:flex;align-items:center;gap:14px;}
+.stepper button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--hair);font-size:18px;font-weight:600;line-height:1;}
+.stepper button:disabled{opacity:.35;cursor:default;}
+.stepper b{font-size:17px;min-width:14px;text-align:center;font-variant-numeric:tabular-nums;}
 .grpwrap{background:var(--cream);border:1px solid var(--hair);border-radius:12px;overflow:hidden;margin-bottom:18px;}
 
 /* config */
@@ -145,22 +241,21 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 .grid2 button{padding:13px 0;border-radius:12px;border:1.5px solid var(--hair);background:var(--cream);font-size:14px;font-weight:600;}
 .grid2 button.on{border-color:var(--gold);background:#FFF3C4;color:var(--cocoa);}
 
-/* toast */
-.toast{position:absolute;left:16px;right:16px;bottom:96px;background:var(--dusk);border-radius:12px;padding:13px 15px;
+/* toast — bottom offset is set per screen by positionToast() */
+.toast{position:absolute;inset-inline:16px;bottom:96px;background:var(--dusk);border-radius:12px;padding:13px 15px;
   display:flex;align-items:center;gap:12px;z-index:40;color:#fff;box-shadow:0 12px 32px rgba(31,31,31,.35);
   opacity:0;transform:translateY(14px);transition:all .3s cubic-bezier(.2,.8,.3,1);pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);pointer-events:auto;}
 .toast .msg{flex:1;font-size:13.5px;font-weight:700;}
 .toast .msg small{display:block;font-weight:500;font-size:11.5px;color:rgba(255,255,255,.7);margin-top:1px;}
 
-.hint{position:fixed;bottom:14px;left:0;right:0;text-align:center;font-size:12px;color:rgba(244,236,226,.55);font-weight:600;}
 
 /* iOS grouped inset separators */
 .acrow{border-bottom:none !important;position:relative;}
-.acrow::after{content:"";position:absolute;left:16px;right:0;bottom:0;height:1px;background:var(--hair);}
+.acrow::after{content:"";position:absolute;inset-inline:16px 0;bottom:0;height:1px;background:var(--hair);}
 .grpwrap .acrow:last-child::after{display:none;}
 .memrow{border-bottom:none !important;position:relative;}
-.memrow::after{content:"";position:absolute;left:14px;right:0;bottom:0;height:1px;background:var(--hair);}
+.memrow::after{content:"";position:absolute;inset-inline:14px 0;bottom:0;height:1px;background:var(--hair);}
 .grpwrap .memrow:last-child::after{display:none;}
 </style>
 </head>
@@ -171,54 +266,54 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
   <!-- ============ TODAY ============ -->
   <div class="screen on" data-s="today">
     <div class="scroll">
-      <h1 id="todayGreet" style="font-size:22px;font-weight:700;letter-spacing:-.018em">Good morning, Daria</h1>
+      <!-- Today's title. 28px is the largest that keeps the greeting on one
+           line at this width; a longer name wraps, and balance keeps it even. -->
+      <h1 id="todayGreet" style="font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.2">Good morning, Daria</h1>
 
-      <div class="card" style="margin-top:18px;padding:15px 16px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
-          <span style="font-size:13.5px;font-weight:700">Your rhythm</span>
-          <span style="font-size:13px;font-weight:700;color:var(--clay)">23 days</span>
-        </div>
-        <div id="weekRow" style="display:flex;justify-content:space-between;gap:5px"></div>
+      <!-- no card, and no running total: the week reads as itself, and the
+           total lives on Journey where the history is -->
+      <div id="weekRow" style="display:flex;justify-content:space-between;gap:5px;margin-top:20px"></div>
+
+      <!-- The mission is one of the user's own habits, featured for today.
+           Reads in the text direction: tick, then the mission, then its emoji. -->
+      <div class="mission" id="missionCard">
+        <button class="mission-main" id="missionMain" onclick="tapMission()">
+          <span class="mark" id="missionMark"></span>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600;color:var(--soft)">Today's mission</div>
+            <div class="mtitle" id="missionTitle" style="font-size:19px;font-weight:800;letter-spacing:-.015em;margin-top:2px;line-height:1.2"></div>
+          </div>
+          <div class="memoji" id="missionEmoji" style="font-size:30px;line-height:1"></div>
+        </button>
       </div>
 
-      <button class="mission" id="missionCard" onclick="tapMission()">
-        <div class="memoji" style="font-size:40px;line-height:1">🏃🏼‍♀️</div>
-        <div style="flex:1;text-align:left">
-          <div style="font-size:12.5px;font-weight:600;color:var(--clay)">Today's mission</div>
-          <div class="mtitle" style="font-size:20px;font-weight:800;letter-spacing:-.015em;margin-top:3px;line-height:1.2">Run for 30 minutes</div>
-        </div>
-        <span class="mark" id="missionMark" style="position:static;flex-shrink:0"></span>
-      </button>
-
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:22px 2px 12px">
-        <h2 style="font-size:18px;font-weight:800;letter-spacing:-.015em">Daily habits</h2>
-        <span id="todayCount" style="font-size:13px;font-weight:600;color:var(--clay);font-variant-numeric:tabular-nums"></span>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:26px 2px 4px">
+        <h2 style="font-size:17px;font-weight:800;letter-spacing:-.015em">Daily habits</h2>
+        <span id="todayCount" style="font-size:12.5px;font-weight:600;color:var(--soft);font-variant-numeric:tabular-nums"></span>
       </div>
-      <div id="habits" class="hgrid"></div>
-
-      <div class="card" id="fact" style="margin-top:16px;background:#FFF3C4;border:1px solid var(--hair)">
-        <div class="k" style="color:var(--cocoa);opacity:.7">Fact of the day</div>
-        <p style="font-size:14.5px;font-weight:500;line-height:1.5;margin-top:4px">10 minutes of morning light can shift your sleep earlier the same night. Your eyes set the clock for the whole day.</p>
-      </div>
+      <div id="habits" class="hlist"></div>
 
     </div>
   </div>
 
   <!-- ============ MENTOR ============ -->
   <div class="screen" data-s="mentor">
-    <div class="navrow" style="background:rgba(244,236,226,.82);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--hair);justify-content:space-between">
-      <button onclick="back()" style="color:var(--coralText);font-size:17px;font-weight:400;padding:4px 6px;display:flex;align-items:center;gap:1px;z-index:1">‹ Back</button>
+    <div class="navrow" style="background:rgba(250,247,241,.82);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--hair);justify-content:space-between">
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Back</button>
       <div style="display:flex;align-items:center;gap:8px">
         <span id="hdMark" class="fl-breathe" style="display:block;width:30px;height:30px"></span>
-        <div style="font-size:17px;font-weight:600;letter-spacing:-.01em">Sol <span id="typing" style="font-size:11px;color:var(--coralText);font-weight:600;display:none">typing…</span></div>
+        <div style="font-size:17px;font-weight:600;letter-spacing:-.01em">Sol <span id="typing" style="font-size:11px;color:var(--soft);font-weight:600;display:none">typing…</span></div>
       </div>
-      <button title="What Sol knows about you" onclick="go('memory')" style="width:34px;height:34px;border-radius:10px;background:var(--cream);border:1px solid var(--hair);font-size:16px">💡</button>
+      <button id="drawerBtn" title="Your chats" aria-label="Your chats" onclick="openDrawer()" style="width:34px;height:34px;border-radius:10px;background:var(--cream);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--cocoa)" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
     </div>
+    <div class="offer" id="mentorOffer"></div>
     <div class="chat" id="chat"></div>
     <div class="chips" id="chips"></div>
 
     <!-- conversation / keyboard: text input bar -->
-    <div id="inputBar" style="display:none;padding:8px 14px 30px;border-top:1px solid var(--hair);gap:9px;align-items:center;background:var(--dawn)">
+    <div id="inputBar" class="foot" style="display:none;padding:8px 14px 30px;border-top:1px solid var(--hair);gap:9px;align-items:center;background:var(--dawn)">
       <button id="voiceBtn" title="Voice is coming soon" aria-label="Voice messages, coming soon" disabled
         style="width:44px;height:44px;border-radius:50%;background:transparent;border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;cursor:default;opacity:.45"></button>
       <input id="chatInput" placeholder="Message Sol…" oninput="syncSend()" onkeydown="if(event.key==='Enter')sendText()"
@@ -228,39 +323,63 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
         <svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
+
+    <!-- your chats: the list slides over the chat, which keeps its place behind it -->
+    <div class="scrim" id="drawerScrim" onclick="closeDrawer()"></div>
+    <aside class="drawer" id="drawer" aria-label="Your chats" aria-hidden="true">
+      <div class="dhd">
+        <button class="newchat" onclick="newChat()"><span style="font-size:17px">＋</span> New chat</button>
+      </div>
+      <div class="dlist" id="drawerList"></div>
+      <div class="dft">
+        <button class="dftrow" id="arcRow" onclick="openArchived()"><span style="font-size:16px">🗄</span><span class="fc">Archived<small id="arcCount"></small></span><span class="chev">›</span></button>
+        <button class="dftrow" onclick="closeDrawer();go('memory')"><span style="font-size:16px">💡</span><span class="fc">What Sol knows about you</span><span class="chev">›</span></button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ============ ARCHIVED CHATS (sub) ============ -->
+  <div class="screen" data-s="archived">
+    <div class="navrow">
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Back</button>
+      <div class="ttl">Archived</div>
+    </div>
+    <div class="scroll nofoot" style="padding-top:6px">
+      <div id="arcList"></div>
+    </div>
   </div>
 
   <!-- ============ JOURNEY ============ -->
   <div class="screen" data-s="journey">
     <div class="scroll">
-      <div style="display:flex;align-items:center;gap:10px;padding-right:46px">
+      <div style="display:flex;align-items:center;gap:10px">
         <h1 class="big" style="flex:1">Your journey</h1>
-        <button onclick="toast('Ready to share','Your progress card was saved to Photos')" aria-label="Share your progress"
+        <button onclick="toast('Share','Not part of this prototype')" aria-label="Share your progress"
           style="width:38px;height:38px;border-radius:50%;background:var(--cream);border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="var(--coralText)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4M5 13v6a1 1 0 001 1h12a1 1 0 001-1v-6"/></svg>
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="var(--cocoa)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4M5 13v6a1 1 0 001 1h12a1 1 0 001-1v-6"/></svg>
         </button>
       </div>
 
       <div class="card" style="margin-top:22px">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+          <!-- a running total, never a streak: nothing here can reset -->
           <div style="flex:1">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums">23</div>
-            <div style="font-size:13px;color:var(--clay);font-weight:600;margin-top:3px">day streak</div>
+            <div id="jrTotal" style="font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums">23</div>
+            <div style="font-size:13px;color:var(--soft);font-weight:600;margin-top:3px">rhythm days</div>
           </div>
-          <div style="text-align:right">
-            <div style="font-size:13px;color:var(--clay)">Longest streak</div>
-            <div style="font-size:15px;font-weight:700;margin-top:2px">23 days</div>
+          <div style="text-align:end">
+            <div style="font-size:13px;color:var(--soft)">This month</div>
+            <div id="jrMonth" style="font-size:15px;font-weight:700;margin-top:2px"></div>
           </div>
         </div>
         <div id="streakDots" style="display:flex;gap:4px;flex-wrap:wrap"></div>
-        <div style="font-size:12.5px;color:var(--sageText);font-weight:600;margin-top:11px">Every day since you started</div>
       </div>
 
 
 
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-          <b style="font-size:15px">Resting heart rate</b><span style="font-size:12.5px;font-weight:600;color:var(--sageText)">−4 bpm this month</span>
+          <b style="font-size:15px">Resting heart rate</b><span style="font-size:12.5px;font-weight:600;color:var(--cocoa)">−4 bpm this month</span>
         </div>
         <svg viewBox="0 0 300 70" width="100%" height="66" aria-label="Resting heart rate trending down">
           <path d="M0,18 L50,24 L100,20 L150,32 L200,38 L250,44 L300,48 L300,62 L0,62 Z" fill="rgba(143,168,122,.20)"/>
@@ -271,17 +390,19 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-          <b style="font-size:15px">Sleep is improving</b><span style="font-size:12.5px;font-weight:600;color:var(--sageText)">now past 7h ☀</span>
+          <b style="font-size:15px">Sleep is improving</b><span style="font-size:12.5px;font-weight:600;color:var(--cocoa)">now past 7h ☀</span>
         </div>
         <svg viewBox="0 0 300 106" width="100%" height="100" aria-label="Sleep trending up">
-          <line x1="0" y1="31" x2="300" y2="31" stroke="#8FA87A" stroke-width="1.2" stroke-dasharray="4 5"/>
-          <text x="300" y="26" text-anchor="end" font-size="10" fill="#8FA87A" font-weight="600">7h</text>
-          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24 L300,90 L0,90 Z" fill="rgba(255,138,101,.22)"/>
-          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24" fill="none" stroke="#FF8A65" stroke-width="2.5" stroke-linecap="round"/>
-          <g fill="#fff" stroke="#FF8A65" stroke-width="2">
+          <!-- sleep is drawn in the palette's sleep colour; the 7h target is a
+               neutral ink line so it doesn't read as the heart-rate series -->
+          <line x1="0" y1="31" x2="300" y2="31" stroke="#1F1F1F" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="4 5"/>
+          <text x="2" y="26" text-anchor="start" font-size="10" fill="#1F1F1F" fill-opacity=".65" font-weight="600">7h</text>
+          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24 L300,90 L0,90 Z" fill="rgba(111,146,168,.22)"/>
+          <path d="M0,63 L50,71 L100,47 L150,55 L200,27 L250,20 L300,24" fill="none" stroke="#6F92A8" stroke-width="2.5" stroke-linecap="round"/>
+          <g fill="#fff" stroke="#6F92A8" stroke-width="2">
             <circle cx="0" cy="63" r="3"/><circle cx="50" cy="71" r="3"/><circle cx="100" cy="47" r="3"/><circle cx="150" cy="55" r="3"/><circle cx="200" cy="27" r="3"/><circle cx="250" cy="20" r="3"/><circle cx="300" cy="24" r="3"/>
           </g>
-          <g font-size="10" fill="#9E9A94" text-anchor="middle">
+          <g font-size="10" fill="#1F1F1F" fill-opacity=".65" text-anchor="middle">
             <text x="0" y="103">S</text><text x="50" y="103">M</text><text x="100" y="103">T</text><text x="150" y="103">W</text><text x="200" y="103">T</text><text x="250" y="103">F</text><text x="300" y="103">S</text>
           </g>
         </svg>
@@ -290,11 +411,20 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
     </div>
   </div>
 
-  <!-- ============ DISCOVER ============ -->
-  <div class="screen" data-s="discover">
+  <!-- ============ LIBRARY ============ -->
+  <div class="screen" data-s="library">
     <div class="scroll">
-      <h1 class="big">Discover</h1>
+      <h1 class="big">Library</h1>
       <p class="sub">Small habits, and the science behind why they work</p>
+
+      <!-- the fact of the day: the "why" of one of the user's own habits, in
+           Sol's voice, where the rest of the science lives -->
+      <button id="fact" onclick="openFact()" style="display:block;width:100%;text-align:start;font-family:inherit;color:var(--cocoa);margin-bottom:20px;background:#FFF3C4;border-radius:14px;padding:14px 16px">
+        <div class="k" style="color:var(--cocoa);opacity:.7">Fact of the day</div>
+        <p id="factText" style="font-size:14.5px;font-weight:500;line-height:1.5;margin-top:4px"></p>
+        <div id="factLink" style="font-size:13px;font-weight:600;margin-top:8px"></div>
+      </button>
+
       <div class="filters" id="filters"></div>
       <div id="cards"></div>
     </div>
@@ -302,36 +432,90 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 
   <!-- ============ ACCOUNT ============ -->
   <div class="screen" data-s="account">
-    <div class="navrow"><button class="backbtn" onclick="back()">‹ Back</button><div class="ttl">Account</div></div>
-    <div class="scroll" style="padding-top:8px">
+    <div class="scroll">
+      <div id="acHead" style="display:flex;align-items:center;gap:13px;margin-bottom:22px">
+        <span id="acAvatar" style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--peach),var(--coral));display:flex;align-items:center;justify-content:center;flex-shrink:0"><b style="font-size:18px;color:var(--cocoa)">D</b></span>
+        <div style="min-width:0">
+          <h1 id="acName" style="font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.15">Daria</h1>
+          <div id="acMail" style="font-size:13px;font-weight:600;color:var(--soft)">daria@example.com</div>
+        </div>
+      </div>
       <div class="k" style="margin:6px 4px 10px">You &amp; Sol</div>
       <div class="grpwrap">
-        <button class="acrow" onclick="go('memory')"><span class="lbl">What Sol knows about you<small>View, edit, or delete every memory</small></span><span class="chev">›</span></button>
-        <button class="acrow" onclick="toast('Your goal','Someone who moves every day')"><span class="lbl">Your goal &amp; direction<small>Someone who moves every day</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="go('memory')"><span class="lbl">What Sol knows about you<small>View or delete every memory</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="go('address')"><span class="lbl">How Sol talks to you<small id="acAddress">As a woman</small></span><span class="chev">›</span></button>
       </div>
       <div class="k" style="margin:0 4px 10px">Habits</div>
       <div class="grpwrap">
-        <button class="acrow" onclick="openConfig('Target steps','👣');go('config')"><span class="lbl">My habits<small>4 active</small></span><span class="chev">›</span></button>
-        <button class="acrow" onclick="toast('Reminders','Evening reminders are on')"><span class="lbl">Reminders &amp; notifications</span><span class="chev">›</span></button>
+        <button class="acrow" onclick="go('habits')"><span class="lbl">My habits<small id="acHabitCount">4 active</small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="go('notifs')"><span class="lbl">Reminders &amp; notifications<small id="acNotif"></small></span><span class="chev">›</span></button>
+      </div>
+      <div class="k" style="margin:0 4px 10px" id="acSubHead">Subscription</div>
+      <div class="grpwrap" id="acSubGroup">
+        <button class="acrow" id="subRow" onclick="subRowTap()"><span class="lbl">Sol mentor<small id="subStatus"></small></span><span class="chev" id="subChev">›</span></button>
       </div>
       <div class="k" style="margin:0 4px 10px">Privacy &amp; data</div>
       <div class="grpwrap">
-        <button class="acrow" onclick="toast('Reset link sent','Check your email to set a new password')"><span class="lbl">Reset password<small>We'll email you a secure link</small></span><span class="chev">›</span></button>
-        <button class="acrow" onclick="toast('Permissions','Health, Calendar, Notifications, Location')"><span class="lbl">Permissions<small>Health, Calendar, Notifications, Location</small></span><span class="chev">›</span></button>
-        <button class="acrow" onclick="toast('Connected devices','Apple Watch')"><span class="lbl">Connected devices<small>Apple Watch</small></span><span class="chev">›</span></button>
+        <button class="acrow" id="acResetRow" onclick="askReset()"><span class="lbl">Reset password<small>We'll email you a secure link</small></span></button>
+        <button class="acrow" id="acHealthRow" onclick="healthRowTap()"><span class="lbl">Apple Health<small id="acHealth"></small></span><span class="chev">›</span></button>
+        <button class="acrow" onclick="toast('Connected devices','Apple Watch')"><span class="lbl">Connected devices<small>Apple Watch</small></span></button>
+        <button class="acrow" onclick="toast('Terms &amp; Privacy','Not part of this prototype')"><span class="lbl">Terms &amp; Privacy<small>Accepted 1 Sep 2026 · version 1.0.0 (27)</small></span><span class="chev">›</span></button>
+      </div>
+      <div class="k" style="margin:0 4px 10px">Support</div>
+      <div class="grpwrap">
+        <button class="acrow" onclick="toast('Help &amp; support','Not part of this prototype')"><span class="lbl">Help &amp; support<small>Questions, and how to reach a person</small></span><span class="chev">›</span></button>
       </div>
       <div class="grpwrap">
-        <button class="acrow" onclick="openDelete()"><span class="lbl" style="color:#FF3B30">Delete account &amp; all data</span></button>
+        <button class="acrow" id="acSignOutRow" onclick="signOut()"><span class="lbl">Sign out<small>Your plan stays on this phone</small></span></button>
+        <!-- ink label (red text measured 3.55:1); the red icon carries the destructive signal -->
+        <button class="acrow" onclick="openDelete()">
+          <span class="ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#FF3B30" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg></span>
+          <span class="lbl" id="acDelete">Delete account &amp; all data</span>
+        </button>
       </div>
-      <p style="font-size:11.5px;color:var(--clay);text-align:center;line-height:1.5;margin-top:4px">Version 1.0</p>
+
+      <!-- Not product UI: switches for walking the other states in this prototype.
+           Hidden until "Version 1.0" is tapped five times, so a demo never sees them. -->
+      <div class="k" style="margin:0 4px 10px;display:none" id="protoHead">Prototype only</div>
+      <div class="grpwrap" id="protoGroup" style="display:none">
+        <button class="acrow" onclick="protoToggle('health')" role="switch" id="swHealthRow"><span class="lbl">Apple Health connected<small>Off shows the manual tick fallback</small></span><span class="sw" id="swHealth"><i></i></span></button>
+        <button class="acrow" onclick="protoToggle('subscribed')" role="switch" id="swSubRow"><span class="lbl">Subscribed<small>Off shows the free plan</small></span><span class="sw" id="swSub"><i></i></span></button>
+      </div>
+      <button id="verRow" onclick="verTap()" style="display:block;width:100%;font-size:11.5px;color:var(--soft);text-align:center;line-height:1.5;margin-top:4px;padding:6px 0;font-family:inherit">Version 1.0</button>
+    </div>
+  </div>
+
+  <!-- ============ REMINDERS & NOTIFICATIONS (sub) ============ -->
+  <div class="screen" data-s="notifs">
+    <div class="navrow">
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Back</button>
+      <div class="ttl">Reminders &amp; notifications</div>
+    </div>
+    <div class="scroll nofoot" style="padding-top:6px">
+      <div class="grpwrap">
+        <button class="acrow" onclick="notifToggle('backend')" role="switch" id="nfBackRow"><span class="lbl">Sent by Sol<small>Habit reminders and messages, even when Sol is closed. iOS asks permission for these.</small></span><span class="sw" id="nfBack"><i></i></span></button>
+        <button class="acrow" onclick="notifToggle('inApp')" role="switch" id="nfInRow"><span class="lbl">Shown inside Sol<small>While the app is open. No iOS permission needed.</small></span><span class="sw" id="nfIn"><i></i></span></button>
+      </div>
+
+      <div class="k" style="margin:22px 4px 10px">Quiet hours</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <label class="timerow"><span>From</span><input type="time" id="nfQs" aria-label="Quiet hours start" value="22:00" onchange="setQuiet('quietStart',this.value)" /></label>
+        <label class="timerow"><span>Until</span><input type="time" id="nfQe" aria-label="Quiet hours end" value="07:00" onchange="setQuiet('quietEnd',this.value)" /></label>
+      </div>
+      <p style="font-size:12.5px;color:var(--soft);margin:9px 4px 0;line-height:1.45">Sol's own messages wait until quiet hours are over. Habit reminders you set yourself still arrive.</p>
+
+      <div class="k" style="margin:22px 4px 10px">Email</div>
+      <div class="grpwrap">
+        <button class="acrow" onclick="notifToggle('marketing')" role="switch" id="nfMailRow"><span class="lbl">Tips and news by email<small>Account and billing email always arrives.</small></span><span class="sw" id="nfMail"><i></i></span></button>
+      </div>
     </div>
   </div>
 
   <!-- ============ DELETE ACCOUNT (sub, verification + password) ============ -->
   <div class="screen" data-s="delete">
     <div class="navrow">
-      <button class="backbtn" onclick="back()">‹ Cancel</button>
-      <div class="ttl">Delete account</div>
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Cancel</button>
+      <div class="ttl" id="delTitle">Delete account</div>
     </div>
     <div class="scroll nofoot" style="padding-top:6px">
       <div class="card" style="border-color:rgba(255,59,48,.25);background:rgba(255,59,48,.05)">
@@ -347,7 +531,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
         <div class="memrow"><span style="flex:1">Every memory and insight</span></div>
         <div class="memrow"><span style="flex:1">Your goal, habits, and reminders</span></div>
         <div class="memrow"><span style="flex:1">Your full journey and moments</span></div>
-        <div class="memrow"><span style="flex:1">All connected data from Health and Calendar</span></div>
+        <div class="memrow"><span style="flex:1">All connected data from Health</span></div>
       </div>
 
       <label style="display:flex;align-items:flex-start;gap:10px;padding:2px 4px 16px;cursor:pointer" onclick="toggleAck()">
@@ -355,21 +539,30 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
         <span style="font-size:13.5px;color:var(--cocoa);line-height:1.45">I understand this permanently deletes my account and cannot be reversed.</span>
       </label>
 
-      <div class="k" style="margin:0 4px 10px">Confirm it's you</div>
-      <input id="delPass" type="password" placeholder="Enter your password" oninput="syncDelete()"
-        style="width:100%;padding:15px 16px;border-radius:12px;font-size:15px;border:1.5px solid var(--hair);background:var(--cream);color:var(--cocoa);outline:none" />
-      <p style="font-size:11.5px;color:var(--clay);line-height:1.5;margin:9px 4px 0">For your security, Sol asks for your password before deleting anything.</p>
+      <div id="delPassWrap">
+        <div class="k" style="margin:0 4px 10px">Confirm it's you</div>
+        <input id="delPass" type="password" placeholder="Enter your password" oninput="syncDelete()"
+          style="width:100%;padding:15px 16px;border-radius:12px;font-size:15px;border:1.5px solid var(--hair);background:var(--cream);color:var(--cocoa);outline:none" />
+        <p style="font-size:11.5px;color:var(--soft);line-height:1.5;margin:9px 4px 0">For your security, Sol asks for your password before deleting anything.</p>
+      </div>
+
+      <!-- deleting a Sol account does not cancel an App Store subscription -->
+      <div class="card" id="delSubNote" style="margin-top:18px;display:none">
+        <b style="font-size:14px">Your subscription is separate</b>
+        <p style="font-size:13px;color:var(--cocoa);line-height:1.5;margin-top:4px">Apple bills it, so deleting your account won't stop it. Cancel it in the App Store first.</p>
+        <button onclick="toast('Manage subscription','Not part of this prototype')" style="margin-top:8px;font-size:13.5px;font-weight:700;text-decoration:underline;padding:4px 0">Manage subscription</button>
+      </div>
     </div>
-    <div style="padding:12px 20px 28px;border-top:1px solid var(--hair);background:var(--dawn)">
+    <div class="foot" style="padding:12px 20px 28px;border-top:1px solid var(--hair);background:var(--dawn)">
       <button id="delBtn" disabled onclick="confirmDelete()"
-        style="width:100%;padding:15px 0;border-radius:12px;font-size:15.5px;font-weight:700;background:rgba(31,31,31,.08);color:var(--clay);transition:all .2s">Delete my account</button>
+        style="width:100%;padding:15px 0;border-radius:12px;font-size:15.5px;font-weight:700;background:rgba(31,31,31,.08);color:var(--dim);transition:all .2s">Delete my account</button>
     </div>
   </div>
 
   <!-- ============ MEMORY (sub) ============ -->
   <div class="screen" data-s="memory">
     <div class="navrow">
-      <button class="backbtn" onclick="back()">‹ Back</button>
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Back</button>
       <div class="ttl">What Sol knows about you</div>
     </div>
     <div class="scroll nofoot" style="padding-top:6px">
@@ -377,10 +570,22 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
     </div>
   </div>
 
+  <!-- ============ HOW SOL TALKS TO YOU (sub) ============ -->
+  <div class="screen" data-s="address">
+    <div class="navrow">
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Back</button>
+      <div class="ttl">How Sol talks to you</div>
+    </div>
+    <div class="scroll nofoot" style="padding-top:6px">
+      <div class="grpwrap" id="addrRows" role="radiogroup" aria-label="How should Sol talk to you?"></div>
+      <p style="font-size:12.5px;color:var(--soft);margin:10px 4px 0;line-height:1.45">Sol uses this in chat and in everything it sends you.</p>
+    </div>
+  </div>
+
   <!-- ============ BREATHWORK (sub) ============ -->
   <div class="screen" data-s="breath" style="background:radial-gradient(130% 90% at 50% 18%,#fff 0%,var(--dawn) 55%,#E6C98B 100%)">
     <div class="navrow">
-      <button class="backbtn" onclick="stopBreath();back()">Close</button>
+      <button class="backbtn" onclick="stopBreath();back()"><span class="glyph">‹</span> Back</button>
       <div class="ttl" style="text-align:center">Breathe</div>
       <span style="width:48px"></span>
     </div>
@@ -403,7 +608,7 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
   <!-- ============ MEDITATE (sub) ============ -->
   <div class="screen" data-s="meditate" style="background:radial-gradient(130% 90% at 50% 18%,#fff 0%,var(--dawn) 55%,#E6C98B 100%)">
     <div class="navrow">
-      <button class="backbtn" onclick="stopMed();back()">Close</button>
+      <button class="backbtn" onclick="stopMed();back()"><span class="glyph">‹</span> Back</button>
       <div class="ttl" style="text-align:center">Meditate</div>
       <span style="width:48px"></span>
     </div>
@@ -411,13 +616,13 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
       <div style="position:relative;width:250px;height:250px;display:flex;align-items:center;justify-content:center">
         <svg width="250" height="250" viewBox="0 0 250 250" style="position:absolute">
           <circle cx="125" cy="125" r="108" fill="none" stroke="var(--hair)" stroke-width="6"/>
-          <circle id="medRing" cx="125" cy="125" r="108" fill="none" stroke="var(--sage)" stroke-width="6"
+          <circle id="medRing" cx="125" cy="125" r="108" fill="none" stroke="var(--gold)" stroke-width="6"
             stroke-linecap="round" transform="rotate(-90 125 125)" stroke-dasharray="678.6" stroke-dashoffset="0"/>
         </svg>
         <div style="text-align:center">
           <div style="font-size:40px;line-height:1">🧘🏼‍♀️</div>
           <div id="medLeft" style="font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:8px">10:00</div>
-          <div id="medPhase" style="font-size:13px;color:var(--clay);font-weight:600;margin-top:2px">Ready when you are</div>
+          <div id="medPhase" style="font-size:13px;color:var(--soft);font-weight:600;margin-top:2px">Ready when you are</div>
         </div>
       </div>
     </div>
@@ -428,24 +633,61 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
   </div>
 
   <!-- ============ HABIT CONFIG (sub) ============ -->
+  <!-- ============ MY HABITS (sub, list) ============ -->
+  <div class="screen" data-s="habits">
+    <div class="navrow">
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Back</button>
+      <div class="ttl">My habits</div>
+    </div>
+    <div class="scroll nofoot" style="padding-top:8px">
+      <div id="habitList"></div>
+    </div>
+  </div>
+
+  <!-- ============ SIGNED OUT (after deleting the account) ============ -->
+  <div class="screen" data-s="goodbye">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px">
+      <div id="byeFlower"></div>
+      <h1 id="byeTitle" style="font-size:24px;font-weight:700;letter-spacing:-.015em;margin-top:18px">Your account is deleted</h1>
+      <p id="byeText" style="font-size:14.5px;color:var(--soft);line-height:1.5;margin-top:8px">Everything Sol knew about you is gone.</p>
+    </div>
+    <div style="padding:0 24px 36px">
+      <button class="pillbtn" onclick="location.reload()">Start again</button>
+    </div>
+  </div>
+
   <div class="screen" data-s="config">
     <div class="navrow">
-      <button class="backbtn" onclick="back()">‹ Back</button>
+      <button class="backbtn" onclick="back()"><span class="glyph">‹</span> Back</button>
       <div class="ttl">Edit habit</div>
     </div>
     <div class="scroll nofoot" style="padding-top:6px">
       <div class="card" style="display:flex;align-items:center;gap:13px">
         <span id="cfgIcon" style="width:46px;height:46px;border-radius:12px;background:rgba(255,138,101,.18);display:flex;align-items:center;justify-content:center;font-size:22px">👣</span>
-        <b style="flex:1;font-size:15.5px" id="cfgName">Target steps</b>
+        <input id="cfgName" value="Target steps" aria-label="Habit name"
+          style="flex:1;min-width:0;font-size:15.5px;font-weight:700;font-family:inherit;color:var(--cocoa);background:transparent;border:none;outline:none;padding:0" />
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clay)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.8 2.8 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
       </div>
-      <p style="font-size:12.5px;color:var(--clay);margin:8px 4px 0;line-height:1.45">Sol suggested this wording. Make it yours. Specific, time bound habits are the ones that stick.</p>
+      <p style="font-size:12.5px;color:var(--soft);margin:8px 4px 0;line-height:1.45">Sol suggested this wording. Make it yours. Specific, time bound habits are the ones that stick.</p>
 
       <div class="k" style="margin:22px 4px 11px">Time of day</div>
       <div class="trio" id="cfgTime"></div>
 
       <div class="k" style="margin:22px 4px 11px">Frequency</div>
       <div class="grid2" id="cfgFreq"></div>
+      <div id="cfgStepper"></div>
+
+      <!-- only the wake and bedtime habits have a target time -->
+      <div id="cfgTargetWrap" style="display:none">
+        <div class="k" style="margin:22px 4px 11px">Target time</div>
+        <div class="card" style="display:flex;align-items:center;gap:11px">
+          <span style="font-size:18px">🎯</span>
+          <b style="flex:1;font-size:15px" id="cfgTargetLabel">In bed by</b>
+          <input type="time" id="cfgTargetTime" aria-label="Target time" onchange="setTarget(this.value)"
+            style="font-size:14px;font-weight:700;color:var(--cocoa);background:#FFF3C4;border:1.5px solid var(--gold);border-radius:9px;padding:6px 10px;font-family:inherit" />
+        </div>
+        <p style="font-size:12.5px;color:var(--soft);margin:8px 4px 0;line-height:1.45">&ldquo;Consistent&rdquo; means within 45 minutes of this.</p>
+      </div>
 
       <div id="cfgAutoNote" style="display:none;align-items:flex-start;gap:10px;margin-top:22px;background:#FFF3C4;border:1px solid var(--hair);border-radius:14px;padding:14px 15px">
         <span style="font-size:17px;line-height:1.3">⌚</span>
@@ -454,45 +696,48 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
       <div class="card" id="cfgRemCard" style="margin-top:22px;padding-bottom:6px">
         <div style="display:flex;align-items:center;gap:11px">
           <span style="font-size:18px">🔔</span>
-          <b style="flex:1;font-size:15px">Daily reminder</b>
-          <button id="cfgTog" onclick="togReminder()" aria-pressed="true" style="width:51px;height:31px;border-radius:99px;background:var(--green);position:relative;transition:background .2s">
-            <span id="cfgKnob" style="position:absolute;top:2px;left:22px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(31,31,31,.2);transition:left .2s cubic-bezier(.2,.8,.3,1)"></span>
+          <b style="flex:1;font-size:15px">Reminder</b>
+          <button id="cfgTog" onclick="togReminder()" aria-pressed="true" style="width:51px;height:31px;border-radius:99px;background:var(--sage);position:relative;flex-shrink:0;transition:background .2s">
+            <span id="cfgKnob" style="position:absolute;top:2px;inset-inline-start:22px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(31,31,31,.2);transition:left .2s cubic-bezier(.2,.8,.3,1)"></span>
           </button>
         </div>
         <div id="cfgTimeRow" style="display:flex;align-items:center;gap:8px;padding:12px 2px 8px;margin-top:10px;border-top:1px solid var(--hair)">
-          <span style="font-size:13.5px;color:var(--clay);flex:1">Remind me at</span>
+          <span style="font-size:13.5px;color:var(--soft);flex:1">Remind me at</span>
           <button id="cfgClock" onclick="togTimePick()" style="font-size:14px;font-weight:700;color:var(--cocoa);background:#FFF3C4;border:1.5px solid var(--gold);border-radius:9px;padding:7px 13px;font-family:inherit;font-variant-numeric:tabular-nums">2:00 pm ▾</button>
         </div>
         <div id="cfgPick" style="display:none;gap:7px;flex-wrap:wrap;padding:2px 2px 10px;max-height:132px;overflow-y:auto"></div>
       </div>
     </div>
-    <div style="padding:12px 20px 16px;border-top:1px solid var(--hair)">
-      <button class="pillbtn" style="width:100%;padding:15px 0;background:var(--sage)" onclick="toast('Saved',cfgTitle);back()">Save habit</button>
-      <button style="display:block;margin:10px auto 0;font-size:13.5px;font-weight:600;color:var(--iosred);background:none;border:none;font-family:inherit;cursor:pointer;padding:6px 14px" onclick="toast('Removed',cfgTitle+' removed from your plan');back()">Remove habit</button>
+    <div class="foot" style="padding:12px 20px 16px;border-top:1px solid var(--hair)">
+      <button class="pillbtn" style="width:100%;padding:15px 0" onclick="saveConfig()">Save habit</button>
+      <!-- "not right now" (one tap, nothing lost) sits above "this isn't for me" (two taps) -->
+      <div style="display:flex;justify-content:center;gap:18px;margin-top:8px">
+        <button id="cfgPause" style="font-size:13.5px;font-weight:600;color:var(--cocoa);padding:6px 10px" onclick="pauseToggle()">Pause habit</button>
+        <button id="cfgRemove" style="font-size:13.5px;font-weight:600;color:var(--iosred);padding:6px 10px" onclick="removeHabit()">Remove habit</button>
+      </div>
     </div>
   </div>
 
-  <!-- tab bar -->
-  <!-- account button, top right corner (replaces the Account tab) -->
-  <button id="acctBtn" onclick="go('account')" aria-label="Account"
-    style="position:absolute;top:26px;right:20px;width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--peach),var(--coral));display:flex;align-items:center;justify-content:center;z-index:24;box-shadow:0 3px 10px rgba(31,31,31,.25);padding:0">
-    <b style="font-size:16px;color:var(--cocoa)">D</b>
-  </button>
+  <!-- one sheet serves the chat menu, Move to group, and the naming forms -->
+  <div class="scrim" id="sheetScrim" onclick="closeSheet()" style="z-index:70"></div>
+  <div class="sheet" id="sheet" role="menu" aria-hidden="true">
+    <div class="grab"></div>
+    <div id="sheetBody"></div>
+  </div>
 
-  <!-- floating mentor flower (Sol, present across the main tabs) -->
+  <!-- floating mentor flower (Sol, present across the doing tabs) -->
   <button id="floatFlower" onclick="tapFloatFlower()" aria-label="Sol, your mentor. Opens chat."
-    style="position:absolute;right:22px;bottom:104px;width:60px;height:60px;border-radius:50%;background:var(--cream);border:1px solid var(--hair);box-shadow:0 8px 22px rgba(31,31,31,.28);display:flex;align-items:center;justify-content:center;z-index:26;padding:0;transition:transform .2s cubic-bezier(.2,.8,.3,1)">
-    <span class="fl-glow"></span>
-    <span id="floatFlowerWrap" class="fl-drift" style="display:block;pointer-events:none;position:relative"></span>
+    style="position:absolute;inset-inline-end:22px;bottom:104px;width:60px;height:60px;border-radius:50%;background:var(--cream);border:1px solid var(--hair);box-shadow:0 8px 22px rgba(31,31,31,.28);display:flex;align-items:center;justify-content:center;z-index:26;padding:0;transition:transform .2s cubic-bezier(.2,.8,.3,1)">
+    <span id="floatFlowerWrap" style="display:block;pointer-events:none;position:relative"></span>
   </button>
 
   <nav class="tabbar" id="tabbar"></nav>
 
   <!-- toast -->
   <div class="toast" id="toast">
-    <span style="width:30px;height:30px;border-radius:9px;background:rgba(143,168,122,.28);display:flex;align-items:center;justify-content:center">✓</span>
+    <span id="toastIcon" style="width:30px;height:30px;border-radius:9px;background:rgba(143,168,122,.28);display:flex;align-items:center;justify-content:center">✓</span>
     <div class="msg" id="toastMsg">Done<small id="toastSub"></small></div>
-    <button style="color:var(--peach);font-weight:800;font-size:13px" onclick="hideToast()">OK</button>
+    <button id="toastAct" style="color:var(--peach);font-weight:800;font-size:13px;flex-shrink:0" onclick="hideToast()">OK</button>
   </div>
 </div>
 
@@ -502,11 +747,13 @@ h1.big{font-size:34px;font-weight:700;letter-spacing:-.022em;margin-bottom:3px;}
 const TABS=[
   {id:'journey',label:'Journey',icon:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z'},
   {id:'today',label:'Today',icon:'sun'},
-  {id:'discover',label:'Discover',icon:'M12 6c-2-1.3-4-1.3-7 0v12c3-1.3 5-1.3 7 0 2-1.3 4-1.3 7 0V6c-3-1.3-5-1.3-7 0z'},
+  {id:'library',label:'Library',icon:'M12 6c-2-1.3-4-1.3-7 0v12c3-1.3 5-1.3 7 0 2-1.3 4-1.3 7 0V6c-3-1.3-5-1.3-7 0z'},
+  /* Account is a place, not a floating badge over the content */
+  {id:'account',label:'Account',icon:'person'},
 ];
-const ROOTS=['journey','today','discover'];
+const ROOTS=['journey','today','library','account'];
 let current='today', activeRoot='today', stack=[];
-function isSub(id){return ['memory','breath','meditate','config','delete'].includes(id);}
+function isSub(id){return ['memory','address','notifs','archived','breath','meditate','config','delete','habits','goodbye'].includes(id);}
 
 function icon(d){
   if(d==='sun')return '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.5 5.5l1.4 1.4M17.1 17.1l1.4 1.4M18.5 5.5l-1.4 1.4M6.9 17.1l-1.4 1.4"/>';
@@ -522,19 +769,23 @@ function applyScreen(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.s===current));
   renderTabs();
   updateChrome();
+  positionToast();
 }
 function go(id){
   const leaving=current;
+  closeSheet(); if(id!=='mentor')closeDrawer();
   if(current==='breath')stopBreath();
   if(ROOTS.includes(id)){stack=[];activeRoot=id;}
   else if(leaving!==id){stack.push(leaving);}
   current=id;
   applyScreen();
-  if(id==='mentor'&&!isSub(leaving))renderEmptyState();
+  /* free users get the offer; a fresh chat gets the empty state; re-entering never wipes a conversation */
+  if(id==='mentor')renderMentor();
   if(id==='meditate')resetMed();
 }
 function back(){
   const t=stack.pop()||activeRoot||'today';
+  closeSheet(); closeDrawer();
   if(current==='breath')stopBreath();
   current=t;
   if(ROOTS.includes(t))activeRoot=t;
@@ -542,8 +793,9 @@ function back(){
 }
 function updateChrome(){
   const onRoot=ROOTS.includes(current);
-  const f=document.getElementById('floatFlower');if(f)f.style.display=onRoot?'flex':'none';
-  const a=document.getElementById('acctBtn');if(a)a.style.display=onRoot?'flex':'none';
+  /* Sol floats over the three doing places, not over your own settings */
+  const f=document.getElementById('floatFlower');
+  if(f)f.style.display=onRoot&&current!=='account'?'flex':'none';
   const nav=document.getElementById('tabbar');if(nav)nav.style.display=onRoot?'flex':'none';
 }
 
@@ -566,17 +818,54 @@ function flowerSVG(size,fill,idp){
     '<radialGradient id="'+idp+'s" cx="50%" cy="45%" r="58%"><stop offset="0" stop-color="#C99A3A"/><stop offset=".65" stop-color="#9A6A22"/><stop offset="1" stop-color="#5E3B16"/></radialGradient></defs>'+
     '<g class="sway-b">'+back+'</g><g class="sway-f">'+front+'</g><circle cx="0" cy="0" r="21" fill="url(#'+idp+'s)"/>'+seeds+'</svg>';
 }
+/* ---------- prototype state ----------
+   The persona (Daria) is subscribed and has Health connected. The "Prototype
+   only" group in Account flips these so the other states can be walked. */
+/* Every user has an account: Sol has no guest mode (§6). */
+const PROTO={health:true,subscribed:true};
+/* StoreKit supplies the localized price at runtime; this is only a stand-in. */
+const STORE_PRICE='₪39.90';
+/* Daria's activity from onboarding shapes Move your body's mission line. */
+const ACTIVITY={name:'Running',verb:'Run',emoji:'🏃🏼‍♀️'};
+const GOAL_HABITS=['steps','move','strength'];   // her goal: Get stronger
+
+/* `key` is the canonical habit title and never changes; `name` is what the user
+   sees and may rename. HABIT_CFG and cfgDefaults are keyed by `key`.
+   perWeek is null for daily habits, otherwise the weekly target; weekDone counts
+   completions earlier this week, not today. */
 const habitsData=[
-  {id:'steps',icon:'👣',name:'Target steps',val:'6,240',unit:'/ 8,000',done:false,edit:true,auto:true},
-  {id:'move',icon:'🎯',name:'Move your body',val:'2',unit:'of 3 this week',done:false},
-  {id:'breathe',icon:'🪷',name:'Breathwork',val:'5',unit:'min',done:false,opens:'breath'},
-  {id:'water',icon:'💧',name:'Morning water',val:'1',unit:'glass on waking',done:true},
+  {id:'steps',key:'Target steps',icon:'👣',name:'Target steps',val:'6,240',unit:'/ 8,000',done:false,status:'active',perWeek:null},
+  {id:'move',key:'Move your body',icon:'🎯',name:'Move your body',done:false,status:'active',perWeek:3,weekDone:2},
+  {id:'strength',key:'Strength',icon:'💪🏼',name:'Strength',done:false,status:'active',perWeek:2,weekDone:1},
+  {id:'breath',key:'Breathwork',icon:'🪷',name:'Breathwork',val:'5',unit:'min',done:false,opens:'breath',status:'active',perWeek:null},
+  {id:'water',key:'Morning water',icon:'💧',name:'Morning water',val:'1',unit:'glass',done:true,status:'active',perWeek:null},
 ];
-function fillRatio(){return habitsData.filter(h=>h.done).length/habitsData.length*0.9+0.1;}
+const activeHabits=()=>habitsData.filter(h=>h.status!=='paused');
+function weekCount(h){return (h.weekDone||0)+(h.done?1:0);}
+/* a weekly habit counts as done once the week's target is met */
+function isDoneToday(h){return h.done||(!!h.perWeek&&weekCount(h)>=h.perWeek);}
+/* automatic only when the habit is trackable AND Health is connected;
+   otherwise it behaves like any manual habit */
+function isAuto(h){return PROTO.health&&!!(HABIT_CFG[h.key]||{}).auto;}
+function autoSrc(h){return (HABIT_CFG[h.key]||{}).src||'your watch';}
+
+const CHECK='<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#1F1F1F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const PLAY='<svg width="12" height="12" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="var(--cocoa)"/></svg>';
+const watchSVG=c=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6"/><path d="M12 9.5v2.7l1.6 1M9 4h6M9 20h6"/></svg>';
+const WATCH=watchSVG('rgba(31,31,31,.55)'), WATCH_DONE=watchSVG('#1F1F1F');
+/* done by the watch keeps the watch glyph, so the row still says who did it */
+function markFor(h){
+  if(isDoneToday(h))return isAuto(h)?WATCH_DONE:CHECK;
+  return isAuto(h)?WATCH:(h.opens?PLAY:'');
+}
+function markCls(h){
+  return 'mark '+(isDoneToday(h)?'done':(isAuto(h)?'auto':(h.opens?'play':'tap')));
+}
+
 function renderFlower(bloom){
   const w=document.getElementById('floatFlowerWrap');
   if(!w)return;
-  w.innerHTML=markSVG(46,'ff');
+  w.innerHTML=markSVG(34,'ff',true);
   if(bloom){const s=w.querySelector('svg');s.classList.add('fl-bloom');setTimeout(()=>s.classList.remove('fl-bloom'),560);}
 }
 function tapFloatFlower(){
@@ -585,74 +874,333 @@ function tapFloatFlower(){
   if(f){f.style.transform='scale(1.12)';setTimeout(()=>f.style.transform='scale(1)',200);}
   setTimeout(()=>go('mentor'),320);
 }
-function renderHabits(){
-  const el=document.getElementById('todayCount');
-  if(el)el.textContent=habitsData.filter(h=>h.done).length+'/'+habitsData.length+' habits done';
-  document.getElementById('habits').innerHTML=habitsData.map((h,i)=>{
-    const check='<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    const play='<svg width="12" height="12" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="var(--cocoa)"/></svg>';
-    const watch='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--clay)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6"/><path d="M12 10v2.5l1.5 1M9 4h6M9 20h6"/></svg>';
-    const mark=h.done?check:(h.auto?watch:(h.opens?play:''));
-    return '<button class="habit'+(h.done?' done':'')+'" onclick="tapHabit('+i+')">'+
-      '<span class="mark">'+mark+'</span>'+
-      '<span class="ic">'+h.icon+'</span>'+
-      '<span class="nm">'+h.name+'</span>'+
-      (h.val?'<span class="val'+(h.light?' light':'')+'">'+h.val+(h.unit?' <span>'+h.unit+'</span>':'')+'</span>':'')+
-    '</button>';
-  }).join('');
+
+/* ---------- today's mission ----------
+   One of the user's own active habits, written as today's concrete version.
+   Chosen each morning from habits not yet done (goal habits first) and fixed
+   for the day; Swap moves it to the next eligible habit. The persona's mission
+   today is Move your body. */
+const MISSION_LINES={
+  'Consistent wake time':'Wake up at your target time',
+  'Consistent bedtime':'In bed by your target time',
+  'Screen free before bed':'Phone away 15 minutes before bed',
+  '7 hours of sleep':'Give yourself 7 hours tonight',
+  'Caffeine':'No caffeine within 6 hours of bed',
+  'Last meal':'Finish eating 4 hours before bed',
+  'Target steps':'Walk 8,000 steps',
+  'Move your body':()=>ACTIVITY.verb+' for 30 minutes',
+  'Strength':'Fit in a strength session',
+  'Breathwork':'Five minutes of slow breathing',
+  'Clear your head':'Write down 3 things on your mind',
+  'Read':'Read for 20 minutes',
+  'Screen free morning':'No screens for 15 minutes after waking',
+  'Meditate':'Sit for 10 minutes',
+  'Morning water':'A glass of water when you wake',
+};
+function missionLine(h){const l=MISSION_LINES[h.key];return typeof l==='function'?l():(l||h.name);}
+function missionEmoji(h){return h.id==='move'?ACTIVITY.emoji:h.icon;}
+let missionId='move';
+function missionOrder(){
+  const act=activeHabits();
+  return act.filter(h=>GOAL_HABITS.includes(h.id)).concat(act.filter(h=>!GOAL_HABITS.includes(h.id)));
 }
-let missionDone=false;
-function tapMission(){
-  missionDone=!missionDone;
-  renderMission();
-  if(missionDone)toast('Mission complete','Run for 30 minutes');
+function eligibleForMission(){return missionOrder().filter(h=>!isDoneToday(h));}
+function missionHabit(){
+  let h=activeHabits().find(x=>x.id===missionId);
+  if(!h){               // its habit was paused or removed: choose again
+    h=eligibleForMission()[0]||null;
+    missionId=h?h.id:null;
+  }
+  return h;
 }
+function tapMission(){const h=missionHabit();if(h)tapHabitById(h.id);}
 function renderMission(){
   const card=document.getElementById('missionCard');
-  const mark=document.getElementById('missionMark');
-  if(!card||!mark)return;
-  card.classList.toggle('done',missionDone);
-  mark.innerHTML=missionDone?'<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>':'';
+  if(!card)return;
+  const h=missionHabit();
+  card.style.display=h?'block':'none';
+  if(!h)return;
+  const done=isDoneToday(h);
+  card.classList.toggle('done',done);
+  const mm=document.getElementById('missionMark');
+  mm.className=markCls(h);
+  mm.innerHTML=markFor(h);
+  document.getElementById('missionTitle').textContent=missionLine(h);
+  document.getElementById('missionEmoji').textContent=missionEmoji(h);
+  document.getElementById('missionMain').classList.add('solo');
+}
+
+/* ---------- rhythm ----------
+   A rhythm day needs at least one habit actually completed that day; a weekly
+   target met earlier in the week doesn't count on its own. Progress is a
+   running total and nothing resets. */
+const RHYTHM_BEFORE_TODAY=22;          // the persona's rhythm days up to yesterday
+function rhythmToday(){return activeHabits().some(h=>h.done);}
+function rhythmTotal(){return RHYTHM_BEFORE_TODAY+(rhythmToday()?1:0);}
+function renderRhythm(){
+  const total=rhythmTotal(), todayOn=rhythmToday();
+  const t=document.getElementById('rhythmTotal'); if(t)t.textContent=total+' days';
+  const box=document.getElementById('weekRow');
+  if(box){
+    const days=['S','M','T','W','T','F','S'], today=new Date().getDay();
+    box.innerHTML=days.map((d,i)=>{
+      const on=i<today||(i===today&&todayOn);
+      return '<span class="wday'+(on?' on':'')+(i===today?' today':'')+'"><span class="dot">'+(on?CHECK:'')+'</span><span class="lb">'+d+'</span></span>';
+    }).join('');
+  }
+  const jt=document.getElementById('jrTotal'); if(jt)jt.textContent=total;
+  const jm=document.getElementById('jrMonth');
+  if(jm){const n=Math.min(RHYTHM_BEFORE_TODAY,new Date().getDate()-1)+(todayOn?1:0);jm.textContent=n+(n===1?' day':' days');}
+  const dots=document.getElementById('streakDots');
+  if(dots){            // the last 28 days, oldest first; she started 23 days ago
+    let s='';
+    for(let i=0;i<28;i++){const on=i<27?i>=5:todayOn;s+='<span style="width:9px;height:9px;border-radius:2.5px;background:'+(on?'var(--sage)':'rgba(31,31,31,.12)')+'"></span>';}
+    dots.innerHTML=s;
+  }
+}
+
+/* ---------- my habits ---------- */
+const perWeekLabel=n=>n===1?'Once a week':n===2?'Twice a week':n+' times a week';
+function renderHabitList(){
+  const box=document.getElementById('habitList');
+  if(!box)return;
+  const act=activeHabits(), paused=habitsData.filter(h=>h.status==='paused');
+  const q=s=>s.replace(/'/g,"\\'");
+  const open=h=>'openConfig(\''+q(h.key)+'\',\''+h.icon+'\');go(\'config\')';
+  let html='<div class="grpwrap">'+(act.length?act.map(h=>
+    '<button class="acrow" onclick="'+open(h)+'">'+
+    '<span class="ic" style="font-size:19px">'+h.icon+'</span>'+
+    '<span class="lbl">'+h.name+(isAuto(h)?'<small>Tracked by your watch</small>':(h.perWeek?'<small>'+perWeekLabel(h.perWeek)+'</small>':''))+'</span>'+
+    '<span class="chev">›</span></button>').join('')
+    :'<div style="padding:18px 16px;font-size:13.5px;color:var(--soft);text-align:center">No active habits. Add one from the Library.</div>')+'</div>';
+  if(paused.length){
+    html+='<div class="k" style="margin:0 4px 10px">Paused</div><div class="grpwrap">'+paused.map(h=>
+      '<div class="acrow">'+
+      '<span class="ic" style="font-size:19px;opacity:.55">'+h.icon+'</span>'+
+      '<button class="lbl" onclick="'+open(h)+'">'+h.name+'</button>'+
+      '<button class="pill-sm" onclick="resumeHabit(\''+h.id+'\')">Resume</button></div>').join('')+'</div>';
+  }
+  box.innerHTML=html;
+}
+/* one tap to pause, because nothing is lost; resuming is one tap in My habits */
+function pauseToggle(){
+  const h=habitsData.find(x=>x.key===cfgKey);
+  if(!h)return;
+  if(h.status==='paused'){resumeHabit(h.id,true);return;}
+  h.status='paused';
+  renderHabits();
+  toast('Paused','Resume any time in My habits');
+  back();
+}
+function resumeHabit(id,fromConfig){
+  const h=habitsData.find(x=>x.id===id);
+  if(!h)return;
+  h.status='active';
+  renderHabits();
+  toast('Back in your plan',h.name);
+  if(fromConfig)back();
+}
+
+/* Fact of the day comes from the researched "why" of one of the user's own
+   habits, rotating daily. Habit ids and card ids are one namespace, so the
+   lookup is direct. It only re-picks if its habit leaves the plan. */
+let factId=null;
+function renderFact(){
+  const box=document.getElementById('fact');
+  if(!box)return;
+  const mine=activeHabits().map(h=>CARDS.find(c=>c.id===h.id)).filter(Boolean);
+  if(!mine.length){box.style.display='none';factId=null;return;}
+  box.style.display='block';
+  /* it never repeats the habit already featured as today's mission */
+  const m=missionHabit();
+  if(m&&factId===m.id&&mine.length>1)factId=mine.find(c=>c.id!==m.id).id;
+  if(!factId||!mine.some(c=>c.id===factId)){
+    factId=mine[Math.floor(Date.now()/86400000)%mine.length].id;
+  }
+  const c=CARDS.find(x=>x.id===factId), h=habitsData.find(x=>x.id===factId);
+  document.getElementById('factText').textContent=c.why;
+  document.getElementById('factLink').textContent=(h?h.name:c.title)+' ›';
+}
+/* the fact lives in the Library, so tapping it opens its card in place */
+function openFact(){
+  if(!factId)return;
+  openSet[factId]=true;
+  setDomain('all');
+  renderCards();
+  if(current!=='library')go('library');
+  const el=document.getElementById('card-'+factId), sc=el&&el.closest('.scroll');
+  if(sc)sc.scrollTop+=el.getBoundingClientRect().top-sc.getBoundingClientRect().top-12;
+}
+
+/* ---------- today ---------- */
+function tileValue(h){
+  if(h.perWeek)return {val:String(weekCount(h)),unit:'of '+h.perWeek+' this week'};
+  return {val:h.val||'',unit:h.unit||''};
+}
+function renderHabits(){
+  const act=activeHabits();
+  const el=document.getElementById('todayCount');
+  if(el)el.textContent=act.filter(isDoneToday).length+' of '+act.length+' done';
+  renderHabitList();
+  renderFact();
+  renderMission();
+  renderRhythm();
+  const ac=document.getElementById('acHabitCount');
+  if(ac){const p=habitsData.length-act.length;ac.textContent=act.length+' active'+(p?' · '+p+' paused':'');}
+  /* the mission habit is shown as the mission card, not also as a tile */
+  const m=missionHabit();
+  document.getElementById('habits').innerHTML=act.filter(h=>!m||h.id!==m.id).map(h=>{
+    const v=tileValue(h);
+    return '<button class="habit'+(isDoneToday(h)?' done':'')+'" onclick="tapHabitById(\''+h.id+'\')">'+
+      '<span class="'+markCls(h)+'">'+markFor(h)+'</span>'+
+      '<span class="ic">'+h.icon+'</span>'+
+      '<span class="nm">'+h.name+'</span>'+
+      (v.val?'<span class="val">'+v.val+(v.unit?' <span>'+v.unit+'</span>':'')+'</span>':'')+
+    '</button>';
+  }).join('');
 }
 function renderTodayGreet(){
   const el=document.getElementById('todayGreet');
   if(el)el.textContent=greeting()+', Daria';
 }
-function renderWeek(){
-  const box=document.getElementById('weekRow');
-  if(!box)return;
-  const days=['S','M','T','W','T','F','S'], doneTo=4;
-  const check='<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  box.innerHTML=days.map((d,i)=>
-    '<span class="wday'+(i<doneTo?' on':'')+'"><span class="dot">'+(i<doneTo?check:'')+'</span><span class="lb">'+d+'</span></span>').join('');
-}
-function tapHabit(i){
-  const h=habitsData[i];
-  if(h.auto){toast('Tracked automatically','Sol fills this in from your watch');return;}
+function tapHabitById(id){
+  const h=habitsData.find(x=>x.id===id);
+  if(!h)return;
+  if(isAuto(h)){toast('Tracked automatically','Sol fills this in from '+autoSrc(h));return;}
   if(h.opens&&!h.done){go(h.opens);return;}
   h.done=!h.done;
   renderHabits();renderFlower(h.done);
   if(h.done)toast('Marked done',h.name);
 }
+
+/* ---------- mentor is the paid part ----------
+   Free users see what it does and the free-week offer. The conversation
+   underneath is kept, so resubscribing picks up where it left off. */
+function renderMentor(){
+  const offer=document.getElementById('mentorOffer');
+  const free=!PROTO.subscribed;
+  offer.style.display=free?'flex':'none';
+  document.getElementById('chat').style.display=free?'none':'block';
+  document.getElementById('chips').style.display=free?'none':'flex';
+  document.getElementById('inputBar').style.display=free?'none':'flex';
+  /* no chats to reach while the offer is showing */
+  document.getElementById('drawerBtn').style.display=free?'none':'flex';
+  if(free){closeDrawer();
+    offer.innerHTML=
+      '<div class="mentor-stage">'+markSVG(84,'mo',true)+'</div>'+
+      '<h2 style="font-size:22px;font-weight:800;letter-spacing:-.015em;margin-top:16px">Meet your mentor</h2>'+
+      '<ul>'+['Learns what drives you','Notices patterns in your health data','Talks you through the hard days']
+        .map(t=>'<li>'+CHECK+'<span>'+t+'</span></li>').join('')+'</ul>'+
+      '<button class="pillbtn" onclick="startFreeWeek()">Start your free week</button>'+
+      '<p style="font-size:12.5px;color:var(--soft);margin-top:10px;line-height:1.5">7 days free, then '+STORE_PRICE+'/month. Cancel anytime.</p>';
+    return;
+  }
+  openMentorChat();
+}
+function startFreeWeek(){
+  PROTO.subscribed=true;         // stands in for the App Store purchase sheet
+  renderProto();
+  renderMentor();
+  toast('Free week started','Your mentor is ready');
+}
+function renderProto(){
+  const sw=(id,on)=>{const e=document.getElementById(id);if(e)e.classList.toggle('on',on);};
+  sw('swHealth',PROTO.health); sw('swSub',PROTO.subscribed);
+  const r1=document.getElementById('swHealthRow'); if(r1)r1.setAttribute('aria-checked',PROTO.health);
+  const r2=document.getElementById('swSubRow'); if(r2)r2.setAttribute('aria-checked',PROTO.subscribed);
+  const st=document.getElementById('subStatus');
+  if(st)st.textContent=PROTO.subscribed?'Active · renews monthly':'Free plan · free week available';
+  /* the row only shows a chevron when it navigates */
+  const ch=document.getElementById('subChev'); if(ch)ch.style.display=PROTO.subscribed?'none':'inline';
+  const note=document.getElementById('delSubNote'); if(note)note.style.display=PROTO.subscribed?'block':'none';
+  const hr=document.getElementById('acHealth');
+  if(hr)hr.textContent=PROTO.health?'Connected · steps, workouts and sleep':'Not connected · habits are ticked by hand';
+  syncDelete();
+}
+/* the real row, not the demo switch: connecting is an action, and once it is
+   connected iOS owns the permission */
+function healthRowTap(){
+  if(PROTO.health){toast('Apple Health','Connected. Change it in iOS Settings › Health.');return;}
+  protoToggle('health');
+}
+/* the demo switches are for us, not for whoever is being shown the prototype */
+let verTaps=0, verTimer=null;
+function verTap(){
+  verTaps++;
+  clearTimeout(verTimer);
+  verTimer=setTimeout(()=>{verTaps=0;},2500);
+  if(verTaps<5)return;
+  verTaps=0;
+  const on=document.getElementById('protoGroup').style.display==='none';
+  document.getElementById('protoGroup').style.display=on?'':'none';
+  document.getElementById('protoHead').style.display=on?'':'none';
+  toast(on?'Demo switches on':'Demo switches off','Prototype only, never in the app');
+}
+function signOut(){
+  openSheet('<div style="padding:4px 12px 10px"><b style="font-size:15px">Sign out of Sol?</b>'+
+    '<p style="font-size:13px;color:var(--soft);line-height:1.45;margin-top:4px">Your habits and journey stay in your account. Sign back in any time.</p></div>'+
+    srow('','Sign out','confirmSignOut()')+
+    srow('','Cancel','closeSheet()'));
+}
+function confirmSignOut(){
+  closeSheet();
+  stack=[];current='goodbye';applyScreen();
+  const t=document.getElementById('byeTitle'), s=document.getElementById('byeText');
+  if(t)t.textContent='Signed out';
+  if(s)s.textContent='Your habits and journey are waiting in your account.';
+}
+function protoToggle(k){
+  PROTO[k]=!PROTO[k];
+  renderProto();
+  if(current==='mentor')renderMentor();
+  renderHabits();
+  if(current==='config')openConfig(cfgKey,cfgIcon);
+  /* connecting Health switches watch-trackable habits to automatic, which turns
+     their reminders off: say so rather than letting it happen silently */
+  if(k==='health'){
+    const n=habitsData.filter(h=>(HABIT_CFG[h.key]||{}).auto).length;
+    if(n)toast(PROTO.health?'Health connected':'Health disconnected',
+      PROTO.health
+        ? 'Your watch now tracks '+n+' habit'+(n===1?'':'s')+', so their reminders are off'
+        : n+' habit'+(n===1?'':'s')+' back to a tap tick, with reminders');
+  }
+}
+function subRowTap(){
+  if(PROTO.subscribed)toast('Manage subscription','Not part of this prototype');
+  else go('mentor');
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
-  (function(){
-    const box=document.getElementById('streakDots');
-    if(box){let h='';for(let i=0;i<28;i++){h+='<span style="width:9px;height:9px;border-radius:2.5px;background:'+(i<23?'var(--green)':'rgba(31,31,31,.12)')+'"></span>';}box.innerHTML=h;}
-  })();
-  renderHabits();renderWeek();renderTodayGreet();renderMission();renderFlower(false);renderTabs();renderFilters();renderCards();renderMem();renderCfg();renderReminder();updateChrome();
-  document.getElementById('voiceBtn').innerHTML=micSvg('#9E9A94')+'<span style="position:absolute;bottom:-15px;left:calc(50% + 7px);transform:translateX(-50%);font-size:8.5px;font-weight:700;color:var(--clay);white-space:nowrap;letter-spacing:.01em">coming soon</span>';syncSend();
+  renderHabits();renderTodayGreet();renderFlower(false);renderTabs();renderFilters();renderCards();renderMem();renderAddress();renderNotifs();renderDrawer();renderArchived();initDrawerSwipe();openConfig('Target steps','👣');renderProto();updateChrome();
+  /* Escape closes the sheet first, then the drawer */
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape')return;
+    if(document.getElementById('sheet').classList.contains('on'))closeSheet();
+    else closeDrawer();
+  });
+  document.getElementById('voiceBtn').innerHTML=micSvg('#9E9A94')+'<span style="position:absolute;bottom:-15px;left:calc(50% + 7px);transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--soft);white-space:nowrap;letter-spacing:.01em">coming soon</span>';syncSend();
   document.getElementById('bwFlower').innerHTML=flowerSVG(210,1,'bw');
   document.getElementById('hdMark').innerHTML=markSVG(30,'hd');
+  document.getElementById('byeFlower').innerHTML=flowerSVG(110,1,'bye');
 });
 
 
 /* redesigned compact mark: 8 flat rounded petals, gold core */
-function markSVG(size,idp){
-  let p='';
-  for(let i=0;i<8;i++)p+='<ellipse cx="20" cy="10.5" rx="5" ry="8.5" transform="rotate('+(i*45)+' 20 20)" fill="#FF8A65"/>';
-  return '<svg viewBox="0 0 40 40" width="'+size+'" height="'+size+'" aria-label="Sol">'+p+
-    '<circle cx="20" cy="20" r="6.2" fill="#F5B800"/>'+
-    '<circle cx="20" cy="20" r="6.2" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.2"/></svg>';
+/* ---------- Sol's mark ----------
+   A core inside a ring. Small sizes get it still; where Sol is present, rings
+   leave the core and fade outward — a ripple every 4s of a 12s cycle, each one
+   fading in as it leaves, so the loop has no seam. */
+function markSVG(size,idp,live){
+  const r=live?'<circle class="sol-rp" cx="20" cy="20" r="16" fill="none" stroke="#F5B800" stroke-width="1.4"/>'+
+    '<circle class="sol-rp d1" cx="20" cy="20" r="16" fill="none" stroke="#F5B800" stroke-width="1.4"/>'+
+    '<circle class="sol-rp d2" cx="20" cy="20" r="16" fill="none" stroke="#F5B800" stroke-width="1.4"/>':'';
+  /* display:block, or the inline baseline gap pushes the mark off centre */
+  return '<svg viewBox="0 0 40 40" width="'+size+'" height="'+size+'" aria-label="Sol" style="overflow:visible;display:block">'+r+
+    '<g class="'+(live?'sol-breathe':'')+'" style="transform-origin:50% 50%">'+
+      '<circle cx="20" cy="20" r="11.5" fill="none" stroke="#F5B800" stroke-width="1.6" stroke-opacity=".45"/>'+
+      '<circle cx="20" cy="20" r="7" fill="#F5B800"/>'+
+      '<circle cx="20" cy="20" r="7" fill="none" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="1"/>'+
+    '</g></svg>';
 }
 
 /* ---------- mentor chat: empty state + starter prompts ---------- */
@@ -670,55 +1218,401 @@ function micon(name,c){
 /* prompts are mostly memory derived: sleep pattern, protecting the evening,
    a gentle emotional option, and one evergreen habit suggestion */
 const STARTERS=[
+  /* no reply may claim a change the app does not make, and any habit Sol
+     suggests must be one from the canonical list */
   {icon:'heart', tint:'var(--tile)', tc:'#FF8A65', text:"I'm exhausted today, what should I do?",
-   reply:"Then today is a light day, and that still counts as showing up. One short walk is plenty. The steadier version of you is built on returning after the hard days, not on perfect ones. Want me to shrink today's plan to just the walk?",
-   chips:["Yes, lighten today","I'll keep the full plan","Thanks, Sol"]},
+   reply:"Then today is a light day, and that still counts as showing up. Do the smallest habit on your list and let the rest wait. The steadier version of you is built on returning after the hard days, not on perfect ones.",
+   chips:["I'll keep the full plan","Thanks, Sol"]},
   {icon:'spark', tint:'var(--tile)', tc:'#F5B800', text:"Suggest a habit I'd actually keep",
-   reply:"Since you already move most days, morning light would compound it. Ten minutes outside early sets your body clock, which feeds the sleep you're working on. Want to add it as a gentle daily prompt?",
-   chips:["Add morning light","Something calmer","Not now"]},
+   reply:"Since you already move most days, a consistent wake time would compound it. It's the strongest anchor for your body clock, and the rest of your day gets easier around it. Want to add it?",
+   chips:["Add consistent wake time","Something calmer","Not now"]},
 ];
 
+const hasHabit=id=>habitsData.some(h=>h.id===id);
 const FOLLOWUP={
   'Not now':{r:"No problem. I'm here whenever you want to pick it up."},
-  'Yes, lighten today':{r:"Lightened. Just the walk today, everything else can wait.",t:['Plan lightened','Just the walk today']},
   "I'll keep the full plan":{r:"Love it. I'll be right here if it starts to feel like too much."},
   'Thanks, Sol':{r:"Anytime. Go easy on yourself today."},
-  'Add morning light':{r:"Added. I'll give you a gentle morning prompt, no pressure to be perfect.",t:['Added to your plan','Morning light · gentle daily prompt']},
-  'Something calmer':{r:"How about two minutes of breathing after lunch? Small, and it settles the afternoon."},
+  /* r is evaluated before act, so the reply reflects the plan as it was */
+  'Add consistent wake time':{
+    r:()=>hasHabit('wake')?"It's already in your plan.":"Added. Your watch tracks it, so there's nothing to log.",
+    act:()=>{if(!hasHabit('wake')){addHabitFromCard('wake');toast('Added to your plan','Consistent wake time');}}},
+  'Something calmer':{
+    r:()=>hasHabit('breath')?"Your breathwork is already in your plan. Five minutes after lunch settles the afternoon.":"How about five minutes of breathwork after lunch? Small, and it settles the afternoon."},
 };
 
-let convoStarted=false;
-
+/* ---------- conversations ----------
+   Chats are the user's own: only ＋ New chat makes one, and one is listed only
+   once Sol has replied, which is when Sol names it. Sol's own messages arrive as
+   pop-ups and never open a chat. Opening the mentor returns to the last chat. */
+const HOUR=3600e3, DAY=24*HOUR;
+const GROUPS=[{id:'g1',name:'Marathon'},{id:'g2',name:'Sleep'}];
+const CONVOS=[
+  {id:'c1',title:'Sundays are hard',groupId:null,pinned:false,archivedAt:null,at:Date.now()-4*HOUR,
+   msgs:[{from:'me',text:'Sundays are the day I fall off.'},
+         {from:'sol',text:'They have been for a while. Last Sunday you still got your steps in, which counts. What would the smallest version of Sunday look like?'}]},
+  {id:'c2',title:'Race prep',groupId:'g1',pinned:true,archivedAt:null,at:Date.now()-2*DAY,
+   msgs:[{from:'me',text:'Ten weeks to the half. Am I doing enough?'},
+         {from:'sol',text:'Three runs a week is enough to arrive ready. The part to protect is sleep in the last fortnight.'}]},
+  {id:'c3',title:'Getting back after a break',groupId:null,pinned:false,archivedAt:null,at:Date.now()-3*DAY,
+   msgs:[{from:'me',text:'I missed four days. Start over?'},
+         {from:'sol',text:'Nothing resets. Pick the easiest habit on your list and do it today.'}]},
+  {id:'c4',title:'Why mornings work better',groupId:'g2',pinned:false,archivedAt:null,at:Date.now()-7*DAY,
+   msgs:[{from:'me',text:'I run better before work. Why?'},
+         {from:'sol',text:'Your body clock is on your side then, and nothing has had a chance to take the time yet.'}]},
+  {id:'c5',title:'Winding down earlier',groupId:'g2',pinned:false,archivedAt:null,at:Date.now()-14*DAY,
+   msgs:[{from:'me',text:'I keep going to bed at one.'},
+         {from:'sol',text:'Let us move the finish line, not the bedtime: pick the thing you do last, and do it an hour earlier.'}]},
+  {id:'c6',title:'Shin splints',groupId:'g1',pinned:false,archivedAt:Date.now()-20*DAY,at:Date.now()-40*DAY,
+   msgs:[{from:'me',text:'My shins ache after every run.'},
+         {from:'sol',text:'Softer ground and a slower first kilometre. If it sharpens, that is a physio question, not a mentor one.'}]},
+];
+let convoSeq=0, groupSeq=0, currentConvoId=null;
+const openGroups={};
+const liveConvos=()=>CONVOS.filter(c=>!c.archivedAt);
+const byNewest=(a,b)=>b.at-a.at;
+/* a chat is listed once Sol has named it */
+const listedConvos=()=>liveConvos().filter(c=>c.title).sort(byNewest);
+const findConvo=id=>CONVOS.find(c=>c.id===id);
+const currentConvo=()=>findConvo(currentConvoId);
+function groupCount(gid){return liveConvos().filter(c=>c.title&&c.groupId===gid&&!c.pinned).length;}
+function relTime(at){
+  const m=Math.max(0,Math.round((Date.now()-at)/60000));
+  if(m<60)return m<1?'now':m+'m';
+  const h=Math.round(m/60); if(h<24)return h+'h';
+  const d=Math.round(h/24); if(d<7)return d+'d';
+  return Math.round(d/7)+'w';
+}
 function showInputBar(){document.getElementById('inputBar').style.display='flex';}
 
 function greeting(){
   const h=new Date().getHours();
   return h<12?'Good morning':(h<18?'Good afternoon':'Good evening');
 }
+/* the authored starter prompts were only reachable by typing them verbatim;
+   surface them so a new user has somewhere to start */
+function renderStarterPrompts(){
+  document.getElementById('chips').innerHTML=STARTERS.map(s=>
+    '<button onclick="tapStarter(this.textContent)">'+s.text+'</button>').join('');
+}
+function tapStarter(t){
+  const inp=document.getElementById('chatInput');
+  if(inp)inp.value=t;
+  sendText();
+}
 function renderEmptyState(){
-  convoStarted=false;
-  document.getElementById('chips').innerHTML='';
   document.getElementById('chat').innerHTML=
     '<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px">'+
-      '<div class="mentor-stage"><span class="mentor-shadow"></span><div class="mentor-hover" id="mentorAvatar">'+flowerSVG(84,0.75,'me')+'</div></div>'+
+      '<div class="mentor-stage" id="mentorAvatar">'+markSVG(84,'me',true)+'</div>'+
       '<div style="font-size:22px;font-weight:800;letter-spacing:-.015em;color:var(--cocoa);text-align:center;line-height:1.28;margin-top:18px">'+greeting()+', Daria</div>'+
-      '<div style="font-size:14.5px;color:var(--clay);text-align:center;margin-top:8px">How can I help you today?</div>'+
+      '<div style="font-size:14.5px;color:var(--soft);text-align:center;margin-top:8px">How can I help you today?</div>'+
     '</div>';
-  ripplePetals('mentorAvatar');
+  renderStarterPrompts();
   showInputBar();
 }
-function ripplePetals(hostId){
-  const host=document.getElementById(hostId);
-  if(!host)return;
-  const fp=host.querySelectorAll('svg > g:nth-of-type(2) > ellipse');
-  fp.forEach((p,i)=>{p.classList.add('mp-shimmer');p.style.animationDelay=(i/fp.length*2.8).toFixed(2)+'s';});
+/* the marker carries the day the conversation began, so reopening an old chat
+   never labels it "Today" */
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function dayLabel(at){
+  const d=new Date(at||Date.now()), n=new Date();
+  const days=Math.round((new Date(n.getFullYear(),n.getMonth(),n.getDate())-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/DAY);
+  if(days<=0)return 'Today';
+  if(days===1)return 'Yesterday';
+  return d.getDate()+' '+MONTHS[d.getMonth()];
+}
+function dayMark(at){
+  return '<div style="text-align:center;margin:2px 0 14px"><span style="font-size:11px;color:var(--soft);font-weight:600;background:var(--cream);padding:4px 12px;border-radius:99px;border:1px solid var(--hair)">'+dayLabel(at)+'</span></div>';
+}
+function ensureConversation(){
+  if(currentConvo())return;
+  const c={id:'n'+(++convoSeq),title:null,groupId:null,pinned:false,archivedAt:null,at:Date.now(),startedAt:Date.now(),msgs:[]};
+  CONVOS.push(c);
+  currentConvoId=c.id;
+  document.getElementById('chat').innerHTML=dayMark(c.startedAt);
+  document.getElementById('chips').innerHTML='';
+  showInputBar();
+}
+/* Sol names the chat with its first reply: the authored starters carry their
+   own title, anything else is named from the opening line. */
+const CONVO_TITLES={
+  "I'm exhausted today, what should I do?":'A tired day',
+  "Suggest a habit I'd actually keep":'A habit that fits',
+};
+function nameConvo(c){
+  if(!c||c.title)return;
+  const first=(c.msgs.find(m=>m.from==='me')||{}).text||'New chat';
+  c.title=CONVO_TITLES[first.trim()]||first.replace(/\s+/g,' ').trim().split(' ').slice(0,4).join(' ').replace(/[.,!?]$/,'').slice(0,30);
+  renderDrawer();
+}
+/* the mentor reopens the chat you were last in; an empty chat you asked for is
+   kept too, so leaving and coming back never swallows a New chat */
+let newChatPending=false;
+function openMentorChat(){
+  const c=currentConvo();
+  if(!(newChatPending&&!c)&&!(c&&!c.archivedAt)){
+    const last=listedConvos()[0];
+    currentConvoId=last?last.id:null;
+    newChatPending=!last;
+  }
+  renderChat();
+}
+function renderChat(){
+  const c=currentConvo();
+  const chat=document.getElementById('chat');
+  if(!c||!c.msgs.length){renderEmptyState();renderDrawer();return;}
+  chat.innerHTML=dayMark(c.startedAt||c.at)+c.msgs.map(m=>'<div class="bub'+(m.from==='me'?' me':'')+'">'+m.text+'</div>').join('');
+  document.getElementById('chips').innerHTML='';
+  showInputBar();
+  chat.scrollTop=chat.scrollHeight;
+  renderDrawer();
 }
 
-function ensureConversation(){
-  if(convoStarted)return;
-  convoStarted=true;
-  document.getElementById('chat').innerHTML='<div style="text-align:center;margin:2px 0 14px"><span style="font-size:11px;color:var(--clay);font-weight:600;background:var(--cream);padding:4px 12px;border-radius:99px;border:1px solid var(--hair)">Today</span></div>';
-  showInputBar();
+/* ---------- the chat drawer ---------- */
+function openDrawer(){
+  renderDrawer();
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('drawer').setAttribute('aria-hidden','false');
+  document.getElementById('drawerScrim').classList.add('on');
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('on');
+  document.getElementById('drawer').setAttribute('aria-hidden','true');
+  document.getElementById('drawerScrim').classList.remove('on');
+}
+/* swipe: from the start edge to open, across the drawer to close. Pointer
+   events, so a mouse drag in a desktop browser behaves the same as a thumb. */
+function initDrawerSwipe(){
+  const phone=document.querySelector('.phone');
+  if(!phone)return;
+  let x0=null,y0=null,fromEdge=false,onDrawer=false;
+  const rtl=()=>getComputedStyle(document.documentElement).direction==='rtl';
+  const startX=r=>rtl()?r.right:r.left;
+  phone.addEventListener('pointerdown',e=>{
+    if(current!=='mentor'||!PROTO.subscribed)return;
+    if(document.getElementById('sheet').classList.contains('on'))return;
+    const r=phone.getBoundingClientRect(), open=document.getElementById('drawer').classList.contains('on');
+    const dEdge=Math.abs(e.clientX-startX(r));
+    fromEdge=!open&&dEdge<=28;
+    onDrawer=open;
+    if(!fromEdge&&!onDrawer)return;
+    x0=e.clientX;y0=e.clientY;
+  },{passive:true});
+  phone.addEventListener('pointerup',e=>{
+    if(x0===null)return;
+    const dx=(e.clientX-x0)*(rtl()?-1:1), dy=Math.abs(e.clientY-y0);
+    x0=null;
+    if(dy>44)return;                       // a vertical scroll, not a swipe
+    if(fromEdge&&dx>44)openDrawer();
+    else if(onDrawer&&dx<-44)closeDrawer();
+  },{passive:true});
+}
+function convoRow(c){
+  return '<div class="crow'+(c.id===currentConvoId?' on':'')+'" data-c="'+c.id+'">'+
+    '<button class="ct" onclick="openConvo(\''+c.id+'\')">'+esc(c.title)+'</button>'+
+    '<span class="cw">'+relTime(c.at)+'</span>'+
+    '<button class="cm" aria-label="Options for '+esc(c.title)+'" onclick="convoMenu(\''+c.id+'\')">⋯</button>'+
+  '</div>';
+}
+function renderDrawer(){
+  const list=document.getElementById('drawerList');
+  if(!list)return;
+  const listed=listedConvos();
+  const pinned=listed.filter(c=>c.pinned);
+  const loose=listed.filter(c=>!c.pinned&&!c.groupId);
+  let html='';
+  if(pinned.length)html+='<div class="sect">PINNED</div>'+pinned.map(convoRow).join('');
+  if(GROUPS.length){
+    html+='<div class="sect">GROUPS</div>'+GROUPS.map(g=>{
+      const open=!!openGroups[g.id], inside=listed.filter(c=>!c.pinned&&c.groupId===g.id);
+      return '<div class="grow'+(open?' open':'')+'">'+
+        '<button class="gv" aria-label="'+(open?'Collapse':'Expand')+' '+esc(g.name)+'" onclick="toggleGroup(\''+g.id+'\')">›</button>'+
+        '<button class="gt" onclick="toggleGroup(\''+g.id+'\')">'+esc(g.name)+'</button>'+
+        /* the count is what you'd see inside: a pinned chat is listed under Pinned only */
+        '<span class="gc">'+(inside.length||'Empty')+'</span>'+
+        '<button class="cm" aria-label="Options for '+esc(g.name)+'" onclick="groupMenu(\''+g.id+'\')">⋯</button>'+
+      '</div>'+
+      (open?'<div style="padding-inline-start:16px">'+(inside.length?inside.map(convoRow).join('')
+        :'<div style="font-size:12.5px;color:var(--soft);padding:8px">Nothing in this group yet.</div>')+'</div>':'');
+    }).join('');
+  }
+  html+='<div class="sect">CHATS</div>'+(loose.length?loose.map(convoRow).join('')
+    :'<div style="font-size:12.5px;color:var(--soft);padding:8px 8px 4px">Your chats appear here once Sol has replied.</div>');
+  list.innerHTML=html;
+  const n=CONVOS.filter(c=>c.archivedAt).length;
+  const row=document.getElementById('arcRow');
+  if(row)row.style.display=n?'flex':'none';
+  const cnt=document.getElementById('arcCount');
+  if(cnt)cnt.textContent=n+(n===1?' chat':' chats');
+}
+function toggleGroup(gid){openGroups[gid]=!openGroups[gid];renderDrawer();}
+function openConvo(id){
+  currentConvoId=id; newChatPending=false;
+  closeDrawer(); renderChat();
+}
+function newChat(){
+  currentConvoId=null; newChatPending=true;
+  closeDrawer(); renderChat();
+}
+
+/* ---------- the sheet: chat menu, group menu, naming ---------- */
+function openSheet(html){
+  document.getElementById('sheetBody').innerHTML=html;
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('sheet').setAttribute('aria-hidden','false');
+  document.getElementById('sheetScrim').classList.add('on');
+}
+function closeSheet(){
+  document.getElementById('sheet').classList.remove('on');
+  document.getElementById('sheet').setAttribute('aria-hidden','true');
+  document.getElementById('sheetScrim').classList.remove('on');
+}
+const TRASH='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#FF3B30" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>';
+const SI={rename:'✏️',pin:'📌',archive:'🗄',del:TRASH,group:'📁',unarchive:'↩'};
+function srow(icon,label,onclick,cls,chev){
+  return '<button class="srow'+(cls?' '+cls:'')+'" role="menuitem" onclick="'+onclick+'">'+
+    '<span class="si">'+icon+'</span><span class="sc">'+label+'</span>'+(chev?'<span class="chev">›</span>':'')+'</button>';
+}
+function convoMenu(id){
+  const c=findConvo(id); if(!c)return;
+  openSheet(
+    srow(SI.rename,'Rename','renameConvo(\''+id+'\')')+
+    '<div class="sdiv"></div>'+
+    srow(SI.pin,c.pinned?'Unpin chat':'Pin chat','togglePin(\''+id+'\')')+
+    srow(SI.archive,'Archive','archiveConvo(\''+id+'\')')+
+    srow(SI.del,'Delete','deleteConvo(\''+id+'\')','bad')+
+    '<div class="sdiv"></div>'+
+    srow(SI.group,c.groupId?'Move to another group':'Move to group','groupPicker(\''+id+'\')',null,true)+
+    (c.groupId?srow(SI.group,'Remove from group','setGroup(\''+id+'\',null)'):'')
+  );
+}
+function renameConvo(id){
+  const c=findConvo(id); if(!c)return;
+  nameForm('Rename chat',c.title,'saveRename(\''+id+'\')');
+}
+function nameForm(title,value,onsave){
+  openSheet('<div style="padding:4px 12px 10px"><b style="font-size:15px">'+title+'</b></div>'+
+    '<div style="padding:0 10px"><input id="nameIn" maxlength="24" value="'+esc(value||'')+'" aria-label="'+title+'" /></div>'+
+    '<div style="display:flex;gap:9px;padding:12px 10px 0">'+
+      '<button class="srow" style="justify-content:center;background:rgba(31,31,31,.06)" onclick="closeSheet()">Cancel</button>'+
+      '<button class="srow" id="nameSave" style="justify-content:center;background:var(--sage)" onclick="'+onsave+'">Save</button>'+
+    '</div>');
+  const i=document.getElementById('nameIn'); if(i)i.focus();
+}
+function nameValue(){return (document.getElementById('nameIn')||{}).value?.trim()||'';}
+function saveRename(id){
+  const c=findConvo(id), v=nameValue();
+  if(!c||!v)return;
+  c.title=v; closeSheet(); renderDrawer(); renderArchived(); toast('Saved',v);
+}
+function togglePin(id){
+  const c=findConvo(id); if(!c)return;
+  c.pinned=!c.pinned;
+  closeSheet(); renderDrawer();
+  toast(c.pinned?'Pinned':'Unpinned',c.title);
+}
+/* archiving takes a chat out of the drawer; its group waits for it, its pin does not */
+function archiveConvo(id){
+  const c=findConvo(id); if(!c)return;
+  c.archivedAt=Date.now(); c.pinned=false;
+  if(c.id===currentConvoId){currentConvoId=null;openMentorChat();}
+  closeSheet(); renderDrawer(); renderArchived();
+  toast('Archived',c.title,{label:'Undo',fn:()=>unarchiveConvo(id)});
+}
+function unarchiveConvo(id){
+  const c=findConvo(id); if(!c)return;
+  c.archivedAt=null;
+  closeSheet(); renderDrawer(); renderArchived();
+  toast('Back in your chats',c.title);
+}
+/* two taps, like Remove habit, and it never touches what Sol learned */
+let convoArmed=null;
+function deleteConvo(id){
+  const c=findConvo(id); if(!c)return;
+  if(convoArmed!==id){
+    convoArmed=id;
+    const b=document.querySelector('.srow.bad .sc');
+    if(b)b.innerHTML='Tap again to delete<small style="display:block;font-size:11.5px;font-weight:500;color:var(--soft)">What Sol learned stays in What Sol knows about you</small>';
+    setTimeout(()=>{if(convoArmed===id)convoArmed=null;},4000);
+    return;
+  }
+  convoArmed=null;
+  CONVOS.splice(CONVOS.indexOf(c),1);
+  if(c.id===currentConvoId){currentConvoId=null;openMentorChat();}
+  closeSheet(); renderDrawer(); renderArchived();
+  toast('Deleted','What Sol learned stays in What Sol knows about you');
+}
+function groupPicker(id){
+  const c=findConvo(id); if(!c)return;
+  openSheet('<div style="padding:4px 12px 6px"><b style="font-size:15px">Move to group</b></div>'+
+    GROUPS.map(g=>srow(c.groupId===g.id?'✓':SI.group,esc(g.name),'setGroup(\''+id+'\',\''+g.id+'\')')).join('')+
+    '<div class="sdiv"></div>'+
+    srow('＋','New group…','newGroupFor(\''+id+'\')'));
+}
+function setGroup(id,gid){
+  const c=findConvo(id); if(!c)return;
+  c.groupId=gid;
+  if(gid)openGroups[gid]=true;
+  closeSheet(); renderDrawer();
+  toast(gid?'Moved':'Removed from group',gid?(GROUPS.find(g=>g.id===gid)||{}).name:c.title);
+}
+function newGroupFor(id){nameForm('New group','','saveNewGroup(\''+id+'\')');}
+function saveNewGroup(id){
+  const v=nameValue(); if(!v)return;
+  const g={id:'g'+(++groupSeq)+'n',name:v};
+  GROUPS.push(g);
+  setGroup(id,g.id);
+}
+function groupMenu(gid){
+  const g=GROUPS.find(x=>x.id===gid); if(!g)return;
+  openSheet(
+    srow(SI.rename,'Rename group','renameGroup(\''+gid+'\')')+
+    '<div class="sdiv"></div>'+
+    srow(SI.del,'Delete group','deleteGroup(\''+gid+'\')','bad'));
+}
+function renameGroup(gid){
+  const g=GROUPS.find(x=>x.id===gid); if(!g)return;
+  nameForm('Rename group',g.name,'saveGroupName(\''+gid+'\')');
+}
+function saveGroupName(gid){
+  const g=GROUPS.find(x=>x.id===gid), v=nameValue();
+  if(!g||!v)return;
+  g.name=v; closeSheet(); renderDrawer(); toast('Saved',v);
+}
+/* deleting a group only ungroups its chats */
+let groupArmed=null;
+function deleteGroup(gid){
+  const g=GROUPS.find(x=>x.id===gid); if(!g)return;
+  if(groupArmed!==gid){
+    groupArmed=gid;
+    const b=document.querySelector('.srow.bad .sc');
+    if(b)b.innerHTML='Tap again to delete<small style="display:block;font-size:11.5px;font-weight:500;color:var(--soft)">The chats in it stay, without a group</small>';
+    setTimeout(()=>{if(groupArmed===gid)groupArmed=null;},4000);
+    return;
+  }
+  groupArmed=null;
+  CONVOS.forEach(c=>{if(c.groupId===gid)c.groupId=null;});
+  GROUPS.splice(GROUPS.indexOf(g),1);
+  closeSheet(); renderDrawer();
+  toast('Group deleted','The chats in it stay, without a group');
+}
+
+/* ---------- archived chats ---------- */
+function openArchived(){closeDrawer();renderArchived();go('archived');}
+function renderArchived(){
+  const el=document.getElementById('arcList');
+  if(!el)return;
+  const rows=CONVOS.filter(c=>c.archivedAt).sort(byNewest);
+  el.innerHTML=rows.length?'<div class="grpwrap">'+rows.map(c=>
+    '<div class="acrow"><span class="lbl">'+esc(c.title)+'<small>Archived '+relTime(c.archivedAt)+' ago</small></span>'+
+    '<button class="pill-sm" onclick="unarchiveConvo(\''+c.id+'\')">Unarchive</button>'+
+    '<button class="cm" aria-label="Delete '+esc(c.title)+'" onclick="archMenu(\''+c.id+'\')">⋯</button></div>').join('')+'</div>'
+    :'<p style="font-size:13.5px;color:var(--soft);padding:10px 6px;line-height:1.5">Nothing archived. Archiving a chat takes it out of your list without deleting it.</p>';
+}
+function archMenu(id){
+  const c=findConvo(id); if(!c)return;
+  openSheet(srow(SI.unarchive,'Unarchive','unarchiveConvo(\''+id+'\')')+
+    '<div class="sdiv"></div>'+
+    srow(SI.del,'Delete','deleteConvo(\''+id+'\')','bad'));
 }
 
 function renderStarterChips(chips){
@@ -729,19 +1623,27 @@ function tapFollow(c){
   addBub({from:'me',text:c});
   const f=FOLLOWUP[c]||{r:"Got it."};
   showTyping(true);
-  setTimeout(()=>{showTyping(false);addBub({from:'sol',text:f.r});if(f.t)toast(f.t[0],f.t[1]);},1000);
+  setTimeout(()=>{
+    showTyping(false);
+    addBub({from:'sol',text:typeof f.r==='function'?f.r():f.r});
+    if(f.act)f.act();
+  },1000);
 }
 
+/* every bubble is kept on its conversation, which is what the drawer reads */
 function addBub(m){
+  const c=currentConvo();
+  if(c){c.msgs.push({from:m.from,text:m.text});c.at=Date.now();}
   const chat=document.getElementById('chat');
-  let html='';
-  if(m.insight)html+='<div class="noticed">💡 SOL NOTICED</div>';
-  html+='<div class="bub'+(m.from==='me'?' me':'')+'">'+m.text+'</div>';
-  chat.insertAdjacentHTML('beforeend',html);
+  chat.insertAdjacentHTML('beforeend','<div class="bub'+(m.from==='me'?' me':'')+'">'+m.text+'</div>');
   chat.scrollTop=chat.scrollHeight;
+  if(m.from==='sol'&&c)nameConvo(c);     // Sol names the chat with its first reply
 }
 function showTyping(on){
   document.getElementById('typing').style.display=on?'inline':'none';
+  /* the mark ripples while Sol is thinking, and settles when it isn't */
+  const hd=document.getElementById('hdMark');
+  if(hd)hd.innerHTML=markSVG(30,'hd',on);
   const chat=document.getElementById('chat');
   const ex=document.getElementById('typedots');
   if(on&&!ex){chat.insertAdjacentHTML('beforeend','<div id="typedots" class="dots"><i></i><i></i><i></i></div>');chat.scrollTop=chat.scrollHeight;}
@@ -770,7 +1672,7 @@ function sendText(){
   addBub({from:'me',text:v});
   showTyping(true);
   const st=STARTERS.find(x=>x.text===v);
-  if(st){setTimeout(()=>{showTyping(false);addBub({from:'sol',text:st.reply,insight:st.insight});renderStarterChips(st.chips);},1000);return;}
+  if(st){setTimeout(()=>{showTyping(false);addBub({from:'sol',text:st.reply});renderStarterChips(st.chips);},1000);return;}
   const r=TEXT_REPLIES[textReplyIdx++%TEXT_REPLIES.length];
   setTimeout(()=>{showTyping(false);addBub({from:'sol',text:r});},1000);
 }
@@ -782,11 +1684,15 @@ function sendText(){
 const MED_LENGTHS=[5,10,15,20];
 let medLen=10, medLeft=600, medTimer=null, medRunning=false;
 const MED_C=2*Math.PI*108;
+/* a session is under way once any time has elapsed — paused counts. The length
+   is locked from then until the session is reset or finished. */
+function medStarted(){return medRunning||medLeft<medLen*60;}
 function renderMedPicker(){
   const p=document.getElementById('medPicker');
   if(!p)return;
+  const locked=medStarted();
   p.innerHTML=MED_LENGTHS.map(m=>
-    '<button onclick="setMedLen('+m+')" style="flex:1;padding:9px 0;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid '+
+    '<button onclick="setMedLen('+m+')" '+(locked?'disabled aria-disabled="true" ':'')+'style="flex:1;padding:9px 0;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:'+(locked?'default':'pointer')+';opacity:'+(locked&&m!==medLen?.45:1)+';border:1.5px solid '+
     (m===medLen?'var(--gold)':'var(--hair)')+';background:'+(m===medLen?'#FFF3C4':'var(--cream)')+';color:var(--cocoa)">'+m+' min</button>').join('');
 }
 function fmtMed(sec){
@@ -800,7 +1706,7 @@ function paintMed(){
   if(ring)ring.setAttribute('stroke-dashoffset', MED_C*(1-medLeft/(medLen*60)));
 }
 function setMedLen(m){
-  if(medRunning)return;
+  if(medStarted())return;
   medLen=m; medLeft=m*60;
   renderMedPicker(); paintMed();
 }
@@ -833,95 +1739,102 @@ function toggleMed(){
       medLeft=0; paintMed();
       ph.textContent='Done';
       b.textContent='Mark as done';
-      b.onclick=()=>{markSessionDone('meditate','Meditate');stopMed();back();};
+      b.onclick=()=>{stopMed();back();markSessionDone('meditate','Meditate');};
       return;
     }
     paintMed();
   },1000);
 }
+/* Habit ids and Library card ids share one namespace, so a card id resolves a
+   habit directly. A session for a habit that is not in the plan is a real
+   session — it just cannot be "marked done" against anything. */
 function markSessionDone(id,label){
   const h=habitsData.find(x=>x.id===id);
-  if(h){h.done=true;renderHabits();renderFlower(true);}
-  toast('Marked done',label);
+  if(h&&h.status==='paused'){toast('Session complete',label,{label:'Resume habit',fn:()=>resumeHabit(h.id)});return;}
+  if(h){h.done=true;renderHabits();renderFlower(true);toast('Marked done',label);return;}
+  const c=CARDS.find(x=>x.id===id);
+  toast('Session complete',label,c?{label:'Add to my plan',fn:()=>{addHabitFromCard(id);toast('Added to your plan',label);}}:null);
+}
+/* one tap used to "send" a reset email outright; confirm first */
+function askReset(){
+  toast('Reset password','We\'ll email you a secure link',
+    {label:'Send',fn:()=>toast('Reset link sent','Check your email to set a new password')});
+}
+/* the one place a habit enters the plan: the Library's Add and the post-session
+   offer both come through here */
+function addHabitFromCard(id){
+  if(habitsData.some(h=>h.id===id))return;
+  const c=CARDS.find(x=>x.id===id);
+  if(!c)return;
+  const h={id:c.id,key:c.title,icon:c.icon,name:c.title,done:false,status:'active',perWeek:cfgDefaults(c.title).perWeek||null,weekDone:0};
+  if(c.tryIt)h.opens=c.tryIt;
+  habitsData.push(h);
+  addedSet[id]=true;
+  renderHabits();renderCards();
 }
 
-/* ---------- discover ---------- */
+/* ---------- library ---------- */
 const DOMAINS=[['all','All'],['sleep','Sleep'],['movement','Movement'],['calm','Calm']];
 const CARDS=[
   {id:'wake',d:'sleep',icon:'⏰',tt:'#6F92A8',bg:'var(--tile)',title:'Consistent wake time',
    what:'Same time every day, including weekends.',
-   why:'A fixed wake time is the strongest anchor for your body clock.',
-   more:'Your clock takes its cue from when you get up, not when you lie down. Hold it steady for two weeks and bedtime tends to follow on its own.'},
+   why:'A fixed wake time is the strongest anchor for your body clock.'},
 
   {id:'bedtime',d:'sleep',icon:'🛏️',tt:'#6F92A8',bg:'var(--tile)',title:'Consistent bedtime',
-   what:'Within about 45 minutes of the same time every night.',
-   why:'Regular sleep timing tracks with better sleep quality, separately from how long you sleep.',
-   more:'Regularity is its own ingredient. Two people sleeping the same hours can wake feeling very differently depending on how steady those hours are.'},
+   what:'Within about 45 minutes of your target bedtime.',
+   why:'Regular sleep timing tracks with better sleep quality, separately from how long you sleep.'},
 
   {id:'nobed',d:'sleep',icon:'📱',tt:'#6F92A8',bg:'var(--tile)',title:'Screen free before bed',
    what:'No screens for 15 minutes before you sleep.',
-   why:'Light and stimulation close to bed hold off the drop in alertness that lets sleep start.',
-   more:'Fifteen minutes is deliberately small, short enough to keep on a bad night. Leaving the phone across the room removes the decision entirely.'},
+   why:'Light and stimulation close to bed hold off the drop in alertness that lets sleep start.'},
 
   {id:'sevenh',d:'sleep',icon:'💤',tt:'#6F92A8',bg:'var(--tile)',title:'7 hours of sleep',
    what:'At least 7 hours a night.',
-   why:'Seven or more hours is what sleep medicine bodies recommend for adults, and below it health risk climbs.',
-   more:'This one is an outcome more than an action, which is why the other sleep habits exist. Fix the timing and the hours usually follow.'},
+   why:'Seven or more hours is what sleep medicine bodies recommend for adults, and below it health risk climbs.'},
 
   {id:'caffeine',d:'sleep',icon:'☕',tt:'#6F92A8',bg:'var(--tile)',title:'Caffeine',
    what:'None within 6 hours of your bedtime.',
-   why:'Caffeine has a half life of roughly five to six hours, so an afternoon coffee is still working at bedtime.',
-   more:'You may fall asleep fine and still lose deep sleep, which is why people underestimate this one. Shift the cutoff earlier an hour at a time.'},
+   why:'Caffeine has a half life of roughly five to six hours, so an afternoon coffee is still working at bedtime.'},
 
   {id:'meal',d:'sleep',icon:'🍽️',tt:'#6F92A8',bg:'var(--tile)',title:'Last meal',
    what:'Finish eating at least 4 hours before bed.',
-   why:'Lying down soon after eating makes reflux and broken sleep more likely.',
-   more:'The aim is comfort, not restriction. If four hours is unrealistic, even two is a meaningful improvement on eating right up to bedtime.'},
+   why:'Lying down soon after eating makes reflux and broken sleep more likely.'},
 
   {id:'steps',d:'movement',icon:'👣',tt:'#FF8A65',bg:'var(--tile)',title:'Target steps',
    what:'Reach at least 8,000 steps across the day.',
-   why:'Around 8,000 steps a day is where the steepest drop in health risk shows up.',
-   more:'8,000 is a starting point, not a rule. Sol adjusts it to where you actually are, since a target you beat most days builds more than one you miss.'},
+   why:'Around 8,000 steps a day is where the steepest drop in health risk shows up.'},
 
   {id:'move',d:'movement',icon:'🎯',tt:'#FF8A65',bg:'var(--tile)',title:'Move your body',
-   what:'At least 30 minutes, a few times a week.',
-   why:'Regular moderate activity is the most consistent predictor of long term health there is.',
-   more:'The number of sessions adapts to you. Anything that raises your breathing counts, and splitting 30 minutes into two halves works just as well.'},
+   what:'At least 30 minutes, 3 times a week.',
+   why:'Regular moderate activity is the most consistent predictor of long term health there is.'},
 
   {id:'strength',d:'movement',icon:'💪🏼',tt:'#FF8A65',bg:'var(--tile)',title:'Strength',
    what:'At least twice a week.',
-   why:'Major activity guidelines put muscle strengthening work at two or more days a week.',
-   more:'Bodyweight counts. Two short sessions beat one long one, and the muscle you keep into later life is built by exactly this kind of repetition.'},
+   why:'Major activity guidelines put muscle strengthening work at two or more days a week.'},
 
   {id:'breath',d:'calm',icon:'🪷',tt:'#8FA87A',bg:'var(--tile)',title:'Breathwork',tryIt:'breath',
-   what:'In for 4, a half second pause, out for 5.5, for five minutes.',
-   why:'Six breaths a minute is the rate where heart rate variability peaks.',
-   more:'The longer exhale is what activates the calming response. Doing it at the same time daily builds the reflex, so it is available when stress actually hits.'},
+   what:'In for 4, pause, out for 5.5, for five minutes.',
+   why:'Six breaths a minute is the rate where heart rate variability peaks.'},
 
   {id:'journal',d:'calm',icon:'✍🏼',tt:'#8FA87A',bg:'var(--tile)',title:'Clear your head',
-   what:'Write down at least 3 things that are on your mind.',
-   why:'Getting what is unfinished out of your head makes it easier to stop turning it over.',
-   more:'It works best right before bed or first thing in the morning, whenever the loop is loudest. Bullet points are fine, nobody is reading it but you.'},
+   what:'Write down at least 3 things on your mind.',
+   why:'Getting what is unfinished out of your head makes it easier to stop turning it over.'},
 
   {id:'read',d:'calm',icon:'📚',tt:'#8FA87A',bg:'var(--tile)',title:'Read',
    what:'20 minutes with a book.',
-   why:'A low arousal wind down that displaces screen time.',
-   more:'Paper or e ink beats a backlit screen here. The point is as much what it replaces as what it is.'},
+   why:'A low arousal wind down that displaces screen time.'},
 
   {id:'nowake',d:'calm',icon:'📱',tt:'#8FA87A',bg:'var(--tile)',title:'Screen free morning',
    what:'No screens for the first 15 minutes after waking.',
-   why:'Starting the day without input protects your attention before the day claims it.',
-   more:'Charging the phone outside the bedroom does most of the work. Fifteen minutes is enough to notice the difference in how the morning feels.'},
+   why:'Starting the day without input protects your attention before the day claims it.'},
 
   {id:'meditate',d:'calm',icon:'🧘🏼‍♀️',tt:'#8FA87A',bg:'var(--tile)',title:'Meditate',tryIt:'meditate',
-   what:'Meditate for about 10 minutes.',
-   why:'10 minutes of daily practice is enough to show measurable drops in stress.',
-   more:'A wandering mind is not failure, noticing the wander is the repetition. Same time each day matters more than length.'},
+   what:'About 10 minutes.',
+   why:'10 minutes of daily practice is enough to show measurable drops in stress.'},
 
   {id:'water',d:'calm',icon:'💧',tt:'#8FA87A',bg:'var(--tile)',title:'Morning water',
    what:'A glass of water when you wake up.',
-   why:'You wake mildly dehydrated after a night without fluids.',
-   more:'The smallest habit on this list, which is exactly why it works. Leaving a glass by the bed the night before removes the only obstacle.'},
+   why:'You wake mildly dehydrated after a night without fluids.'},
 ];
 let domain='all';const addedSet={};const openSet={};
 function toggleMore(id){openSet[id]=!openSet[id];renderCards();}
@@ -929,54 +1842,162 @@ function renderFilters(){
   document.getElementById('filters').innerHTML=DOMAINS.map(d=>'<button class="'+(domain===d[0]?'on':'')+'" onclick="setDomain(\''+d[0]+'\')">'+d[1]+'</button>').join('');
 }
 function setDomain(d){domain=d;renderFilters();renderCards();}
+/* A card shows only the habit's title until it is tapped; the open card
+   holds the definition, the why and the actions. */
 function renderCards(){
   const list=domain==='all'?CARDS:CARDS.filter(c=>c.d===domain);
   document.getElementById('cards').innerHTML=list.map(c=>{
-    const added=addedSet[c.id];
-    const addBtn='<button style="flex:1;background:'+(added?'rgba(31,31,31,.06)':'var(--sage)')+';color:'+(added?'var(--clay)':'var(--cocoa)')+'" onclick="addCard(\''+c.id+'\')" '+(added?'disabled':'')+'>'+(added?'Added to your plan':'＋ Add to my plan')+'</button>';
-    return '<div class="card">'+
-      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:11px">'+
-      '<span style="width:36px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">'+c.icon+'</span>'+
-      '<div style="flex:1"><b style="font-size:15.5px;letter-spacing:-.01em">'+c.title+'</b></div></div>'+
-      '<div class="what" style="font-weight:600;color:var(--cocoa)">'+c.what+'</div>'+
-      '<div class="what" style="margin-top:5px">'+c.why+'</div>'+
-      (openSet[c.id]?'<div class="what" style="margin-top:6px">'+c.more+'</div>':'')+
-      '<button onclick="toggleMore(\''+c.id+'\')" style="display:block;background:none;border:none;padding:0;margin:8px 0 12px;font-size:13px;font-weight:700;color:var(--clay);cursor:pointer;font-family:inherit">'+(openSet[c.id]?'Show less':'Read more about this habit')+'</button>'+
-      '<div class="rowbtns">'+(c.tryIt?'<button style="background:var(--sage);color:var(--cocoa)" onclick="go(\''+c.tryIt+'\')">'+c.icon+' Try it now</button>':'')+addBtn+'</div></div>';
+    const added=addedSet[c.id], open=!!openSet[c.id];
+    const addBtn='<button style="flex:1;background:'+(added?'rgba(31,31,31,.06)':'var(--sage)')+';color:'+(added?'var(--dim)':'var(--cocoa)')+'" onclick="addCard(\''+c.id+'\')" '+(added?'disabled':'')+'>'+(added?'Added to your plan':'＋ Add to my plan')+'</button>';
+    return '<div class="card dcard'+(open?' open':'')+'" id="card-'+c.id+'">'+
+      '<button class="dhead" onclick="toggleMore(\''+c.id+'\')" aria-expanded="'+open+'" aria-controls="cb-'+c.id+'">'+
+        '<span class="dic">'+c.icon+'</span>'+
+        '<b>'+c.title+'</b>'+
+        (added?'<span class="dadded">In your plan</span>':'')+
+        '<span class="chev dchev" aria-hidden="true">›</span>'+
+      '</button>'+
+      (open?'<div class="dbody" id="cb-'+c.id+'">'+
+        '<div class="what" style="font-weight:600;color:var(--cocoa)">'+c.what+'</div>'+
+        '<div class="what" style="margin-top:5px">'+c.why+'</div>'+
+        '<div class="rowbtns" style="margin-top:12px">'+(c.tryIt?'<button style="background:var(--sage);color:var(--cocoa)" onclick="go(\''+c.tryIt+'\')">'+c.icon+' Try it now</button>':'')+addBtn+'</div>'+
+      '</div>':'')+
+    '</div>';
   }).join('');
 }
 function addCard(id){
-  addedSet[id]=true;renderCards();
+  addHabitFromCard(id);
   const c=CARDS.find(x=>x.id===id);
   if(c)openConfig(c.title,c.icon);
   toast('Added to your plan','Set the details in Edit habit');
   setTimeout(()=>go('config'),700);
 }
+/* Settings live per habit. They used to live in module globals that openConfig
+   overwrote from defaults on every open, so "Save habit" saved nothing. */
+const cfgStore={};
+/* Only these two habits have a target time; "consistent" is measured against it. */
+const TARGET_TIME={'Consistent wake time':['07:00','Wake up at'],'Consistent bedtime':['23:00','In bed by']};
+let cfgTarget=null;
+let cfgKey='Target steps';
 function openConfig(title,icon){
+  cfgKey=title;
   cfgTitle=title; cfgIcon=icon||'👣';
-  const d=cfgDefaults(title);
-  cfgAuto=!!d.auto; cfgSrc=d.src||'';
-  if(!cfgAuto){cfgT=d.tod; cfgClockT=d.at; cfgR=true;}
+  const d=cfgDefaults(title), s=cfgStore[title];
+  const hab=habitsData.find(x=>x.key===title);
+  cfgAuto=PROTO.health&&!!d.auto; cfgSrc=d.src||'';
+  cfgTitle = s&&s.name ? s.name : title;
+  cfgT     = s ? s.tod   : (d.tod||'evening');
+  cfgClockT= s ? s.at    : (d.at||'8:00 pm');
+  cfgPerWeek= s ? s.perWeek : (hab ? (hab.perWeek??null) : (d.perWeek??null));
+  cfgR     = s ? s.rem   : true;
+  cfgTarget= TARGET_TIME[title] ? (s&&s.target ? s.target : TARGET_TIME[title][0]) : null;
   cfgPickOpen=false;
-  const n=document.getElementById('cfgName'); if(n)n.textContent=cfgTitle;
+  disarmRemove();
+  const pz=document.getElementById('cfgPause'); if(pz)pz.textContent=hab&&hab.status==='paused'?'Resume habit':'Pause habit';
+  const n=document.getElementById('cfgName'); if(n)n.value=cfgTitle;
   const i=document.getElementById('cfgIcon'); if(i)i.textContent=cfgIcon;
   renderCfg(); renderReminder();
+}
+/* removal is destructive, so it takes two taps rather than a dialog */
+let removeArmed=null;
+function disarmRemove(){
+  clearTimeout(removeArmed);removeArmed=null;
+  const b=document.getElementById('cfgRemove');
+  if(b)b.textContent='Remove habit';
+}
+function removeHabit(){
+  const b=document.getElementById('cfgRemove');
+  if(!removeArmed){
+    if(b)b.textContent='Tap again to remove';
+    removeArmed=setTimeout(disarmRemove,3000);
+    return;
+  }
+  disarmRemove();
+  const i=habitsData.findIndex(x=>x.key===cfgKey);
+  if(i>-1){
+    const id=habitsData[i].id;
+    habitsData.splice(i,1);
+    delete addedSet[id];
+    delete cfgStore[cfgKey];
+    renderHabits();renderCards();
+  }
+  toast('Removed',cfgKey+' removed from your plan');
+  back();
+}
+function saveConfig(){
+  const n=document.getElementById('cfgName');
+  const name=n&&n.value.trim()?n.value.trim():cfgKey;
+  cfgStore[cfgKey]={name:name,tod:cfgT,at:cfgClockT,perWeek:cfgPerWeek,rem:cfgR,target:cfgTarget};
+  const h=habitsData.find(x=>x.key===cfgKey);
+  if(h){h.name=name;h.perWeek=cfgPerWeek;if(cfgPerWeek&&h.weekDone==null)h.weekDone=0;renderHabits();}
+  toast('Saved',name);
+  back();
+}
+
+/* user-written names reach the DOM, so escape them */
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ---------- reminders & notifications ----------
+   Two kinds: sent by the server through Apple, and shown while Sol is open.
+   Quiet hours hold back Sol's own messages, never the user's own reminders. */
+const NOTIF={backend:true,inApp:true,quietStart:'22:00',quietEnd:'07:00',marketing:false};
+function clock12(t){
+  const [h,m]=t.split(':').map(Number);
+  return ((h%12)||12)+':'+String(m).padStart(2,'0')+(h<12?' am':' pm');
+}
+function renderNotifs(){
+  const sw=(id,on)=>{const e=document.getElementById(id);if(e)e.classList.toggle('on',on);};
+  const rw=(id,on)=>{const e=document.getElementById(id);if(e)e.setAttribute('aria-checked',on);};
+  sw('nfBack',NOTIF.backend); rw('nfBackRow',NOTIF.backend);
+  sw('nfIn',NOTIF.inApp);     rw('nfInRow',NOTIF.inApp);
+  sw('nfMail',NOTIF.marketing); rw('nfMailRow',NOTIF.marketing);
+  const qs=document.getElementById('nfQs'); if(qs)qs.value=NOTIF.quietStart;
+  const qe=document.getElementById('nfQe'); if(qe)qe.value=NOTIF.quietEnd;
+  const ac=document.getElementById('acNotif');
+  if(ac)ac.textContent=(NOTIF.backend||NOTIF.inApp?'On':'Off')+
+    ' · quiet '+clock12(NOTIF.quietStart)+' to '+clock12(NOTIF.quietEnd);
+}
+function notifToggle(k){
+  NOTIF[k]=!NOTIF[k];
+  renderNotifs();
+  /* declining the iOS permission never hides what Sol shows while it's open */
+  if(k==='backend'&&!NOTIF.backend)toast('Off','Sol can still show these while the app is open');
+}
+function setQuiet(k,v){if(v){NOTIF[k]=v;renderNotifs();}}
+
+/* ---------- how Sol talks to you ----------
+   The mentor and every message use this; it replaces a gender question. */
+const ADDRESS=[['feminine','As a woman'],['masculine','As a man'],['neutral','Neutral']];
+let addressForm='feminine';
+function addressLabel(){return (ADDRESS.find(a=>a[0]===addressForm)||ADDRESS[2])[1];}
+function renderAddress(){
+  const wrap=document.getElementById('addrRows');
+  if(wrap)wrap.innerHTML=ADDRESS.map(([k,label])=>
+    '<button class="acrow" role="radio" aria-checked="'+(addressForm===k)+'" onclick="pickAddress(\''+k+'\')">'+
+    '<span class="lbl">'+label+'</span>'+
+    (addressForm===k?'<span style="display:flex">'+CHECK+'</span>':'')+'</button>').join('');
+  const ac=document.getElementById('acAddress'); if(ac)ac.textContent=addressLabel();
+}
+function pickAddress(k){
+  if(addressForm===k){back();return;}
+  addressForm=k;
+  renderAddress();
+  toast('Saved','Sol talks to you this way from its next message');
 }
 
 /* ---------- memory ---------- */
 const MEM=[
   {title:'Your goal & why',icon:'🎯',items:['You\'re training for a half marathon in October.','The real why: to feel strong in your body again after a hard year.','You think of yourself as becoming a runner, not just doing runs.']},
   {title:'Things Sol has learned',icon:'💡',items:['Your sleep slips by about an hour on nights work runs late.','You respond better to gentle data than to pep talks.','Sundays are your hardest day to stay consistent.','A short walk reliably lifts you out of a low afternoon.']},
-  {title:'Your preferences',icon:'🎚',items:['You like reminders in the evening, not the morning.','You\'d rather Sol be brief on busy days.','You keep your habits and goal hidden from buddies.']},
+  {title:'Your preferences',icon:'🎚',items:['You like reminders in the evening, not the morning.','You\'d rather Sol be brief on busy days.']},
 ];
 function renderMem(){
   document.getElementById('memgroups').innerHTML=MEM.map((g,gi)=>
-    '<div style="margin-bottom:20px"><div style="display:flex;align-items:center;gap:9px;margin:0 4px 10px"><b style="font-size:14px;letter-spacing:-.01em">'+g.title+'</b><span style="font-size:12px;color:var(--clay);font-weight:600">'+g.items.length+'</span></div>'+
+    '<div style="margin-bottom:20px"><div style="display:flex;align-items:center;gap:9px;margin:0 4px 10px"><b style="font-size:14px;letter-spacing:-.01em">'+g.title+'</b><span style="font-size:12px;color:var(--soft);font-weight:600">'+g.items.length+'</span></div>'+
     '<div class="grpwrap" style="margin-bottom:0">'+
-    (g.items.length?g.items.map((t,ii)=>'<div class="memrow"><span style="flex:1">'+t+'</span><button class="del" onclick="delMem('+gi+','+ii+')">Delete</button></div>').join(''):'<div style="padding:16px 14px;font-size:13.5px;color:var(--clay);text-align:center">Nothing here. Sol will learn as you go.</div>')+
+    (g.items.length?g.items.map((t,ii)=>'<div class="memrow"><span style="flex:1">'+t+'</span><button class="del" onclick="delMem('+gi+','+ii+')">Delete</button></div>').join(''):'<div style="padding:16px 14px;font-size:13.5px;color:var(--soft);text-align:center">Nothing here. Sol will learn as you go.</div>')+
     '</div></div>').join('');
 }
-function delMem(gi,ii){MEM[gi].items.splice(ii,1);renderMem();toast('Forgotten','Sol won\'t bring that up again');}
+function delMem(gi,ii){MEM[gi].items.splice(ii,1);renderMem();toast('Deleted','Sol no longer has this');}
 
 /* ---------- delete account (verification + password) ---------- */
 let delAcked=false;
@@ -993,11 +2014,12 @@ function syncDelete(){
   const pass=(document.getElementById('delPass')||{}).value||'';
   const ok=delAcked&&pass.length>=1;
   const b=document.getElementById('delBtn');
+  if(!b)return;
   b.disabled=!ok;
   b.style.background=ok?'#FF3B30':'rgba(31,31,31,.08)';
-  b.style.color=ok?'#fff':'var(--clay)';
+  b.style.color=ok?'#fff':'var(--dim)';
 }
-function confirmDelete(){toast('Account deleted','This is a prototype, nothing was really removed');setTimeout(()=>go('account'),400);}
+function confirmDelete(){stack=[];current='goodbye';applyScreen();}
 
 /* ---------- breathwork ---------- */
 const INH=4,HOLD=0.5,EXH=5.5,CYCLE=10,TOTAL=300;
@@ -1007,6 +2029,9 @@ function toggleBreath(){
   bwRun=true;bwStart=performance.now()-bwPaused;document.getElementById('bwBtn').textContent='Pause';bwTick();
 }
 function stopBreath(){bwRun=false;bwPaused=0;cancelAnimationFrame(bwRaf);
+  /* bwTick swaps this handler for a mark-done closure when a session finishes.
+     Restore it here, as resetMed() does, or "Begin" completes and exits. */
+  document.getElementById('bwBtn').onclick=toggleBreath;
   document.getElementById('bwBtn').textContent='Begin';
   document.getElementById('bwPhase').textContent='Ready';
   document.getElementById('bwCount').textContent='';
@@ -1016,7 +2041,7 @@ function stopBreath(){bwRun=false;bwPaused=0;cancelAnimationFrame(bwRaf);
 function bwTick(){
   if(!bwRun)return;
   const e=(performance.now()-bwStart)/1000;
-  if(e>=TOTAL){bwRun=false;document.getElementById('bwPhase').textContent='Done';document.getElementById('bwCount').textContent='';document.getElementById('bwBtn').textContent='Mark as done';document.getElementById('bwBtn').onclick=()=>{markSessionDone('breathe','Breathwork');stopBreath();back();};return;}
+  if(e>=TOTAL){bwRun=false;document.getElementById('bwPhase').textContent='Done';document.getElementById('bwCount').textContent='';document.getElementById('bwBtn').textContent='Mark as done';document.getElementById('bwBtn').onclick=()=>{stopBreath();back();markSessionDone('breath','Breathwork');};return;}
   const rem=TOTAL-e,mm=Math.floor(rem/60),ss=String(Math.floor(rem%60)).padStart(2,'0');
   document.getElementById('bwLeft').textContent=mm+':'+ss;
   const ic=e%CYCLE;let scale,phase,left;
@@ -1032,7 +2057,7 @@ function bwTick(){
 }
 
 /* ---------- config ---------- */
-let cfgT='afternoon',cfgF='Weekdays',cfgR=true,cfgClockT='2:00 pm',cfgPickOpen=false;
+let cfgT='afternoon',cfgPerWeek=null,cfgR=true,cfgClockT='2:00 pm',cfgPickOpen=false;
 let cfgTitle='Target steps',cfgIcon='👣',cfgAuto=false,cfgSrc='';
 const CFG_TIMES=['6:00 am','6:30 am','7:00 am','7:30 am','8:00 am','9:00 am','10:00 am',
   '12:00 pm','1:00 pm','2:00 pm','3:00 pm','4:00 pm','5:00 pm','6:00 pm','7:00 pm',
@@ -1044,8 +2069,8 @@ const HABIT_CFG={
   'Consistent bedtime':{auto:true,src:'your watch'},
   'Consistent wake time':{auto:true,src:'your watch'},
   '7 hours of sleep':{auto:true,src:'your watch'},
-  'Move your body':{auto:true,src:'your watch'},
-  'Strength':{tod:'evening',at:'6:00 pm'},
+  'Move your body':{auto:true,src:'your watch',perWeek:3},
+  'Strength':{tod:'evening',at:'6:00 pm',perWeek:2},
   'Morning water':{tod:'morning',at:'7:30 am'},
   'Screen free morning':{tod:'morning',at:'7:00 am'},
   'Meditate':{tod:'morning',at:'8:00 am'},
@@ -1075,8 +2100,8 @@ function renderReminder(){
     auto.querySelector('span:last-child').textContent='Sol completes this automatically from '+(cfgSrc||'your watch')+', so there is nothing to log.';
     return;
   }
-  document.getElementById('cfgTog').style.background=cfgR?'var(--green)':'#E6E4DF';
-  document.getElementById('cfgKnob').style.left=cfgR?'22px':'2px';
+  document.getElementById('cfgTog').style.background=cfgR?'var(--sage)':'#E6E4DF';
+  document.getElementById('cfgKnob').style.insetInlineStart=cfgR?'22px':'2px';
   const row=document.getElementById('cfgTimeRow'); if(row)row.style.display=cfgR?'flex':'none';
   renderTimePick();
 }
@@ -1097,9 +2122,27 @@ function setTod(tod){
 function renderCfg(){
   const times=[['morning','🌅','Morning'],['afternoon','☀️','Afternoon'],['evening','🌙','Evening']];
   document.getElementById('cfgTime').innerHTML=times.map(t=>'<button class="'+(cfgT===t[0]?'on':'')+'" onclick="setTod(\''+t[0]+'\')"><span style="font-size:19px">'+t[1]+'</span>'+t[2]+'</button>').join('');
-  const freqs=['Every day','Weekdays','Weekends','Custom'];
-  document.getElementById('cfgFreq').innerHTML=freqs.map(f=>'<button class="'+(cfgF===f?'on':'')+'" onclick="cfgF=\''+f+'\';renderCfg()">'+f+'</button>').join('');
+  const weekly=cfgPerWeek!=null;
+  document.getElementById('cfgFreq').innerHTML=
+    '<button class="'+(weekly?'':'on')+'" onclick="setFreq(null)">Every day</button>'+
+    '<button class="'+(weekly?'on':'')+'" onclick="setFreq(cfgPerWeek||3)">Times a week</button>';
+  document.getElementById('cfgStepper').innerHTML=weekly?
+    '<div class="stepper"><span>Each week</span><div>'+
+    '<button onclick="stepFreq(-1)" aria-label="Fewer" '+(cfgPerWeek<=1?'disabled':'')+'>−</button>'+
+    '<b>'+cfgPerWeek+'</b>'+
+    '<button onclick="stepFreq(1)" aria-label="More" '+(cfgPerWeek>=6?'disabled':'')+'>+</button></div></div>':'';
+  const tw=document.getElementById('cfgTargetWrap');
+  if(tw){
+    tw.style.display=cfgTarget==null?'none':'block';
+    if(cfgTarget!=null){
+      document.getElementById('cfgTargetLabel').textContent=(TARGET_TIME[cfgKey]||['','Target'])[1];
+      document.getElementById('cfgTargetTime').value=cfgTarget;
+    }
+  }
 }
+function setTarget(v){if(v)cfgTarget=v;}
+function setFreq(n){cfgPerWeek=n;renderCfg();}
+function stepFreq(d){cfgPerWeek=Math.max(1,Math.min(6,cfgPerWeek+d));renderCfg();}
 function togReminder(){
   cfgR=!cfgR;
   if(!cfgR)cfgPickOpen=false;
@@ -1108,11 +2151,25 @@ function togReminder(){
 
 /* ---------- toast ---------- */
 let toastT=null;
-function toast(msg,sub){
+/* an actionable toast asks for a decision, so it gets longer than the usual 2.8s */
+const TOAST_SUCCESS=['Marked done','Added to your plan','Saved','Session complete','Reset link sent','Back in your plan','Free week started'];
+function positionToast(){
+  const t=document.getElementById('toast'); if(!t)return;
+  const scr=document.querySelector('.screen.on'), foot=scr&&scr.querySelector(':scope > .foot');
+  t.style.bottom=(ROOTS.includes(current)?96:(foot&&foot.offsetHeight?foot.offsetHeight+12:28))+'px';
+}
+function toast(msg,sub,action){
   document.getElementById('toastMsg').childNodes[0].textContent=msg;
+  document.getElementById('toastIcon').style.display=TOAST_SUCCESS.includes(msg)?'flex':'none';
+  positionToast();
   document.getElementById('toastSub').textContent=sub||'';
+  const act=document.getElementById('toastAct');
+  if(act){
+    act.textContent=action?action.label:'OK';
+    act.onclick=action?()=>{hideToast();action.fn();}:hideToast;
+  }
   document.getElementById('toast').classList.add('show');
-  clearTimeout(toastT);toastT=setTimeout(hideToast,2800);
+  clearTimeout(toastT);toastT=setTimeout(hideToast,action?6000:2800);
 }
 function hideToast(){document.getElementById('toast').classList.remove('show');}
 </script>

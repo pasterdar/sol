@@ -8,10 +8,18 @@
 <style>
 :root{
   --dawn:#FAF7F1; --cream:#fff; --cocoa:#1F1F1F; --clay:#9E9A94;
-  --peach:#E6C98B; --coral:#FF8A65; --gold:#F5B800; --rose:#FF8A65; --sage:#8FA87A;
+  --peach:#E6C98B; --coral:#FF8A65; --gold:#F5B800; --sage:#8FA87A;
   --coralText:#FF8A65; --sageText:#8FA87A; --goldText:#F5B800;
-  --dusk:#1F1F1F; --hair:#E6E4DF;
-  --blue:#007AFF; --green:#8FA87A;
+  --hair:#E6E4DF;
+  /* Secondary text tier. Not an eleventh colour: this is the locked ink at 65%,
+     which measures 4.98:1 on dawn, 5.17:1 on white and 4.95:1 on butter — the
+     lightest it can go and still clear AA on every surface it lands on. */
+  --soft:rgba(31,31,31,.65);
+  /* --clay is decoration only: grab handles, field icons, picker chrome.
+     It never carries text. */
+  /* --blue: permitted ONLY inside the simulated iOS dialog. The dialog's own
+     system greys and third-party sign-in marks are likewise exempt. */
+  --blue:#007AFF;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#1F1F1F;min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -26,7 +34,8 @@ input{font-family:inherit;}
 
 /* progress header */
 .prog{padding:22px 22px 0;display:flex;align-items:center;gap:14px;}
-.prog .bk{font-size:26px;line-height:1;width:24px;color:var(--coralText);font-weight:300;}
+.prog .bk{font-size:26px;line-height:1;width:44px;height:44px;margin-inline-start:-10px;display:flex;align-items:center;
+  color:var(--cocoa);font-weight:300;flex-shrink:0;}
 .prog .track{flex:1;height:4px;border-radius:99px;background:#E6E4DF;}
 .prog .fill{height:100%;border-radius:99px;background:var(--gold);transition:width .45s cubic-bezier(.2,.8,.3,1);}
 
@@ -34,47 +43,32 @@ input{font-family:inherit;}
 .footer{padding:14px 26px 30px;}
 
 h1.hd{font-size:32px;font-weight:700;letter-spacing:-.022em;line-height:1.16;}
-h1,p,.perm .tx b{text-wrap:balance;}
-p.lead{font-size:16px;color:var(--clay);margin-top:8px;line-height:1.5;}
+h1,p{text-wrap:balance;}
+p.lead{font-size:16px;color:var(--soft);margin-top:8px;line-height:1.5;}
 
 .primary{width:100%;padding:16px 0;border-radius:12px;background:var(--sage);color:var(--cocoa);
   font-size:17px;font-weight:600;transition:all .25s cubic-bezier(.2,.8,.3,1);}
-.primary:disabled{background:#E6E4DF;color:var(--clay);}
-.ghostbtn{width:100%;padding:12px 0;border-radius:12px;background:transparent;color:var(--sageText);
+/* disabled label stays readable: ink at .7 over #E6E4DF measures 5.42:1 */
+.primary:disabled{background:#E6E4DF;color:var(--cocoa);opacity:.7;}
+.ghostbtn{width:100%;padding:12px 0;border-radius:12px;background:transparent;color:var(--cocoa);
   font-size:16px;font-weight:400;margin-top:6px;}
 
 /* option rows */
-.opt{width:100%;text-align:left;padding:14px 15px;border-radius:12px;border:1.5px solid var(--hair);
+.opt{width:100%;text-align:start;padding:14px 15px;border-radius:12px;border:1.5px solid var(--hair);
   background:var(--cream);display:flex;align-items:center;gap:13px;transition:all .25s ease;}
 .opt.sel{border-color:var(--gold);background:#FFF3C4;}
-.opt.dim{opacity:.5;}
 .opt .ic{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .opt .tx{flex:1;}
 .opt .tx b{display:block;font-size:16px;font-weight:600;}
-.opt .tx small{display:block;font-size:13px;color:var(--clay);margin-top:2px;}
+/* balance so a two-line description never strands one word on line two */
+.opt .tx small{display:block;font-size:13px;color:var(--soft);margin-top:2px;text-wrap:balance;}
+/* one control per meaning: .radio.one = choose one (goal),
+   .radio = choose several (activity, habit stack). */
 .radio{width:22px;height:22px;border-radius:6px;flex-shrink:0;border:1.5px solid var(--hair);
-  display:flex;align-items:center;justify-content:center;background:transparent;}
-.opt.sel .radio{border-color:var(--goldText);background:var(--gold);}
-.dashed{border:1.5px dashed #E6E4DF;background:transparent;}
-.dashed.sel{border:1.5px solid var(--gold);background:#FFF3C4;}
+  display:flex;align-items:center;justify-content:center;background:transparent;transition:all .2s ease;}
+.radio.one{border-radius:50%;}
+.radio.on,.opt.sel .radio{border-color:var(--goldText);background:var(--gold);}
 
-/* toggles (iOS metrics) */
-.tog{width:51px;height:31px;border-radius:99px;flex-shrink:0;background:#E6E4DF;position:relative;transition:background .25s ease;}
-.tog.on{background:var(--green);}
-.tog .kn{position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;
-  box-shadow:0 1px 3px rgba(31,31,31,.2);transition:left .25s cubic-bezier(.2,.8,.3,1);}
-.tog.on .kn{left:22px;}
-.tog.big{width:51px;height:31px;}
-.tog.big .kn{width:27px;height:27px;}
-.tog.big.on .kn{left:22px;}
-.tog.big.on{background:var(--green);}
-
-/* permission card */
-.perm{background:var(--cream);border:1px solid var(--hair);border-radius:12px;padding:18px;display:flex;align-items:center;gap:14px;}
-.perm .ic{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.perm .tx{flex:1;}
-.perm .tx b{font-size:16px;font-weight:700;}
-.perm .tx small{display:block;font-size:12.5px;color:var(--clay);margin-top:2px;}
 
 /* animations */
 @keyframes swayF{0%,100%{transform:rotate(-2.6deg);}50%{transform:rotate(2.6deg);}}
@@ -92,30 +86,25 @@ p.lead{font-size:16px;color:var(--clay);margin-top:8px;line-height:1.5;}
 @keyframes gentleSway{0%,100%{transform:rotate(-2.4deg);}50%{transform:rotate(2.4deg);}}
 .bloom-wrap{animation:gentleSway 5.2s ease-in-out 1.8s infinite;transform-origin:center;}
 .done-text{animation:rise .8s cubic-bezier(.2,.8,.3,1) 1.3s both;}
-@keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.sheet{animation:sheetUp .36s cubic-bezier(.2,.8,.3,1) both;}
-@media (prefers-reduced-motion:reduce){.sw-f,.sw-b,.rise,.bloom-scale,.bloom-petal,.bloom-center,.bloom-wrap,.done-text,.sheet{animation:none!important;opacity:1;}}
+@media (prefers-reduced-motion:reduce){.sw-f,.sw-b,.rise,.bloom-scale,.bloom-petal,.bloom-center,.bloom-wrap,.done-text{animation:none!important;opacity:1;}}
 
-/* sheets */
-.scrim{position:absolute;inset:0;background:rgba(31,31,31,.45);z-index:40;}
-.sheetbox{position:absolute;left:0;right:0;bottom:0;z-index:41;background:var(--dawn);
-  border-radius:28px 28px 0 0;padding-bottom:22px;max-height:78%;display:flex;flex-direction:column;
-  box-shadow:0 -8px 30px rgba(31,31,31,.18);}
-.grab{width:38px;height:5px;border-radius:99px;background:#9E9A94;margin:10px auto 6px;}
-.sheethead{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 12px;}
-.donebtn{font-size:15.5px;font-weight:700;color:var(--coralText);}
+.k{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--soft);}
 
-.yearwrap{position:relative;height:132px;}
-.yearband{position:absolute;top:50%;margin-top:-22px;left:16px;right:16px;height:44px;border-radius:12px;background:#FFF3C4;pointer-events:none;z-index:1;}
-.fadeT{position:absolute;top:0;left:0;right:0;height:44px;background:linear-gradient(var(--dawn),rgba(250,247,241,0));pointer-events:none;z-index:2;}
-.fadeB{position:absolute;bottom:0;left:0;right:0;height:44px;background:linear-gradient(rgba(250,247,241,0),var(--dawn));pointer-events:none;z-index:2;}
-.yearscroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;padding:44px 0;text-align:center;scrollbar-width:none;position:relative;z-index:0;}
-.yearscroll::-webkit-scrollbar{display:none;}
-.yr{display:block;width:100%;height:44px;scroll-snap-align:center;font-size:18px;font-weight:500;color:#9E9A94;opacity:.75;font-variant-numeric:tabular-nums;transition:all .15s ease;}
-.yr.on{font-size:24px;font-weight:700;color:var(--cocoa);opacity:1;}
-
-.hint{position:fixed;bottom:14px;left:0;right:0;text-align:center;font-size:12px;color:rgba(250,247,241,.55);font-weight:600;}
-.k{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--clay);}
+/* form fields */
+.fieldrow{position:relative;margin-bottom:14px;}
+.field{width:100%;padding:15px 16px;border-radius:12px;font-size:15px;border:1.5px solid var(--hair);
+  background:var(--cream);color:var(--cocoa);outline:none;transition:border-color .2s ease;}
+.field:focus{border-color:var(--gold);}
+.field::placeholder{color:var(--soft);}
+.reveal{position:absolute;inset-inline-end:8px;top:11px;font-size:13px;font-weight:700;color:var(--cocoa);padding:8px 8px;}
+/* the palette has no error colour, so a failed field speaks in ink, and the
+   disabled button carries the rest of the signal */
+.fieldmsg{font-size:12px;line-height:1.4;margin:6px 4px 0;color:var(--soft);}
+.fieldmsg.bad{color:var(--cocoa);font-weight:600;}
+/* layout is direction-neutral; glyphs that point get mirrored */
+.prog .bk:dir(rtl){transform:scaleX(-1);}
+.timerow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;font-size:16px;font-weight:600;}
+.timerow input{font:inherit;font-size:17px;font-weight:700;color:var(--cocoa);background:#FFF3C4;border:1.5px solid var(--gold);border-radius:9px;padding:6px 10px;font-variant-numeric:tabular-nums;}
 </style>
 </head>
 <body>
@@ -207,7 +196,7 @@ const SPORTS=[
 const STACKS={
   sleep:[
     {id:'s1',emoji:'⏰',label:'Consistent wake time',sub:'Same time every day, including weekends',on:true},
-    {id:'s2',emoji:'🛏️',label:'Consistent bedtime',sub:'Within about 45 minutes of the same time',on:true},
+    {id:'s2',emoji:'🛏️',label:'Consistent bedtime',sub:'Within about 45 minutes of your target bedtime',on:true},
     {id:'s3',emoji:'📱',label:'Screen free before bed',sub:'No screens for 15 minutes before you sleep',on:true},
     {id:'s4',emoji:'💤',label:'7 hours of sleep',sub:'At least 7 hours a night',on:true},
     {id:'s5',emoji:'☕',label:'Caffeine',sub:'None within 6 hours of your bedtime',on:false},
@@ -222,9 +211,11 @@ const STACKS={
     {id:'c6',emoji:'💧',label:'Morning water',sub:'A glass of water when you wake up',on:false},
   ],
 };
+/* The habit library. Onboarding does not offer "add a habit" in V1 — this is
+   kept as the source list for the post-onboarding library. Do not delete. */
 const ADDABLE=[
   {id:'a-wake',emoji:'⏰',label:'Consistent wake time',sub:'Same time every day, including weekends'},
-  {id:'a-bedtime',emoji:'🛏️',label:'Consistent bedtime',sub:'Within about 45 minutes of the same time'},
+  {id:'a-bedtime',emoji:'🛏️',label:'Consistent bedtime',sub:'Within about 45 minutes of your target bedtime'},
   {id:'a-nobed',emoji:'📱',label:'Screen free before bed',sub:'No screens for 15 minutes before you sleep'},
   {id:'a-7h',emoji:'💤',label:'7 hours of sleep',sub:'At least 7 hours a night'},
   {id:'a-caffeine',emoji:'☕',label:'Caffeine',sub:'None within 6 hours of your bedtime'},
@@ -239,16 +230,35 @@ const ADDABLE=[
   {id:'a-meditate',emoji:'🧘🏼‍♀️',label:'Meditate',sub:'About 10 minutes'},
   {id:'a-water',emoji:'💧',label:'Morning water',sub:'A glass of water when you wake up'},
 ];
-const STEPS=['welcome','goal','sport','build','plan','about','health','notify','done'];
-const YEARS=[];for(let y=2008;y>=1940;y--)YEARS.push(y);
+/* 'signup' is the email form; Apple and Google skip straight past it, the same
+   way 'sport' is skipped for the non-fitness goals. */
+const STEPS=['welcome','goal','sport','build','plan','sleeptimes','about','health','notify','account','signup','trial','ready'];
+/* The full date of birth is kept, so the age check is exact to the day rather
+   than approximate the way a year alone was. Sol is for people 16 and over.
+   A younger date can still be entered, so the answer stays honest. */
+const MIN_AGE=16;
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const TODAY=iso(new Date());
+function ageFrom(s){
+  const b=new Date(s+'T00:00:00'), n=new Date();
+  let a=n.getFullYear()-b.getFullYear();
+  const m=n.getMonth()-b.getMonth();
+  if(m<0||(m===0&&n.getDate()<b.getDate()))a--;
+  return a;
+}
+const hasDob=()=>!!S.birthDate;
+const ageOk=()=>hasDob()&&ageFrom(S.birthDate)>=MIN_AGE;
 
 /* ============ state ============ */
-const S={
-  step:0, goals:[], other:false, otherText:'', stack:[], sports:[], sportQuery:'',
-  birthYear:1996, gender:null, healthOn:false, notifyOn:false,
-  yearOpen:false, addOpen:false,
-};
-const MAX=3;
+/* one source of truth for a fresh run, so restart() cannot miss a field */
+function defaults(){
+  return {
+    step:0, goals:[], stack:[], sports:[], sportQuery:'',
+    birthDate:null, address:null, bedtime:'23:00', waketime:'07:00', healthOn:false, notifyOn:false, subscribed:false,
+    authMethod:null, name:'', email:'', pass:'', showPass:false, marketing:false, touched:{}, busy:false,
+  };
+}
+const S=defaults();
 
 function sportLabel(){
   if(!S.sports||!S.sports.length)return 'Training';
@@ -264,56 +274,64 @@ function fitnessStack(){
     {id:'f3',emoji:'💪🏼',label:'Strength',sub:'At least twice a week',on:true},
   ];
 }
+/* rebuild is non-destructive: a habit the user already turned on or off keeps
+   that choice, so changing an activity no longer discards their edits. */
 function rebuildStack(){
+  const prev={};
+  (S.stack||[]).forEach(h=>{prev[h.id]=h.on;});
   const merged=[];
   S.goals.forEach(gid=>{
     const st = gid==='fitness' ? fitnessStack() : (STACKS[gid]||[]);
-    st.forEach(h=>{if(!merged.some(m=>m.id===h.id))merged.push({...h});});
+    st.forEach(h=>{
+      if(merged.some(m=>m.id===h.id))return;
+      merged.push({...h, on:(h.id in prev)?prev[h.id]:h.on});
+    });
   });
   S.stack=merged;
 }
+/* one goal only: a second tap replaces the choice, it does not get blocked */
 function pickGoal(g){
-  S.other=false;
-  if(S.goals.includes(g))S.goals=S.goals.filter(x=>x!==g);
-  else if(S.goals.length<MAX)S.goals.push(g);
+  S.goals=S.goals.includes(g)?[]:[g];
   if(!S.goals.includes('fitness'))S.sports=[];
   rebuildStack();
-  render();
+  paintGoals();
 }
-function pickOther(){S.other=true;S.goals=[];S.stack=[];render();setTimeout(()=>{const el=document.getElementById('otherIn');if(el)el.focus();},50);}
-function toggleHabit(hid){const h=S.stack.find(x=>x.id===hid);if(h)h.on=!h.on;render();}
-function addHabit(id){const h=ADDABLE.find(x=>x.id===id);if(h&&!S.stack.some(x=>x.id===h.id))S.stack.push({...h,on:true});render();}
+function toggleHabit(hid){const h=S.stack.find(x=>x.id===hid);if(h)h.on=!h.on;paintStack();}
 function skipSport(){return !S.goals.includes('fitness');}
+/* one rule for every conditional step, used by next, back and the progress bar */
+function skipStep(s){
+  if(s==='sport')return skipSport();
+  if(s==='signup')return S.authMethod!=='email';
+  if(s==='sleeptimes')return !sleepTimesNeeded();
+  if(s==='trial')return S.authMethod==null;
+  return false;
+}
 function next(){
-  if(S.step<STEPS.length-1){
-    S.step++;
-    if(STEPS[S.step]==='sport'&&skipSport())S.step++;
-    render();
-  }
+  let i=S.step+1;
+  while(i<STEPS.length-1&&skipStep(STEPS[i]))i++;
+  if(i<STEPS.length){S.step=i;render();}
 }
 function back(){
   clearBuild();
-  if(S.step>0){
-    S.step--;
-    if(STEPS[S.step]==='build')S.step--;
-    if(STEPS[S.step]==='sport'&&skipSport())S.step--;
-    render();
-  }
+  let i=S.step-1;
+  /* 'build' is an animation, never a place to land going backwards */
+  while(i>0&&(skipStep(STEPS[i])||STEPS[i]==='build'))i--;
+  if(i>=0){S.step=i;render();}
 }
-function acceptOtherPlan(){S.other=false;S.goals=['calm'];rebuildStack();S.step=STEPS.indexOf('build');render();}
-
 const activeCount=()=>S.stack.filter(h=>h.on).length;
-const addable=()=>ADDABLE.filter(h=>!S.stack.some(x=>x.id===h.id||x.label===h.label));
+const plural=(n,word)=>n+' '+word+(n===1?'':'s');
 const goalIcon=()=>{
-  if(S.other||S.goals.length!==1)return '';
   const g=GOALS.find(x=>x.id===S.goals[0]);
   return g?GI(g,20):'';
 };
-const goalLabel=()=>S.other?(S.otherText||'your goal'):(S.goals.length===1?GOALS.find(g=>g.id===S.goals[0]).label:S.goals.length+' directions');
+const goalLabel=()=>{
+  const g=GOALS.find(x=>x.id===S.goals[0]);
+  return g?g.label:'your goal';
+};
 
 /* ============ views ============ */
-function optRow(o,sel,dim,onclick,right){
-  return '<button class="opt'+(sel?' sel':'')+(dim?' dim':'')+'" '+(dim?'disabled':'')+' onclick="'+onclick+'">'+
+function optRow(o,sel,onclick,right){
+  return '<button class="opt'+(sel?' sel':'')+'" role="radio" aria-checked="'+sel+'" onclick="'+onclick+'">'+
     '<span class="ic" style="background:transparent">'+GI(o,22)+'</span>'+
     '<span class="tx"><b>'+o.label+'</b><small>'+o.sub+'</small></span>'+right+'</button>';
 }
@@ -323,87 +341,127 @@ function vWelcome(){
     logoFlower(150)+
     '<div style="font-size:26px;font-weight:800;letter-spacing:.22em;color:var(--gold);margin-top:22px">SOL</div>'+
     '<h1 style="font-size:33px;font-weight:700;letter-spacing:-.025em;margin-top:10px;line-height:1.15">Become the best<br>version of yourself</h1>'+
-    '<p style="font-size:15.5px;color:var(--clay);line-height:1.5;margin-top:12px">Core habits, based on science.<br>A mentor that learns what drives you.</p>'+
+    '<p style="font-size:15.5px;color:var(--soft);line-height:1.5;margin-top:12px">Core habits, based on science.<br>A mentor that learns what drives you.</p>'+
   '</div>'+
   '<div class="footer">'+
     '<button class="primary" onclick="next()">Get started</button>'+
-    '<p style="font-size:11.5px;color:var(--clay);text-align:center;line-height:1.5;margin-top:14px">By continuing, you agree to Sol\'s <span style="color:var(--coralText);font-weight:600">Terms of Service</span> and <span style="color:var(--coralText);font-weight:600">Privacy Policy</span>. Sol supports healthy habits and isn\'t medical advice.</p>'+
+    '<p style="font-size:11.5px;color:var(--soft);text-align:center;line-height:1.5;margin-top:14px">By continuing, you agree to Sol\'s <span style="font-weight:600;text-decoration:underline">Terms of Service</span> and <span style="font-weight:600;text-decoration:underline">Privacy Policy</span>. Sol supports healthy habits and isn\'t medical advice.</p>'+
   '</div>';
 }
 
-function vGoal(){
-  const rows=GOALS.map(g=>{
-    const sel=S.goals.includes(g.id),atCap=S.goals.length>=MAX&&!sel;
-    return optRow(g,sel,atCap,"pickGoal('"+g.id+"')",
-      '<span class="radio">'+(sel?I('check','#1F1F1F',13):'')+'</span>');
+function goalRows(){
+  return GOALS.map(g=>{
+    const sel=S.goals.includes(g.id);
+    return optRow(g,sel,"pickGoal('"+g.id+"')",
+      '<span class="radio one'+(sel?' on':'')+'">'+(sel?I('check','#1F1F1F',13):'')+'</span>');
   }).join('');
-  const nudge=S.goals.length>=2?'<div style="font-size:12.5px;color:var(--cocoa);font-weight:600;line-height:1.5;padding:2px 4px;display:flex;gap:7px;align-items:flex-start">'+I('check','#F5B800',14)+'<span>Most people go further by nailing one first. You can always add the '+(S.goals.length===MAX?'others':'rest')+' once it sticks.</span></div>':'';
-  const can=S.goals.length>0;
+}
+/* repaint the list only: a full render() would replay the entrance animation
+   and scroll the user back to the top on every tap. */
+function paintGoals(){
+  const list=document.getElementById('goalList');
+  if(list)list.innerHTML=goalRows();
+  const b=document.getElementById('goalBtn');
+  if(b)b.disabled=!S.goals.length;
+}
+function vGoal(){
   return '<div class="body rise">'+
     '<h1 class="hd">What are you working toward?</h1>'+
     '<p class="lead">Start with one.<br>Sol builds your plan around it.</p>'+
-    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;padding-bottom:12px">'+rows+nudge+'</div>'+
+    '<div id="goalList" role="radiogroup" style="display:flex;flex-direction:column;gap:10px;margin-top:20px;padding-bottom:12px">'+goalRows()+'</div>'+
   '</div>'+
-  '<div class="footer"><button class="primary" id="goalBtn" '+(can?'':'disabled')+' onclick="next()">Build my plan</button></div>';
-}
-function syncGoalBtn(){
-  const b=document.getElementById('goalBtn');if(!b)return;
-  const can=S.goals.length>0||(S.other&&S.otherText.trim().length>1);
-  b.disabled=!can;
+  '<div class="footer"><button class="primary" id="goalBtn" '+(S.goals.length?'':'disabled')+' onclick="next()">Build my plan</button></div>';
 }
 
-function vPlanOther(){
-  return '<div class="body rise" style="justify-content:center;text-align:center">'+
-    '<div style="align-self:center">'+logoFlower(96)+'</div>'+
-    '<h1 style="font-size:22px;font-weight:700;margin-top:16px;letter-spacing:-.02em;line-height:1.25">Sol doesn\'t do weight loss, and that\'s on purpose.</h1>'+
-    '<p style="font-size:14.5px;color:var(--clay);line-height:1.55;margin-top:12px">No diets, no calories, no numbers on a scale. What Sol can do is help you feel stronger, more energetic, and more rested, through movement, sleep, and stress habits that genuinely change how you feel.</p>'+
-    '<p style="font-size:14.5px;font-weight:600;line-height:1.5;margin-top:14px">Want to start there instead?</p>'+
-  '</div>'+
-  '<div class="footer"><button class="primary" onclick="acceptOtherPlan()">Yes, build that plan</button></div>';
-}
-
-function vPlan(){
-  if(S.other)return vPlanOther();
-  const rows=S.stack.map(h=>
-    '<button class="opt'+(h.on?' sel':'')+'" style="opacity:'+(h.on?1:.6)+'" onclick="toggleHabit(\''+h.id+'\')">'+
+/* the same checkbox as the activity screen: this is choose-several, and the
+   gold fill with an ink check stays legible on the butter selected row
+   (9.21:1) where a gold toggle track would have measured 1.61:1 */
+function stackRows(){
+  return S.stack.map(h=>
+    /* no row-level opacity: it would compound with --soft and drop the
+       descriptions below AA. Border, fill and checkbox already carry the state. */
+    '<button class="opt'+(h.on?' sel':'')+'" role="checkbox" aria-checked="'+h.on+'" onclick="toggleHabit(\''+h.id+'\')">'+
     '<span class="ic" style="width:40px;height:40px;background:transparent">'+GI(h,20)+'</span>'+
     '<span class="tx"><b style="font-size:14.5px">'+h.label+'</b><small style="font-size:12px">'+h.sub+'</small></span>'+
-    '<span class="tog'+(h.on?' on':'')+'"><span class="kn"></span></span></button>').join('');
+    '<span class="radio'+(h.on?' on':'')+'">'+(h.on?I('check','#1F1F1F',13):'')+'</span></button>').join('');
+}
+function paintStack(){
+  const list=document.getElementById('stackList');
+  if(list)list.innerHTML=stackRows();
   const n=activeCount();
-  const label=n===0?'Pick at least one. Small is the point.':'Start with '+n+' habit'+(n===1?'':'s');
+  const b=document.getElementById('stackBtn');
+  if(b){b.disabled=n===0;b.textContent=n===0?'Continue':'Start with '+plural(n,'habit');}
+  const note=document.getElementById('stackNote');
+  if(note)note.style.display=n===0?'block':'none';
+}
+function vPlan(){
+  const n=activeCount();
   return '<div class="body rise">'+
     '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">'+goalIcon()+'<span style="font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--cocoa)">'+goalLabel()+'</span></div>'+
     '<h1 class="hd">Here\'s your habit stack</h1>'+
     '<p class="lead">The few with the biggest impact.</p>'+
-    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:18px">'+rows+'</div>'+
-    '<p style="font-size:13px;color:var(--clay);line-height:1.5;margin-top:14px;padding-bottom:12px;white-space:nowrap">The science behind each lives in Discover.</p>'+
+    '<div id="stackList" style="display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-bottom:12px">'+stackRows()+'</div>'+
   '</div>'+
-  '<div class="footer"><button class="primary" '+(n===0?'disabled':'')+' onclick="next()">'+label+'</button></div>';
-}
-
-function vAbout(){
-  const genders=['Male','Female','Other'].map(g=>
-    '<button onclick="S.gender=\''+g+'\';render()" style="padding:15px 4px;border-radius:12px;font-size:14.5px;font-weight:600;border:1.5px solid '+(S.gender===g?'var(--gold)':'var(--hair)')+';background:'+(S.gender===g?'#FFF3C4':'var(--cream)')+';color:'+'var(--cocoa)'+';transition:all .2s ease">'+g+'</button>').join('');
-  return '<div class="body rise">'+
-    '<h1 class="hd">A little about you</h1>'+
-    '<p class="lead">Just enough to keep your habits safe.</p>'+
-    '<div class="k" style="margin:26px 4px 11px">YEAR OF BIRTH</div>'+
-    '<button onclick="S.yearOpen=true;render()" style="position:relative;width:100%;padding:15px 18px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;display:flex;align-items:center;justify-content:center">'+
-      '<span style="font-size:17px;font-weight:700;font-variant-numeric:tabular-nums">'+S.birthYear+'</span>'+
-      '<span style="position:absolute;right:16px;font-size:11px;color:var(--clay);font-weight:600">Tap to change</span></button>'+
-    '<div class="k" style="margin:24px 4px 11px">GENDER</div>'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">'+genders+'</div>'+
-  '</div>'+
-  '<div class="footer"><button class="primary" '+(S.gender?'':'disabled')+' onclick="next()">Continue</button></div>';
-}
-
-function permCard(iconName,iconColor,iconBg,title,sub,stateKey){
-  return '<div class="perm">'+
-    '<span class="ic" style="background:'+iconBg+'">'+I(iconName,iconColor,25)+'</span>'+
-    '<span class="tx"><b>'+title+'</b><small>'+sub+'</small></span>'+
-    '<button class="tog big'+(S[stateKey]?' on':'')+'" onclick="S.'+stateKey+'=!S.'+stateKey+';render()" aria-pressed="'+S[stateKey]+'"><span class="kn"></span></button>'+
+  '<div class="footer">'+
+    '<p id="stackNote" style="display:'+(n===0?'block':'none')+';font-size:13px;color:var(--cocoa);text-align:center;line-height:1.45;margin-bottom:10px">Pick at least one. Small is the point.</p>'+
+    '<button class="primary" id="stackBtn" '+(n===0?'disabled':'')+' onclick="next()">'+(n===0?'Continue':'Start with '+plural(n,'habit'))+'</button>'+
   '</div>';
 }
+
+/* Sol keeps how to talk to the user, not their gender. Neutral covers
+   "prefer not to say". */
+const ADDRESS=[['feminine','As a woman'],['masculine','As a man'],['neutral','Neutral']];
+function addressRows(){
+  return ADDRESS.map(([k,label])=>
+    '<button onclick="pickAddress(\''+k+'\')" role="radio" aria-checked="'+(S.address===k)+'" style="padding:15px 4px;border-radius:12px;font-size:14.5px;font-weight:600;border:1.5px solid '+(S.address===k?'var(--gold)':'var(--hair)')+';background:'+(S.address===k?'#FFF3C4':'var(--cream)')+';color:var(--cocoa);transition:all .2s ease">'+label+'</button>').join('');
+}
+function pickAddress(k){
+  S.address=k;
+  const grid=document.getElementById('addressGrid');
+  if(grid)grid.innerHTML=addressRows();
+  syncAbout();
+}
+/* the calm message only turns into a refusal once a date says so */
+const ageText=()=>(!hasDob()||ageOk())?'Sol is for people '+MIN_AGE+' and over.'
+  :'Sol is for people '+MIN_AGE+' and over, so we can\u2019t set it up for you yet.';
+function syncAbout(){
+  const b=document.getElementById('aboutBtn');
+  if(b)b.disabled=!(S.address&&ageOk());
+  const m=document.getElementById('ageMsg');
+  if(m){m.textContent=ageText();m.className='fieldmsg'+(hasDob()&&!ageOk()?' bad':'');}
+}
+function setDob(v){S.birthDate=v||null;syncAbout();}
+function vAbout(){
+  return '<div class="body rise">'+
+    '<h1 class="hd">A little about you</h1>'+
+    '<p class="lead">So Sol talks to you the right way.</p>'+
+    '<div class="k" style="margin:26px 4px 11px">DATE OF BIRTH</div>'+
+    '<label class="timerow"><span>Born on</span>'+
+      '<input type="date" id="dob" aria-label="Date of birth" max="'+TODAY+'" value="'+(S.birthDate||'')+'" onchange="setDob(this.value)"/></label>'+
+    '<p class="fieldmsg'+(hasDob()&&!ageOk()?' bad':'')+'" id="ageMsg">'+ageText()+'</p>'+
+    '<div class="k" style="margin:22px 4px 11px">HOW SHOULD SOL TALK TO YOU?</div>'+
+    '<div id="addressGrid" role="radiogroup" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;padding-bottom:12px">'+addressRows()+'</div>'+
+  '</div>'+
+  '<div class="footer"><button class="primary" id="aboutBtn" '+(S.address&&ageOk()?'':'disabled')+' onclick="next()">Continue</button></div>';
+}
+
+/* Asked once, for the Sleep goal, when a consistency habit is in the stack.
+   "Consistent" is measured against these. */
+function sleepTimesNeeded(){return S.goals.includes('sleep')&&S.stack.some(h=>(h.id==='s1'||h.id==='s2')&&h.on);}
+function vSleepTimes(){
+  const on=id=>S.stack.some(h=>h.id===id&&h.on);
+  const row=(label,key)=>'<label class="timerow"><span>'+label+'</span><input type="time" id="t-'+key+'" value="'+S[key]+'" onchange="S.'+key+'=this.value"/></label>';
+  return '<div class="body rise">'+
+    '<h1 class="hd">Your sleep times</h1>'+
+    '<p class="lead">\u201CConsistent\u201D means within 45 minutes of these.</p>'+
+    '<div style="display:flex;flex-direction:column;gap:10px;margin-top:22px">'+
+      (on('s2')?row('Bedtime','bedtime'):'')+
+      (on('s1')?row('Wake time','waketime'):'')+
+    '</div>'+
+  '</div>'+
+  '<div class="footer"><button class="primary" onclick="next()">Continue</button></div>';
+}
+
 function permFooter(onLabel,offLabel,on){
   return '<div class="footer"><button class="primary" onclick="'+(on?'next()':'grantAndNext()')+'">'+(on?onLabel:offLabel)+'</button>'+
     (!on?'<button class="ghostbtn" onclick="next()">Maybe later</button>':'')+'</div>';
@@ -411,28 +469,40 @@ function permFooter(onLabel,offLabel,on){
 let pendingGrant=null;
 function grantAndNext(){if(pendingGrant){S[pendingGrant]=true;}next();}
 
+/* A preview of the system dialog, not the dialog itself: scaled back, no
+   shadow, and inert, so its rows no longer invite a tap that does nothing.
+   The caption says whose dialog it is. */
 function iosAlert(title,body){
-  return '<div style="width:272px;margin:0 auto;background:rgba(249,249,251,.94);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(31,31,31,.18);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)">'+
-    '<div style="padding:18px 16px 14px;text-align:center">'+
-      '<div style="font-size:16px;font-weight:700;color:#000;letter-spacing:-.01em">'+title+'</div>'+
-      '<div style="font-size:12.5px;color:#3c3c43;opacity:.9;line-height:1.35;margin-top:5px">'+body+'</div>'+
-    '</div>'+
-    '<div style="display:flex;border-top:1px solid rgba(60,60,67,.25);font-size:16px;color:#007AFF">'+
-      '<div style="flex:1;text-align:center;padding:12px 0;border-right:1px solid rgba(60,60,67,.25)">Don\'t Allow</div>'+
-      '<div style="flex:1;text-align:center;padding:12px 0;font-weight:600">Allow</div>'+
-    '</div></div>';
+  return '<div style="display:flex;flex-direction:column;align-items:center;gap:9px">'+
+    '<div style="font-size:13px;font-weight:600;color:var(--cocoa)">Next, iOS will ask:</div>'+
+    '<div aria-hidden="true" style="width:272px;transform:scale(.92);transform-origin:top center;pointer-events:none;background:rgba(249,249,251,.94);border-radius:14px;overflow:hidden;border:1px solid var(--hair);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)">'+
+      '<div style="padding:18px 16px 14px;text-align:center">'+
+        '<div style="font-size:16px;font-weight:700;color:#000;letter-spacing:-.01em">'+title+'</div>'+
+        '<div style="font-size:12.5px;color:#3c3c43;opacity:.9;line-height:1.35;margin-top:5px">'+body+'</div>'+
+      '</div>'+
+      '<div style="display:flex;border-top:1px solid rgba(60,60,67,.25);font-size:16px;color:#007AFF">'+
+        '<div style="flex:1;text-align:center;padding:12px 0;border-inline-end:1px solid rgba(60,60,67,.25)">Don\'t Allow</div>'+
+        '<div style="flex:1;text-align:center;padding:12px 0;font-weight:600">Allow</div>'+
+      '</div></div></div>';
 }
-function permScreen(title,lead,why,at,ab,cta,stateKey){
+/* once granted the screen has to agree with its own footer, so the pending
+   dialog is replaced by a settled state */
+function permSettled(label){
+  return '<div style="display:flex;align-items:center;gap:10px;background:#FFF3C4;border:1px solid var(--hair);border-radius:14px;padding:14px 18px">'+
+    I('check','#8FA87A',20)+'<span style="font-size:15px;font-weight:600;color:var(--cocoa)">'+label+'</span></div>';
+}
+function permScreen(title,lead,why,at,ab,cta,stateKey,doneLabel){
+  const on=S[stateKey];
   return '<div class="body rise" style="justify-content:flex-start">'+
     '<div style="display:flex;flex-direction:column;align-items:center;margin-top:14px">'+
       '<h1 class="hd" style="text-align:center">'+title+'</h1>'+
       '<div style="background:var(--cream);border:1px solid var(--hair);border-radius:16px;padding:13px 17px;margin-top:16px;font-size:15px;line-height:1.45;color:var(--cocoa);text-align:center;max-width:28ch;text-wrap:balance">'+lead+'</div>'+
     '</div>'+
     '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:6px 0">'+
-      iosAlert(at,ab)+
-      '<p style="font-size:13px;color:var(--clay);line-height:1.5;text-align:center;max-width:30ch">'+why+'</p>'+
+      (on?permSettled(doneLabel):iosAlert(at,ab))+
+      '<p style="font-size:13px;color:var(--soft);line-height:1.5;text-align:center;max-width:30ch">'+why+'</p>'+
     '</div>'+
-  '</div>'+permFooter('Continue',cta,S[stateKey]);
+  '</div>'+permFooter('Continue',cta,on);
 }
 
 function vHealth(){
@@ -440,86 +510,186 @@ function vHealth(){
   return permScreen(
     'Connect Apple Health',
     'Connect Health so Sol sees your <b>movement and sleep</b>',
-    'Your habits then tick themselves off, so Sol can spot what is working without you logging a thing.',
+    'Your movement and sleep then tick themselves off.',
     '\u201CSol\u201D Would Like to Access Health',
     'Reads steps, workouts and sleep',
-    'Connect Apple Health','healthOn');
+    'Connect Apple Health','healthOn','Health connected');
 }
 function vNotify(){
   pendingGrant='notifyOn';
   return permScreen(
     'Let Sol reach you',
-    'Turn on <b>gentle nudges</b> at the right moments, never a flood',
-    'A nudge at the right moment is what turns a good plan into a habit that actually sticks.',
+    'Reminders for your habits, at the times <b>you choose</b>',
+    /* the permission only covers what Sol sends while it is closed */
+    'Skip this and you’ll still see Sol’s notes inside the app.',
     '\u201CSol\u201D Would Like to Send Notifications',
     'Reminders you can change anytime',
-    'Turn on notifications','notifyOn');
+    'Turn on notifications','notifyOn','Notifications on');
 }
 
-function vDone(){
-  return '<div class="body" style="justify-content:center;align-items:center;text-align:center">'+
-    logoFlower(130)+
-    '<h1 class="done-text" style="font-size:29px;font-weight:700;letter-spacing:-.02em;margin-top:16px">Let\'s start</h1>'+
-    '<p class="done-text" style="font-size:14.5px;color:var(--clay);line-height:1.5;margin-top:8px;max-width:30ch">'+activeCount()+' habits, one direction. Create your account to save your progress.</p>'+
-    '<div class="done-text" style="width:100%;margin-top:24px;display:flex;flex-direction:column;gap:9px">'+
-      '<button style="width:100%;padding:14px 0;border-radius:12px;background:var(--cocoa);color:#fff;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px">'+I('apple','#fff',19)+' Continue with Apple</button>'+
-      '<button style="width:100%;padding:14px 0;border-radius:12px;border:1.5px solid var(--hair);background:#fff;color:var(--cocoa);font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:9px">'+
+/* the prototype stops at the account wall; say so rather than going silent */
+function stub(msg){
+  const el=document.getElementById('doneNote');
+  if(el)el.textContent=msg;
+}
+function vAccount(){
+  return '<div class="body rise" style="justify-content:center;align-items:center;text-align:center">'+
+    logoFlower(104)+
+    '<h1 style="font-size:29px;font-weight:700;letter-spacing:-.02em;margin-top:16px">Let\'s start</h1>'+
+    '<p style="font-size:14.5px;color:var(--soft);line-height:1.5;margin-top:8px;max-width:30ch">'+plural(activeCount(),'habit')+', one direction. Create your account to save your progress.</p>'+
+    '<div style="width:100%;margin-top:24px;display:flex;flex-direction:column;gap:9px">'+
+      '<button id="authApple" onclick="authWith(\'apple\')" style="width:100%;padding:14px 0;border-radius:12px;background:var(--cocoa);color:#fff;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px">'+I('apple','#fff',19)+' Continue with Apple</button>'+
+      '<button id="authGoogle" onclick="authWith(\'google\')" style="width:100%;padding:14px 0;border-radius:12px;border:1.5px solid var(--hair);background:#fff;color:var(--cocoa);font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:9px">'+
         '<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>'+
         ' Continue with Google</button>'+
     '</div>'+
-    '<button class="done-text" style="margin-top:12px;background:transparent;color:var(--coralText);font-size:14.5px;font-weight:600;padding:4px 8px">Sign up with email</button>'+
-    '<p class="done-text" style="font-size:12.5px;color:var(--clay);margin-top:12px;line-height:1.5">7 days free, full access. Then ₪39.90/month. Cancel anytime.</p>'+
+    '<button onclick="authWith(\'email\')" style="margin-top:12px;background:transparent;color:var(--cocoa);font-size:14.5px;font-weight:600;padding:6px 8px;text-decoration:underline">Sign up with email</button>'+
   '</div>'+
   '<div class="footer"><button class="ghostbtn" style="font-size:14.5px" onclick="restart()">Restart demo</button></div>';
 }
-function restart(){
-  S.step=0;S.goals=[];S.other=false;S.otherText='';S.stack=[];S.gender=null;
-  S.healthOn=false;S.notifyOn=false;render();
-}
 
-/* ============ sheets ============ */
-function sheetAdd(){
-  const list=addable();
-  const rows=list.length?list.map(h=>
-    '<button onclick="addHabit(\''+h.id+'\')" style="width:100%;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--hair);background:var(--cream);display:flex;align-items:center;gap:12px">'+
-    '<span style="width:38px;height:38px;border-radius:11px;background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+GI(h,19)+'</span>'+
-    '<span style="flex:1"><span style="display:block;font-size:14.5px;font-weight:600">'+h.label+'</span><span style="display:block;font-size:12px;color:var(--clay);margin-top:2px">'+h.sub+'</span></span>'+
-    '<span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--coralText);flex-shrink:0">'+I('plus','#FF8A65',16)+' Add</span></button>').join('')
-  :'<div style="text-align:center;color:var(--clay);font-size:14px;padding:20px 0 24px">You\'ve added everything we suggest for now. You can always add more later from Discover.</div>';
-  return '<div class="scrim" onclick="S.addOpen=false;render()"></div>'+
-    '<div class="sheetbox sheet"><div class="grab"></div>'+
-    '<div class="sheethead"><div><div style="font-size:18px;font-weight:700">Add a habit</div><div style="font-size:12.5px;color:var(--clay);margin-top:1px">From Sol\'s science backed library.</div></div>'+
-    '<button class="donebtn" onclick="S.addOpen=false;render()">Done</button></div>'+
-    '<div style="overflow-y:auto;padding:0 20px;display:flex;flex-direction:column;gap:9px">'+rows+'</div></div>';
+/* ---- account creation ---- */
+/* Apple and Google are simulated: a short pending state, then straight to the
+   ready screen. Email gets the real form. Sol has no guest mode: an account is
+   how the plan survives a lost phone, and how a subscription is held. */
+function authWith(m){
+  if(S.busy)return;
+  S.authMethod=m;
+  if(m==='email'){next();return;}
+  S.busy=true;
+  const b=document.getElementById(m==='apple'?'authApple':'authGoogle');
+  if(b){b.textContent='Connecting…';b.disabled=true;}
+  /* if they tapped back while it was pending, do not yank them forward */
+  setTimeout(()=>{S.busy=false;if(STEPS[S.step]==='account')next();},900);
 }
-function sheetYear(){
-  const rows=YEARS.map(y=>'<button class="yr'+(y===S.birthYear?' on':'')+'" onclick="S.birthYear='+y+';render()">'+y+'</button>').join('');
-  return '<div class="scrim" onclick="S.yearOpen=false;render()"></div>'+
-    '<div class="sheetbox sheet" style="max-height:none;padding-bottom:28px"><div class="sheethead" style="padding-top:16px"><span style="font-size:16px;font-weight:700">Year of birth</span>'+
-    '<button class="donebtn" onclick="S.yearOpen=false;render()">Done</button></div>'+
-    '<div class="yearwrap"><div class="yearband"></div><div class="fadeT"></div><div class="fadeB"></div>'+
-    '<div class="yearscroll" id="yearScroll">'+rows+'</div></div></div>';
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const nameOk=()=>S.name.trim().length>0;
+const emailOk=()=>EMAIL_RE.test(S.email.trim());
+const passOk=()=>S.pass.length>=8;
+const signupOk=()=>nameOk()&&emailOk()&&passOk();
+function suInput(k,v){S[k]=v;syncSignup();}
+function suBlur(k){S.touched[k]=true;paintSignupMsgs();}
+function syncSignup(){
+  const b=document.getElementById('suBtn');
+  if(b)b.disabled=!signupOk();
+  paintSignupMsgs();
 }
+function paintSignupMsgs(){
+  const set=(id,bad,text)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.className='fieldmsg'+(bad?' bad':'');
+    el.textContent=text;
+  };
+  set('msgEmail', S.touched.email&&S.email.trim()&&!emailOk(),
+    (S.touched.email&&S.email.trim()&&!emailOk())?'That address is missing something. Check it over.':'');
+  set('msgPass', S.touched.pass&&S.pass&&!passOk(), 'At least 8 characters.');
+}
+function toggleReveal(){
+  S.showPass=!S.showPass;
+  const f=document.getElementById('suPass'), b=document.getElementById('suReveal');
+  if(f)f.type=S.showPass?'text':'password';
+  if(b)b.textContent=S.showPass?'Hide':'Show';
+}
+function createAccount(){
+  if(S.busy||!signupOk())return;
+  S.busy=true;
+  const b=document.getElementById('suBtn');
+  if(b){b.textContent='Creating your account…';b.disabled=true;}
+  setTimeout(()=>{S.busy=false;if(STEPS[S.step]==='signup')next();},900);
+}
+function suKey(e){if(e.key==='Enter')createAccount();}
+function toggleMarketing(){
+  S.marketing=!S.marketing;
+  const row=document.getElementById('mktRow'), box=document.getElementById('mktBox');
+  if(row)row.setAttribute('aria-checked',S.marketing);
+  if(box){
+    box.style.borderColor=S.marketing?'var(--gold)':'var(--hair)';
+    box.style.background=S.marketing?'#FFF3C4':'transparent';
+    box.innerHTML=S.marketing?I('check','#1F1F1F',14):'';
+  }
+}
+function vSignup(){
+  return '<div class="body rise">'+
+    '<h1 class="hd">Create your account</h1>'+
+    '<p class="lead">So your plan is waiting on any device.</p>'+
+    '<div style="margin-top:24px">'+
+      '<div class="fieldrow"><input class="field" id="suName" value="'+esc(S.name)+'" autocomplete="given-name" placeholder="First name" oninput="suInput(\'name\',this.value)" onblur="suBlur(\'name\')" onkeydown="suKey(event)"/></div>'+
+      '<div class="fieldrow"><input class="field" id="suEmail" type="email" value="'+esc(S.email)+'" autocomplete="email" placeholder="Email" oninput="suInput(\'email\',this.value)" onblur="suBlur(\'email\')" onkeydown="suKey(event)"/>'+
+        '<p class="fieldmsg" id="msgEmail"></p></div>'+
+      '<div class="fieldrow"><input class="field" id="suPass" type="'+(S.showPass?'text':'password')+'" value="'+esc(S.pass)+'" autocomplete="new-password" placeholder="Password" style="padding-inline-end:64px" oninput="suInput(\'pass\',this.value)" onblur="suBlur(\'pass\')" onkeydown="suKey(event)"/>'+
+        '<button class="reveal" id="suReveal" onclick="toggleReveal()">'+(S.showPass?'Hide':'Show')+'</button>'+
+        '<p class="fieldmsg" id="msgPass">At least 8 characters.</p></div>'+
+    '</div>'+
+    /* optional and off by default; account and billing email sends either way */
+    '<button id="mktRow" onclick="toggleMarketing()" role="checkbox" aria-checked="'+S.marketing+'" style="display:flex;align-items:flex-start;gap:11px;text-align:start;margin-top:4px;padding:4px 2px">'+
+      '<span id="mktBox" style="width:22px;height:22px;border-radius:6px;flex-shrink:0;margin-top:1px;border:1.5px solid '+(S.marketing?'var(--gold)':'var(--hair)')+';background:'+(S.marketing?'#FFF3C4':'transparent')+';display:flex;align-items:center;justify-content:center">'+(S.marketing?I('check','#1F1F1F',14):'')+'</span>'+
+      '<span style="font-size:13px;color:var(--soft);line-height:1.45">Send me occasional tips and news. Account and billing email arrives either way.</span>'+
+    '</button>'+
+  '</div>'+
+  '<div class="footer"><button class="primary" id="suBtn" '+(signupOk()?'':'disabled')+' onclick="createAccount()">Create account</button></div>';
+}
+/* Subscribing needs an account, so guests never reach this step. The price
+   comes from StoreKit at runtime; STORE_PRICE is only a stand-in. */
+const STORE_PRICE='₪39.90';
+function vTrial(){
+  return '<div class="body rise" style="justify-content:center;align-items:center;text-align:center">'+
+    logoFlower(96)+
+    '<h1 style="font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:16px">Meet your mentor</h1>'+
+    '<p class="lead" style="max-width:30ch">Sol learns what drives you, notices patterns in your health data, and talks you through the hard days.</p>'+
+    '<p style="font-size:12.5px;color:var(--soft);margin-top:16px;line-height:1.5">Your habits stay free either way.</p>'+
+  '</div>'+
+  '<div class="footer">'+
+    '<button class="primary" id="trialBtn" onclick="startTrial()">Start your free week</button>'+
+    '<p style="font-size:12.5px;color:var(--soft);text-align:center;margin-top:10px;line-height:1.5">7 days free, then '+STORE_PRICE+'/month. Cancel anytime.</p>'+
+    '<button class="ghostbtn" onclick="S.subscribed=false;next()">Not now</button>'+
+  '</div>';
+}
+function startTrial(){
+  if(S.busy)return;
+  S.busy=true;
+  const b=document.getElementById('trialBtn');
+  if(b){b.textContent='Confirming with the App Store\u2026';b.disabled=true;}
+  /* stands in for the App Store purchase sheet */
+  setTimeout(()=>{S.busy=false;if(STEPS[S.step]==='trial'){S.subscribed=true;next();}},900);
+}
+function vReady(){
+  const named=S.name.trim()?', '+S.name.trim():'';
+  const sub=S.subscribed?'Your account is set and your free week has started.':'Your account is set and your plan is saved.';
+  return '<div class="body" style="justify-content:center;align-items:center;text-align:center">'+
+    bloomFlower(130)+
+    '<h1 class="done-text" style="font-size:29px;font-weight:700;letter-spacing:-.02em;margin-top:16px">You\'re in'+esc(named)+'</h1>'+
+    '<p class="done-text" style="font-size:14.5px;color:var(--soft);line-height:1.5;margin-top:8px;max-width:30ch">'+sub+'</p>'+
+    '<p class="done-text" style="font-size:14.5px;color:var(--soft);line-height:1.5;margin-top:4px">'+plural(activeCount(),'habit')+', starting today.</p>'+
+    '<div class="done-text" style="width:100%;margin-top:26px">'+
+      '<button class="primary" onclick="stub(\'Continues in the Sol app prototype.\')">Open Sol</button>'+
+      '<p id="doneNote" style="font-size:12px;color:var(--soft);font-weight:600;margin-top:10px;line-height:1.4;min-height:16px"></p>'+
+    '</div>'+
+  '</div>'+
+  '<div class="footer"><button class="ghostbtn" style="font-size:14.5px" onclick="restart()">Restart demo</button></div>';
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function restart(){Object.assign(S,defaults());render();}
 
 /* ============ render ============ */
 const GOALWORD={sleep:'better sleep',fitness:'strength',calm:'calm'};
+/* the goal word, never the activity name: "running +4 more" read as broken */
 function buildBeats(){
-  let first='Reading your goal';
-  if(S.goals&&S.goals.length===1){var w=(S.goals[0]==='fitness'&&S.sports.length)?sportLabel().toLowerCase():(GOALWORD[S.goals[0]]||'your goal');first='Reading your goal, '+w;}
-  else if(S.goals&&S.goals.length>1){first='Reading your goals';}
-  return [first,'Choosing habits backed by science','Setting a gentle starting point','Shaping it around your week'];
+  const w=GOALWORD[S.goals[0]];
+  return [w?'Reading your goal, '+w:'Reading your goal',
+    'Choosing habits backed by science','Setting a gentle starting point','Shaping it around your week'];
 }
 function vBuild(){
   const rows=buildBeats().map((b)=>
     '<div class="build-row" style="opacity:0;transform:translateY(5px);transition:opacity .35s ease,transform .35s ease;display:flex;align-items:center;gap:12px">'+
       '<span class="build-ck" style="width:23px;height:23px;border-radius:6px;flex-shrink:0;border:1.5px solid var(--hair);display:flex;align-items:center;justify-content:center;transition:all .3s ease">'+
-        '<svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="opacity:0"/></svg>'+
+        '<svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="#1F1F1F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="opacity:0"/></svg>'+
       '</span>'+
-      '<span style="font-size:15.5px;font-weight:600;color:var(--cocoa);line-height:1.35">'+b+'</span>'+
+      '<span style="font-size:15.5px;font-weight:600;color:var(--cocoa);line-height:1.35;text-wrap:balance">'+b+'</span>'+
     '</div>').join('');
   return '<div class="body" style="justify-content:center">'+
-    '<div style="width:100%;max-width:300px;margin:0 auto;display:flex;flex-direction:column;gap:17px">'+
-      '<div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--clay);text-align:center;margin-bottom:4px">Building your plan</div>'+
+    '<div style="width:100%;max-width:320px;margin:0 auto;display:flex;flex-direction:column;gap:17px">'+
+      '<div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);text-align:center;margin-bottom:4px">Building your plan</div>'+
       rows+
     '</div>'+
   '</div>'+
@@ -535,7 +705,7 @@ function startBuild(){
   rows.forEach((row,i)=>{
     buildTimers.push(setTimeout(function(){row.style.opacity='1';row.style.transform='none';},i*STEP));
     buildTimers.push(setTimeout(function(){
-      const ck=row.querySelector('.build-ck');if(ck){ck.style.background='var(--green)';ck.style.borderColor='var(--green)';}
+      const ck=row.querySelector('.build-ck');if(ck){ck.style.background='var(--sage)';ck.style.borderColor='var(--sage)';}
       const path=row.querySelector('path');if(path)path.style.opacity='1';
     },i*STEP+CHECK));
   });
@@ -545,15 +715,17 @@ function startBuild(){
 function sportRows(){
   const q=(S.sportQuery||'').trim().toLowerCase();
   const list=SPORTS.filter(sp=>sp[0].toLowerCase().indexOf(q)>-1);
-  if(!list.length)return '<div style="text-align:center;color:var(--clay);font-size:14px;padding:22px 0;line-height:1.5">No match. Sol can still build around movement in general.</div>';
+  if(!list.length)return '<div style="text-align:center;color:var(--soft);font-size:14px;padding:22px 0;line-height:1.5">No match. Sol can still build around movement in general.</div>';
   return list.map(item=>{
     const sp=item[0], ic=item[1];
     const on=S.sports.indexOf(sp)>-1;
     const full=!on&&S.sports.length>=MAX_SPORTS;
-    return '<button onclick="setSport(\''+sp.replace(/'/g,"\\'")+'\')" style="width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;cursor:'+(full?'default':'pointer')+';opacity:'+(full?.45:1)+';font-family:inherit;transition:all .2s ease;border:1.5px solid '+(on?'var(--gold)':'var(--hair)')+';background:'+(on?'#FFF3C4':'var(--cream)')+'">'+
+    /* aria-disabled, not disabled: the row must still take the tap so it can
+       explain why nothing happened. */
+    return '<button onclick="setSport(\''+sp.replace(/'/g,"\\'")+'\')" role="checkbox" aria-checked="'+on+'" aria-disabled="'+full+'" style="width:100%;text-align:start;display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;opacity:'+(full?.45:1)+';font-family:inherit;transition:all .2s ease;border:1.5px solid '+(on?'var(--gold)':'var(--hair)')+';background:'+(on?'#FFF3C4':'var(--cream)')+'">'+
       '<span style="font-size:20px;width:26px;text-align:center;flex-shrink:0">'+ic+'</span>'+
       '<span style="flex:1;font-size:15px;font-weight:600;color:var(--cocoa)">'+sp+'</span>'+
-      (on?'<span style="width:22px;height:22px;border-radius:6px;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+I('check','#1F1F1F',13)+'</span>':'')+
+      '<span class="radio'+(on?' on':'')+'">'+(on?I('check','#1F1F1F',13):'')+'</span>'+
     '</button>';
   }).join('');
 }
@@ -563,11 +735,20 @@ function filterSports(v){
   if(box)box.innerHTML=sportRows();
 }
 const MAX_SPORTS=5;
+const SPORT_LEAD='Pick up to five you want to build around. You can change them later.';
+let sportHintT=null;
+function sportHint(){
+  const el=document.getElementById('sportLead');
+  if(!el)return;
+  el.textContent='Five is the most — deselect one to swap.';
+  clearTimeout(sportHintT);
+  sportHintT=setTimeout(()=>{const e=document.getElementById('sportLead');if(e)e.textContent=SPORT_LEAD;},2600);
+}
 function setSport(sp){
   const i=S.sports.indexOf(sp);
   if(i>-1)S.sports.splice(i,1);
   else if(S.sports.length<MAX_SPORTS)S.sports.push(sp);
-  else return;
+  else {sportHint();return;}
   rebuildStack();
   const box=document.getElementById('sportList');
   if(box)box.innerHTML=sportRows();
@@ -583,7 +764,7 @@ function syncSportBtn(){
 function vSport(){
   return '<div class="body rise">'+
     '<h1 class="hd">Which activity?</h1>'+
-    '<p class="lead">Pick up to five you want to build around. You can change them later.</p>'+
+    '<p class="lead" id="sportLead">'+SPORT_LEAD+'</p>'+
     '<div style="display:flex;align-items:center;gap:9px;background:var(--cream);border:1px solid var(--hair);border-radius:12px;padding:11px 14px;margin:18px 0 12px">'+
       I('search','#9E9A94',18)+
       '<input id="sportSearch" value="'+(S.sportQuery||'').replace(/"/g,'&quot;')+'" oninput="filterSports(this.value)" placeholder="Search activities" style="flex:1;min-width:0;border:none;background:transparent;outline:none;font-size:15px;color:var(--cocoa);font-family:inherit" />'+
@@ -593,19 +774,26 @@ function vSport(){
   '<div class="footer"><button id="sportBtn" class="primary" '+(S.sports.length?'':'disabled')+' onclick="next()">'+(!S.sports.length?'Pick an activity':(S.sports.length===1?'Continue with '+S.sports[0]:'Continue with '+S.sports.length+' activities'))+'</button></div>';
 }
 
-const VIEWS={welcome:vWelcome,goal:vGoal,sport:vSport,build:vBuild,plan:vPlan,about:vAbout,health:vHealth,notify:vNotify,done:vDone};
+const VIEWS={welcome:vWelcome,goal:vGoal,sport:vSport,build:vBuild,plan:vPlan,sleeptimes:vSleepTimes,about:vAbout,health:vHealth,notify:vNotify,account:vAccount,signup:vSignup,trial:vTrial,ready:vReady};
+/* the bar counts only the steps this run will actually show, so skipping the
+   activity step no longer produces a 12.5% -> 50% jump */
+/* Only the goal decides which steps the bar counts. The sign-in route isn't
+   known until the account screen, so its optional steps always count;
+   otherwise choosing email would move the bar backwards. */
+function progressSteps(){
+  return STEPS.filter(s=>!(s==='sport'&&skipSport())&&!(s==='sleeptimes'&&!sleepTimesNeeded()));
+}
+function progressPct(){
+  const vis=progressSteps(), i=vis.indexOf(STEPS[S.step]);
+  return i<=0?0:(i/(vis.length-1)*100);
+}
 function render(){
   const id=STEPS[S.step];
-  const prog=(S.step>0&&id!=='build')?'<div class="prog"><button class="bk" onclick="back()" aria-label="Back">‹</button>'+
-    '<div class="track"><div class="fill" style="width:'+(S.step/(STEPS.length-1)*100)+'%"></div></div><div style="width:24px"></div></div>':'';
-  document.getElementById('phone').innerHTML=prog+VIEWS[id]()+
-    (S.addOpen?sheetAdd():'')+(S.yearOpen?sheetYear():'');
+  /* no way back out of a created account, so 'ready' carries no header */
+  const prog=(S.step>0&&id!=='ready')?'<div class="prog"><button class="bk" onclick="back()" aria-label="Back">‹</button>'+
+    '<div class="track"><div class="fill" style="width:'+progressPct()+'%"></div></div><div style="width:44px"></div></div>':'';
+  document.getElementById('phone').innerHTML=prog+VIEWS[id]();
   if(id==='build')startBuild();
-  if(S.yearOpen){
-    const sc=document.getElementById('yearScroll');
-    const idx=YEARS.indexOf(S.birthYear);
-    if(sc&&idx>=0)sc.scrollTop=idx*44;
-  }
 }
 render();
 </script>
